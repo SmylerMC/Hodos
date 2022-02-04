@@ -1,5 +1,6 @@
 class Shader {
 
+	#type;
 	#glShader; // The WebGL shader pointer
 	#srcUrl;
 	gl;
@@ -7,7 +8,7 @@ class Shader {
 	constructor(gl, url, type) {
 		this.gl = gl;
 		this.srcUrl = url;
-		this.glShader = gl.createShader(type);
+		this.type = type;
 	}
 
 	load(whenReady) {
@@ -32,6 +33,7 @@ class Shader {
 
 	compile() {
 		console.log("Compiling shader: " + this.url);
+		this.glShader = this.gl.createShader(this.type);
 		this.gl.shaderSource(this.glShader, this.glsl);
 		this.gl.compileShader(this.glShader);
 		console.log("Loaded shader: " + this.url);
@@ -39,6 +41,10 @@ class Shader {
 
 	get url() {
 		return this.srcUrl;
+	}
+
+	linkTo(glProgram) {
+		this.gl.attachShader(glProgram, this.glShader);
 	}
 
 }
@@ -55,6 +61,29 @@ class FragmentShader extends Shader {
 
 	constructor(gl, url) {
 		super(gl, url, gl.FRAGMENT_SHADER);
+	}
+
+}
+
+class ShaderProgram {
+	
+	#gl;
+	#shaders;
+	#glProgram;
+
+	constructor(gl, shaders) {
+		this.gl = gl;
+		this.shaders = shaders;
+	}
+
+	link() {
+		this.glProgram = this.gl.createProgram();
+		this.shaders.forEach(shader => shader.linkTo(this.glProgram));
+		this.gl.linkProgram(this.glProgram);
+	}
+
+	use() {
+		this.gl.useProgram(this.glProgram);
 	}
 
 }
