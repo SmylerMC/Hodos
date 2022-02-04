@@ -11,7 +11,7 @@ class WorldMap {
 	}
 
 	load(whenReady) {
-		let testShader = new Shader(this.gl, "glsl/vertex.glsl", this.gl.VERTEX_SHADER);
+		let testShader = new VertexShader(this.gl, "glsl/vertex.glsl");
 		testShader.load(whenReady);
 	}
 

@@ -1,8 +1,12 @@
 class Shader {
+
+	#glShader; // The WebGL shader pointer
+	#srcUrl;
+	gl;
 	
 	constructor(gl, url, type) {
 		this.gl = gl;
-		this.url = url;
+		this.srcUrl = url;
 		this.glShader = gl.createShader(type);
 	}
 
@@ -33,5 +37,24 @@ class Shader {
 		console.log("Loaded shader: " + this.url);
 	}
 
-	
+	get url() {
+		return this.srcUrl;
+	}
+
+}
+
+class VertexShader extends Shader {
+
+	constructor(gl, url) {
+		super(gl, url, gl.VERTEX_SHADER);
+	}
+
+}
+
+class FragmentShader extends Shader {
+
+	constructor(gl, url) {
+		super(gl, url, gl.FRAGMENT_SHADER);
+	}
+
 }
