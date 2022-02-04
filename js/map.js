@@ -10,4 +10,9 @@ class WorldMap {
 		this.canvas.height = height;
 	}
 
+	load(whenReady) {
+		let testShader = new Shader(this.gl, "glsl/vertex.glsl", this.gl.VERTEX_SHADER);
+		testShader.load(whenReady);
+	}
+
 }
