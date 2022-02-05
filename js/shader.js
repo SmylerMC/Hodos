@@ -70,6 +70,7 @@ class ShaderProgram {
 	#gl;
 	#shaders;
 	#glProgram;
+	#glCoordsAttrib;
 
 	constructor(gl, shaders) {
 		this.gl = gl;
@@ -80,10 +81,24 @@ class ShaderProgram {
 		this.glProgram = this.gl.createProgram();
 		this.shaders.forEach(shader => shader.linkTo(this.glProgram));
 		this.gl.linkProgram(this.glProgram);
+		this.glCoordsAttrib = this.gl.getAttribLocation(this.glProgram, "coordinates");
 	}
 
 	use() {
 		this.gl.useProgram(this.glProgram);
+	}
+
+	draw(geometry) {
+		this.gl.bindBuffer(this.gl.ARRAY_BUFFER, geometry.vbo);
+		this.gl.vertexAttribPointer(
+			this.glCoordsAttrib,
+			3, this.gl.FLOAT,
+			false, 0, 0);
+		this.gl.enableVertexAttribArray(this.glCoordsAttrib);
+		this.gl.drawArrays(
+			this.gl.TRIANGLE_STRIP,
+			geometry.verticesStart,
+			geometry.verticesEnd);
 	}
 
 }

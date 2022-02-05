@@ -13,11 +13,33 @@ class WorldMap {
 	resize(width, height) {
 		this.canvas.width = width;
 		this.canvas.height = height;
+		this.gl.viewport(0, 0, this.canvas.width, this.canvas.height);
 	}
 
 	load(whenReady) {
 		this.whenReady = whenReady;
 		this.#loadShaders();
+		this.testTriangle1 = new Triangle(this.gl,
+			0, 0, 0,
+			0, 1, 0,
+			1, 1, 0
+		);
+		this.testTriangle2 = new Triangle(this.gl,
+			0, 0, 0,
+			0, -1, 0,
+			-1, -1, 0
+		);
+	}
+
+	startRender() {
+		setInterval(() => this.#render(), 1000/10);
+	}
+
+	#render() {
+		this.gl.clearColor(.5, 0, 0, 1);
+		this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
+		this.shaders.draw(this.testTriangle1);
+		this.shaders.draw(this.testTriangle2);
 	}
 
 	#loadShaders() {
@@ -49,6 +71,10 @@ class WorldMap {
 			if(--i <= 0) whenReady();
 		}
 		loadables.forEach(l => l.load(loaded));
+	}
+	
+	get shaders() {
+		return this.shaderProgram;
 	}
 
 }
