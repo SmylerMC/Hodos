@@ -6,7 +6,7 @@ const worldMap = new WorldMap(document.getElementById("map"));
 resize();
 window.addEventListener('resize', resize)
 
-worldMap.load(() => {
-	console.log("Shader loaded")
+worldMap.load().then(() => {
+	console.log("Map loaded");
 	worldMap.startRender();
 });

@@ -16,19 +16,11 @@ class WorldMap {
 		this.gl.viewport(0, 0, this.canvas.width, this.canvas.height);
 	}
 
-	load(whenReady) {
-		this.whenReady = whenReady;
-		this.#loadShaders();
-		this.testTriangle1 = new Triangle(this.gl,
-			0, 0, 0,
-			0, 1, 0,
-			1, 1, 0
-		);
-		this.testTriangle2 = new Triangle(this.gl,
-			0, 0, 0,
-			0, -1, 0,
-			-1, -1, 0
-		);
+	async load() {
+		await Promise.all([
+			await this.#loadShaders(),
+			this.#loadData()
+		]);
 	}
 
 	startRender() {
@@ -42,37 +34,33 @@ class WorldMap {
 		this.shaders.draw(this.testTriangle2);
 	}
 
-	#loadShaders() {
+	async #loadShaders() {
 		let vShader = new VertexShader(this.gl, "glsl/vertex.glsl");
 		let fShader = new FragmentShader(this.gl, "glsl/fragment.glsl");
-		let shaders = [vShader, fShader];
-		this.#loadAll(() => this.#loadShaderProgram(shaders), shaders);
+		await Promise.all([
+			await vShader.load(),
+			await fShader.load()
+		]).then(() => {
+			let program = new ShaderProgram(this.gl, [vShader, fShader]);
+			program.link();
+			program.use();
+			this.shaderProgram = program;
+		}, () => console.log("Failed to load shaders"));
 	}
 
-	#loadShaderProgram(shaders) {
-		let program = new ShaderProgram(this.gl, shaders);
-		program.link();
-		program.use();
-		this.shaderProgram = program;
-		this.#checkLoaded();
+	async #loadData() {
+		this.testTriangle1 = new Triangle(this.gl,
+			0, 0, 0,
+			0, 1, 0,
+			1, 1, 0
+		);
+		this.testTriangle2 = new Triangle(this.gl,
+			0, 0, 0,
+			0, -1, 0,
+			-1, -1, 0
+		);
 	}
 
-	#checkLoaded() {
-		if (this.shaderProgram != null) this.whenReady();
-	}
-
-	/**
-	 * Utility method to load all given resources async and
-	 * call a method once ready.
-	 */
-	#loadAll(whenReady, loadables) {
-		var i = loadables.length;
-		let loaded = () => {
-			if(--i <= 0) whenReady();
-		}
-		loadables.forEach(l => l.load(loaded));
-	}
-	
 	get shaders() {
 		return this.shaderProgram;
 	}
