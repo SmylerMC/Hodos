@@ -28,7 +28,7 @@ class WorldMap {
 	}
 
 	#render() {
-		this.gl.clearColor(.5, 0, 0, 1);
+		this.gl.clearColor(0, 0.5, 0.8, 1);
 		this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
 		this.shaders.draw(this.tileTest);
 	}
