@@ -30,8 +30,7 @@ class WorldMap {
 	#render() {
 		this.gl.clearColor(.5, 0, 0, 1);
 		this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
-		this.shaders.draw(this.testTriangle1);
-		this.shaders.draw(this.testTriangle2);
+		this.shaders.draw(this.tileTest);
 	}
 
 	async #loadShaders() {
@@ -59,6 +58,7 @@ class WorldMap {
 			0, -1, 0,
 			-1, -1, 0
 		);
+		this.tileTest = new BackedTile(this.gl);
 	}
 
 	get shaders() {

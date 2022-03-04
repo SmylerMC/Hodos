@@ -82,8 +82,9 @@ class ShaderProgram {
 			3, this.gl.FLOAT,
 			false, 0, 0);
 		this.gl.enableVertexAttribArray(this.glCoordsAttrib);
+	
 		this.gl.drawArrays(
-			this.gl.TRIANGLE_STRIP,
+			this.gl.TRIANGLES,
 			geometry.verticesStart,
 			geometry.verticesEnd);
 	}
