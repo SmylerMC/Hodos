@@ -12,11 +12,30 @@ class WorldMap {
   }
 
   render() {
+    //On regénère une triangulation de delaunay a partir de 1000 points random
     this.delaunay = d3.Delaunay.from(fillWithPoints(1000, this));
+
+    //On vide le canvas
     this.gl.clearRect(0, 0, this.width, this.height);
-    this.gl.fillStyle = "black";
+
+    //Rendu des triangles de delaunay
     this.gl.beginPath();
-    this.delaunay.render(this.gl, 1);
+    this.delaunay.render(this.gl);
+    this.gl.strokeStyle = "#ccc";
     this.gl.stroke();
+
+    //Rendu des cellules de voronoi
+    this.gl.beginPath();
+    this.delaunay
+      .voronoi([0, 0, this.canvas.width, this.canvas.height])
+      .render(this.gl);
+    this.gl.strokeStyle = "black";
+    this.gl.stroke();
+
+    //Rendu des barycentres des voronoi
+    this.gl.beginPath();
+    this.delaunay.renderPoints(this.gl);
+    this.gl.fillStyle = "black";
+    this.gl.fill();
   }
 }
