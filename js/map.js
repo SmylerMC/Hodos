@@ -3,18 +3,32 @@ class WorldMap {
     this.canvas = canvas;
     this.gl = canvas.getContext("2d");
     this.delaunay = d3.Delaunay.from(fillWithPoints(1000, this));
+    this.cells = Array();
+  }
+
+  createAllCells(voronoid) {
+    for (let i = 0; i < this.delaunay.points.length; i += 2) {
+      this.cells.push(
+        new cell(this.delaunay.points[i], this.delaunay.points[i + 1], 0)
+      );
+      this.cells[i / 2].createPolygonFromDelaunay(voronoid.cellPolygon(i / 2));
+    }
   }
 
   resize(width, height) {
     this.canvas.width = width;
     this.canvas.height = height;
+    this.regenerate();
+    this.createAllCells(this.delaunay.voronoi([0, 0, width, height]));
     this.render();
   }
 
-  render() {
+  regenerate() {
     //On regénère une triangulation de delaunay a partir de 1000 points random
     this.delaunay = d3.Delaunay.from(fillWithPoints(1000, this));
+  }
 
+  render() {
     //On vide le canvas
     this.gl.clearRect(0, 0, this.width, this.height);
 
