@@ -1,38 +1,43 @@
 class WorldMap {
-  canvas;
-  gl;
-  seed;
-  delaunay;
+  canvas; // Canvas
+  gl; // Context
+  seed; // String (int converted to str)
+  trianglesVertices; // Array [ [x0, y0], [x1, y1], ... ]
+  delaunay; // d3-delaunay object
 
   constructor(canvas) {
     this.canvas = canvas;
     this.gl = canvas.getContext("2d");
     this.seed = generateSeed();
-    this.delaunay = d3.Delaunay.from(fillWithPoints(1000, this));
+    this.trianglesVertices = fillWithPoints(1000, this);
+    this.delaunay = d3.Delaunay.from(this.trianglesVertices);
   }
 
   resize(width, height) {
     this.canvas.width = width;
     this.canvas.height = height;
+    this.trianglesVertices = fillWithPoints(1000, this);
     this.render();
+    this.lloydRelaxation(2);
   }
 
-  relax() {
-    var polygons = this.delaunay.voronoi().cellPolygons,
-      centroids = this.delaunay.voronoi().circumcenters,
-      converged = points.every(function (point, i) {
-        return distance(point, centroids[i]) < 1;
-      });
+  /* Lloyd's relaxation of voronoi cells */
+  /* 1 or 2 steps are doing the job quite right */
+  lloydRelaxation(totalSteps) {
+    for (let i = 0; i < totalSteps; i++) {
+      var polygons = Array.from(
+          this.delaunay
+            .voronoi([0, 0, this.canvas.width, this.canvas.height])
+            .cellPolygons()
+        ),
+        centroids = polygons.map(d3.polygonCentroid);
 
-    this.render();
-
-    if (converged) {
-      console.log("Lloyd done !");
-    } else {
-      setTimeout(function () {
-        relax(centroids);
-      }, 50);
+      this.trianglesVertices = centroids;
+      this.delaunay = d3.Delaunay.from(this.trianglesVertices);
     }
+
+    console.log("Lloyd's relaxation done in " + totalSteps + " steps !");
+    this.render();
   }
 
   /* DEV METHODS / STATIC */
@@ -90,12 +95,14 @@ class WorldMap {
     );
   }
 
+  /* RENDER METHOD */
+
   render() {
     //On regénère une triangulation de delaunay a partir de 1000 points random
-    this.delaunay = d3.Delaunay.from(fillWithPoints(1000, this));
+    this.delaunay = d3.Delaunay.from(this.trianglesVertices);
 
     //On vide le canvas
-    this.gl.clearRect(0, 0, this.width, this.height);
+    this.gl.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
     //Rendu des triangles de delaunay
     this.gl.beginPath();
