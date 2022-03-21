@@ -1,6 +1,5 @@
 class WorldMap {
 
-	#whenReady;
 	#shaderProgram;
 	#div;
 	#canvas;

@@ -5,17 +5,17 @@ class BackedTile {
 	#vertexCount;
 
 	constructor(gl) {
-		this.gl = gl;
-		this.vertices = this.gl.createBuffer();
-		this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.vertices);
+		this.#gl = gl;
+		this.#vertices = this.#gl.createBuffer();
+		this.#gl.bindBuffer(this.#gl.ARRAY_BUFFER, this.#vertices);
 		let data = [];
-		this.fillDataArray(data);
-		this.vertexCount = data.length;
-		this.gl.bufferData(this.gl.ARRAY_BUFFER, new Float32Array(data), this.gl.STATIC_DRAW);
-		this.gl.bindBuffer(this.gl.ARRAY_BUFFER, null);
+		this.#fillDataArray(data);
+		this.#vertexCount = data.length;
+		this.#gl.bufferData(this.#gl.ARRAY_BUFFER, new Float32Array(data), this.#gl.STATIC_DRAW);
+		this.#gl.bindBuffer(this.#gl.ARRAY_BUFFER, null);
 	}
 
-	fillDataArray(arr) {
+	#fillDataArray(arr) {
 		// Ugly poorly written test done at 12AM
 		noise.seed(Math.random());
 		for (let i = 0; i < 100; i++) {
@@ -45,7 +45,7 @@ class BackedTile {
 	}
 
 	get vbo() {
-		return this.vertices;
+		return this.#vertices;
 	}
 
 	get verticesStart() {
@@ -53,13 +53,16 @@ class BackedTile {
 	}
 
 	get verticesEnd() {
-		return this.vertexCount / 3;
+		return this.#vertexCount / 3;
 	}
 
 
 
 }
 
+/**
+ * Only there for test purpose
+ */
 class Triangle {
 
 	#gl;
