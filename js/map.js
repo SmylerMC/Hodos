@@ -24,6 +24,10 @@ class WorldMap {
 		this.#canvas.width = width;
 		this.#canvas.height = height;
 		this.#gl.viewport(0, 0, this.#canvas.width, this.#canvas.height);
+		let scale = 500;
+		this.camera.scaleX = scale / width;
+		this.camera.scaleY = scale / height;
+		this.camera.updateGl();
 	}
 
 	async load() {

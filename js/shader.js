@@ -137,13 +137,20 @@ class Camera {
 	#gl;
 	#matrixLocation;
 
+	scaleX = 1;
+	scaleY = 1;
+
 	constructor(gl, matrixLocation) {
 		this.#gl = gl;
 		this.#matrixLocation = matrixLocation;
 	}
 
 	updateGl() {
-		let matrix = new Float32Array([2, 0, 0, 0, 0, 2, 0, 0, 0, 0, 1, 0, -1, -1, 0, 1]);
+		let matrix = new Float32Array(
+			[this.scaleX, 0, 0, 0,
+			 0, this.scaleY, 0, 0,
+			 0, 0, 1, 0,
+			 -1, -1, 0, 1]);
 		this.#gl.uniformMatrix4fv(this.#matrixLocation, false, matrix);
 	}
 }

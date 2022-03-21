@@ -1,6 +1,5 @@
 const resize = () => {
 	worldMap.resize(window.innerWidth, window.innerHeight);
-	worldMap.camera.updateGl();
 }
 
 const worldMap = new WorldMap(document.getElementById("map"));
