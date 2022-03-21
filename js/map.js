@@ -7,6 +7,7 @@ class WorldMap {
 	#gl;
 	#lastFrameStartTime;
 	#lastFramesTimes = [];
+	#controller;
 
 	constructor(div) {
 		this.#div = div;
@@ -18,15 +19,15 @@ class WorldMap {
 		this.#debugSpan.classList.add("hodos-debug");
 		div.appendChild(this.#debugSpan);
 		this.#gl = this.#canvas.getContext("experimental-webgl");
+		this.#controller = new MapController(this);
 	}
 
 	resize(width, height) {
 		this.#canvas.width = width;
 		this.#canvas.height = height;
 		this.#gl.viewport(0, 0, this.#canvas.width, this.#canvas.height);
-		let scale = 500;
-		this.camera.scaleX = scale / width;
-		this.camera.scaleY = scale / height;
+		this.camera.scaleX = SCALE / width;
+		this.camera.scaleY = SCALE / height;
 		this.camera.updateGl();
 	}
 
@@ -51,7 +52,12 @@ class WorldMap {
 		if (this.#lastFrameStartTime) {
 			this.#lastFramesTimes.push(start - this.#lastFrameStartTime);
 			if (this.#lastFramesTimes.length > 100) this.#lastFramesTimes.shift();
-		this.#debugSpan.innerText = "FPS: " + this.fps + " | Frame time: " + frameTime + "ms";
+			this.#debugSpan.innerText = 
+				"FPS: " + this.fps +
+				" | Frame time: " + frameTime + "ms" +
+				" | Zoom: " + this.camera.zoom +
+				" | PosX: " + this.camera.posX +
+				" | PosY: " + this.camera.posY;
 		}
 		this.#lastFrameStartTime = start;
 		window.requestAnimationFrame(t => this.#render(t));
@@ -73,6 +79,7 @@ class WorldMap {
 
 	async #loadData() {
 		this.tileTest = new BackedTile(this.#gl);
+		this.controller.setupCallback();
 	}
 
 	get shaders() {
@@ -85,6 +92,60 @@ class WorldMap {
 
 	get camera() {
 		return this.#shaderProgram.camera;
+	}
+
+	get controller() {
+		return this.#controller;
+	}
+
+}
+
+class MapController {
+
+	#map;
+
+	constructor(map) {
+		this.#map = map;
+	}
+
+	move(deltaX, deltaY) {
+		this.#map.camera.posX += deltaX;
+		this.#map.camera.posY += deltaY;
+		this.#map.camera.updateGl();
+	}
+
+	zoom(deltaZoom) {
+		this.#map.camera.zoom += deltaZoom;
+		this.#map.camera.updateGl();
+	}
+
+	onKeyPress(keyEvent) {
+		let code = keyEvent.keyCode;
+		console.log(code);
+		if (code === 37) {
+			this.move(-10 / SCALE, 0);
+		}
+		if (code === 40) {
+			this.move(0, -10 / SCALE);
+		}
+		if (code === 39) {
+			this.move(10 / SCALE, 0);
+		}
+		if (code === 38) {
+			this.move(0, 10 / SCALE);
+		}
+		if (code === 107) {
+			this.zoom(1);
+		}
+		if (code === 109) {
+			this.zoom(-1);
+		}
+	}
+
+	setupCallback() {
+		window.onkeydown = e => {
+			this.onKeyPress(e);
+		}
 	}
 
 }

@@ -1,3 +1,9 @@
+/**
+ * The size of a rendered map tile, in pixels on the screen.
+ */
+const SCALE = 256;
+
+
 const resize = () => {
 	worldMap.resize(window.innerWidth, window.innerHeight);
 }

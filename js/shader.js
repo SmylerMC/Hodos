@@ -139,6 +139,9 @@ class Camera {
 
 	scaleX = 1;
 	scaleY = 1;
+	posX = 0;
+	posY = 0;
+	zoom = 0;
 
 	constructor(gl, matrixLocation) {
 		this.#gl = gl;
@@ -146,11 +149,16 @@ class Camera {
 	}
 
 	updateGl() {
+		let zoomFactor = Math.pow(2, this.zoom);
+		let scaleX = this.scaleX * zoomFactor;
+		let scaleY = this.scaleY * zoomFactor;
+		let deltaX = - this.posX * zoomFactor;
+		let deltaY = - this.posY * zoomFactor;
 		let matrix = new Float32Array(
-			[this.scaleX, 0, 0, 0,
-			 0, this.scaleY, 0, 0,
-			 0, 0, 1, 0,
-			 -1, -1, 0, 1]);
+			[scaleX, 0,      0, 0,
+			 0,      scaleY, 0, 0,
+			 0,      0,      0, 0,
+			 deltaX, deltaY, 0, 1]);
 		this.#gl.uniformMatrix4fv(this.#matrixLocation, false, matrix);
 	}
 }
