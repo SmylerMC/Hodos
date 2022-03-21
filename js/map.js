@@ -79,4 +79,8 @@ class WorldMap {
 		return Math.round(this.#lastFramesTimes.length  / this.#lastFramesTimes.reduce((sum, val) => sum + val) * 1000);
 	}
 
+	get camera() {
+		return this.#shaderProgram.camera;
+	}
+
 }

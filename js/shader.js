@@ -38,8 +38,8 @@ class Shader {
 	 * Loads the shader's source code from its URL
 	 */
 	async load() {
-		console.log("Loading shader: " + this.#url)
-		let response = await fetch(this.#url);
+		console.log("Loading shader: " + this.url)
+		let response = await fetch(this.url);
 		this.#glsl = await response.text();
 		this.compile();
 	}
@@ -53,7 +53,7 @@ class Shader {
 		this.#glShader = this.#gl.createShader(this.#type);
 		this.#gl.shaderSource(this.#glShader, this.#glsl);
 		this.#gl.compileShader(this.#glShader);
-		console.log("Loaded shader: " + this.#url);
+		console.log("Loaded shader: " + this.url);
 	}
 
 	get url() {
@@ -93,6 +93,7 @@ class ShaderProgram {
 	#shaders;
 	#glProgram;
 	#glCoordsAttrib;
+	#camera;
 
 	constructor(gl, shaders) {
 		this.#gl = gl;
@@ -108,6 +109,7 @@ class ShaderProgram {
 
 	use() {
 		this.#gl.useProgram(this.#glProgram);
+		this.#camera = new Camera(this.#gl, this.#gl.getUniformLocation(this.#glProgram, "view"));
 	}
 
 	draw(geometry) {
@@ -124,4 +126,24 @@ class ShaderProgram {
 			geometry.verticesEnd);
 	}
 
+	get camera() {
+		return this.#camera;
+	}
+
+}
+
+class Camera {
+
+	#gl;
+	#matrixLocation;
+
+	constructor(gl, matrixLocation) {
+		this.#gl = gl;
+		this.#matrixLocation = matrixLocation;
+	}
+
+	updateGl() {
+		let matrix = new Float32Array([2, 0, 0, 0, 0, 2, 0, 0, 0, 0, 1, 0, -1, -1, 0, 1]);
+		this.#gl.uniformMatrix4fv(this.#matrixLocation, false, matrix);
+	}
 }
