@@ -74,10 +74,11 @@ class WorldMap {
       if (this.cells[current_cell].earth == 0) {
         this.cells[current_cell].setEarth();
         for (let next of this.delaunay.neighbors(current_cell)) {
-          if (Math.random() < proba) burn.unshift(next);
+          if (Math.random() < proba && !this.delaunay.hull.includes(next))
+            burn.unshift(next);
         }
       }
-      proba -= 0.01;
+      proba -= 0.001;
     }
   }
 }
