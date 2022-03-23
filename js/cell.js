@@ -2,15 +2,15 @@ class cell {
   x;
   y;
   z;
-  center;
   polygon = Array();
-
   earth = 0;
 
   constructor(x, y, z) {
     this.x = x;
     this.y = y;
     this.z = z;
+    this.polygon = Array();
+    this.earth = 0;
   }
 
   getX() {
