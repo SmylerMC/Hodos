@@ -23,6 +23,7 @@ class WorldMap {
     this.createAllCells(this.delaunay.voronoi([0, 0, width, height]));
     //this.render();
     this.generateContinent();
+    this.generateIsland(0.01);
     this.renderCell();
   }
 
@@ -62,7 +63,7 @@ class WorldMap {
     });
   }
 
-  generateContinent() {
+  generateContinentBurn() {
     var burn;
     burn = Array();
     burn.push(
@@ -78,7 +79,15 @@ class WorldMap {
             burn.unshift(next);
         }
       }
-      proba -= 0.001;
+      proba -= 0.01;
     }
+  }
+
+  generateIsland(taux) {
+    this.cells.forEach((cell) => {
+      if (Math.random() < taux) {
+        cell.setEarth();
+      }
+    });
   }
 }
