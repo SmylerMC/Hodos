@@ -1,23 +1,28 @@
 class cell {
+  x;
+  y;
+  z;
   center;
   polygon = Array();
 
   earth = 0;
 
   constructor(x, y, z) {
-    this.center = new point(x, y, z);
+    this.x = x;
+    this.y = y;
+    this.z = z;
   }
 
   getX() {
-    return this.center.xCoord;
+    return this.x;
   }
 
   getY() {
-    return this.center.yCoord;
+    return this.y;
   }
 
   getCoord() {
-    return [this.center.xCoord, this.center.yCoord];
+    return [this.x, this.y];
   }
 
   createPolygonFromDelaunay(points) {
@@ -29,5 +34,9 @@ class cell {
 
   addPolygonPoint(point) {
     this.polygon.push(point);
+  }
+
+  setEarth() {
+    this.earth = 1;
   }
 }
