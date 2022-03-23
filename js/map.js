@@ -58,9 +58,7 @@ class WorldMap {
 
   renderCell() {
     this.cells.forEach((cell) => {
-      if (cell.earth == 0) this.gl.fillStyle = "#00FFFF";
-      else this.gl.fillStyle = "#FF0000";
-      this.gl.fillRect(cell.getX(), cell.getY(), 2, 2);
+      cell.drawCell(this.gl);
     });
   }
 
@@ -76,10 +74,10 @@ class WorldMap {
       if (this.cells[current_cell].earth == 0) {
         this.cells[current_cell].setEarth();
         for (let next of this.delaunay.neighbors(current_cell)) {
-          if (Math.random() < proba) burn.push(next);
+          if (Math.random() < proba) burn.unshift(next);
         }
       }
-      proba -= 0.05;
+      proba -= 0.01;
     }
   }
 }
