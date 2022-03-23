@@ -1,12 +1,20 @@
 class WorldMap {
+  canvas; // Canvas
+  gl; // Context
+  seed; // String (int converted to str)
+  trianglesVertices; // Array [ [x0, y0], [x1, y1], ... ]
+  delaunay; // d3-delaunay object
+
   constructor(canvas) {
     this.canvas = canvas;
     this.gl = canvas.getContext("2d");
-    this.delaunay = d3.Delaunay.from(fillWithPoints(1000, this));
     this.cells = Array();
+    this.seed = generateSeed();
+    this.trianglesVertices = fillWithPoints(1000, this);
+    this.delaunay = d3.Delaunay.from(this.trianglesVertices);
   }
 
-  createAllCells(voronoid) {
+    createAllCells(voronoid) {
     this.cells = Array();
     for (let i = 0; i < this.delaunay.points.length; i += 2) {
       this.cells.push(
@@ -14,12 +22,16 @@ class WorldMap {
       );
       this.cells[i / 2].createPolygonFromDelaunay(voronoid.cellPolygon(i / 2));
     }
-  }
-
+  
   resize(width, height) {
     this.canvas.width = width;
     this.canvas.height = height;
-    this.regenerate();
+
+    //this.regenerate();
+    
+    this.trianglesVertices = fillWithPoints(1000, this);
+    this.render();
+    this.lloydRelaxation(2);
     this.createAllCells(this.delaunay.voronoi([0, 0, width, height]));
     //this.render();
     this.generateContinent();
@@ -32,9 +44,92 @@ class WorldMap {
     this.delaunay = d3.Delaunay.from(fillWithPoints(1000, this));
   }
 
+
+  
+
+  /* Lloyd's relaxation of voronoi cells */
+  /* 1 or 2 steps are doing the job quite right */
+  lloydRelaxation(totalSteps) {
+    for (let i = 0; i < totalSteps; i++) {
+      var polygons = Array.from(
+          this.delaunay
+            .voronoi([0, 0, this.canvas.width, this.canvas.height])
+            .cellPolygons()
+        ),
+        centroids = polygons.map(d3.polygonCentroid);
+
+      this.trianglesVertices = centroids;
+      this.delaunay = d3.Delaunay.from(this.trianglesVertices);
+    }
+
+    console.log("Lloyd's relaxation done in " + totalSteps + " steps !");
+    this.render();
+  }
+
+  /* DEV METHODS / STATIC */
+
+  /* Colorize the edges of the i triangle */
+  color(i) {
+    this.gl.beginPath();
+    this.delaunay.renderTriangle(i, this.gl);
+    this.gl.strokeStyle = "#b8625c";
+    this.gl.stroke();
+  }
+
+  /* Colorize progressively the edges of the start to end triangles */
+  static colorRange(a, start, end) {
+    var i = start; //  set your counter to 1
+
+    function myLoop(a) {
+      //  create a loop function
+      setTimeout(function () {
+        //  call a 3s setTimeout when the loop is called
+        a.color(i);
+        i++; //  increment the counter
+        if (i < end) {
+          //  if the counter < 10, call the loop function
+          myLoop(a); //  ..  again which will trigger another
+        } //  ..  setTimeout()
+      }, 100);
+    }
+
+    myLoop(a);
+  }
+
+  colorPoints() {
+    this.gl.beginPath();
+    this.delaunay.renderPoints(this.gl);
+    this.gl.fillStyle = "red";
+    this.gl.fill();
+  }
+
+  colorPolygonAndPoint(i) {
+    this.gl.beginPath();
+    this.delaunay
+      .voronoi([0, 0, this.canvas.width, this.canvas.height])
+      .renderCell(i, this.gl);
+    this.gl.fillStyle = "green";
+    this.gl.fill();
+
+    this.gl.beginPath();
+    this.gl.fillStyle = "red";
+    this.gl.fillRect(
+      this.delaunay.points[i * 2],
+      this.delaunay.points[i * 2 + 1],
+      2,
+      2
+    );
+  }
+
+  /* RENDER METHOD */
+
+
   render() {
+    
+     //On regénère une triangulation de delaunay a partir de 1000 points random
+    this.delaunay = d3.Delaunay.from(this.trianglesVertices);
     //On vide le canvas
-    this.gl.clearRect(0, 0, this.width, this.height);
+    this.gl.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
     //Rendu des triangles de delaunay
     this.gl.beginPath();
