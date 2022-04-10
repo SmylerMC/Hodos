@@ -1,4 +1,3 @@
-const worldMap = new WorldMap(document.getElementById("map"));
+const worldMap = new MapGenerator(document.getElementById("map"));
 resize();
 window.addEventListener("resize", resize);
-
