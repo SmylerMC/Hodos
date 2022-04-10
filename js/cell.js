@@ -1,24 +1,28 @@
 class cell {
-  x;
-  y;
-  z;
+  #x;
+  #y;
+  #z;
   polygon = Array();
   earth = 0;
 
   constructor(x, y, z) {
-    this.x = x;
-    this.y = y;
-    this.z = z;
+    this.#x = x;
+    this.#y = y;
+    this.#z = z;
     this.polygon = Array();
     this.earth = 0;
   }
 
-  getX() {
-    return this.x;
+  get x() {
+    return this.#x;
   }
 
-  getY() {
-    return this.y;
+  get y() {
+    return this.#y;
+  }
+
+  get z() {
+    return this.#z;
   }
 
   getCoord() {
@@ -38,6 +42,8 @@ class cell {
 
   setEarth() {
     this.earth = 1;
+    //Temporary
+    this.#z = 1;
   }
 
   //debug function

@@ -14,11 +14,12 @@ class MapGenerator {
     this.delaunay = d3.Delaunay.from(this.trianglesVertices);
   }
 
+  // create cell from the voronoid diagram
   createAllCells(voronoid) {
     this.cells = Array();
     for (let i = 0; i < this.delaunay.points.length; i += 2) {
       this.cells.push(
-        new cell(this.delaunay.points[i], this.delaunay.points[i + 1], 0)
+        new cell(this.delaunay.points[i], this.delaunay.points[i + 1], -1)
       );
       this.cells[i / 2].createPolygonFromDelaunay(voronoid.cellPolygon(i / 2));
     }
@@ -119,7 +120,37 @@ class MapGenerator {
     );
   }
 
-  /* RENDER METHOD */
+  /* GENERATION METHOD */
+
+  generateContinentBurn() {
+    var burn;
+    burn = Array();
+    burn.push(
+      this.delaunay.find(window.innerWidth / 2, window.innerHeight / 2)
+    );
+    let proba = 1.0;
+    while (burn.length != 0) {
+      var current_cell = burn.pop();
+      if (this.cells[current_cell].earth == 0) {
+        this.cells[current_cell].setEarth();
+        for (let next of this.delaunay.neighbors(current_cell)) {
+          if (Math.random() < proba && !this.delaunay.hull.includes(next))
+            burn.unshift(next);
+        }
+      }
+      proba -= 0.01;
+    }
+  }
+
+  generateIsland(taux) {
+    this.cells.forEach((cell) => {
+      if (Math.random() < taux) {
+        cell.setEarth();
+      }
+    });
+  }
+
+  /* RENDER DEBUG METHOD */
 
   render() {
     //On regénère une triangulation de delaunay a partir de 1000 points random
@@ -151,34 +182,6 @@ class MapGenerator {
   renderCell() {
     this.cells.forEach((cell) => {
       cell.drawCell(this.gl);
-    });
-  }
-
-  generateContinentBurn() {
-    var burn;
-    burn = Array();
-    burn.push(
-      this.delaunay.find(window.innerWidth / 2, window.innerHeight / 2)
-    );
-    let proba = 1.0;
-    while (burn.length != 0) {
-      var current_cell = burn.pop();
-      if (this.cells[current_cell].earth == 0) {
-        this.cells[current_cell].setEarth();
-        for (let next of this.delaunay.neighbors(current_cell)) {
-          if (Math.random() < proba && !this.delaunay.hull.includes(next))
-            burn.unshift(next);
-        }
-      }
-      proba -= 0.01;
-    }
-  }
-
-  generateIsland(taux) {
-    this.cells.forEach((cell) => {
-      if (Math.random() < taux) {
-        cell.setEarth();
-      }
     });
   }
 }
