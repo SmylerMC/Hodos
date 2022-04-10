@@ -10,6 +10,8 @@ class cell {
     this.#y = y;
     this.#z = z;
     this.polygon = Array();
+
+    this.continentNumber = 0;
     this.earth = 0;
   }
 
@@ -40,6 +42,10 @@ class cell {
     this.polygon.push(point);
   }
 
+  setContinent(nb) {
+    this.continentNumber = nb;
+  }
+
   setEarth() {
     this.earth = 1;
     //Temporary
@@ -51,7 +57,12 @@ class cell {
     if (this.earth == 0) {
       ctx.fillStyle = "#00FFFF";
     } else {
-      ctx.fillStyle = "#FF0000";
+      ctx.fillStyle =
+        "#FF" +
+        this.continentNumber.toString(16) +
+        "0" +
+        this.continentNumber.toString(16) +
+        "0";
     }
     ctx.beginPath();
     this.polygon.forEach((point, i) => {

@@ -36,8 +36,8 @@ class MapGenerator {
     this.lloydRelaxation(2);
     this.createAllCells(this.delaunay.voronoi([0, 0, width, height]));
     //this.render();
-    this.generateContinentBurn();
-    this.generateIsland(0.01);
+    this.generateMultipleContinentBurn(10, 0.5);
+    //this.generateIsland(0.01);
     this.renderCell();
   }
 
@@ -139,6 +139,46 @@ class MapGenerator {
         }
       }
       proba -= 0.01;
+    }
+  }
+
+  generateMultipleContinentBurn(continentNumber, taux) {
+    var burn;
+    burn = Array();
+    var indiceCell;
+    for (let i = 0; i < continentNumber; i++) {
+      indiceCell = this.delaunay.find(
+        getRandomInRange(0, window.innerWidth),
+        getRandomInRange(0, window.innerHeight)
+      );
+      this.cells[indiceCell].setContinent(i + 1);
+      burn.push(indiceCell);
+    }
+    burn.unshift(-1);
+    let proba = 1.0;
+    while (burn.length != 0) {
+      console.log(burn);
+      var indiceCell = burn.pop();
+      if (indiceCell == -1) {
+        proba -= taux;
+        if (burn.length != 0) {
+          burn.unshift(-1);
+        }
+      } else {
+        this.cells[indiceCell].setEarth();
+        for (let next of this.delaunay.neighbors(indiceCell)) {
+          if (
+            Math.random() < proba &&
+            !this.delaunay.hull.includes(next) &&
+            this.cells[next].earth == 0
+          ) {
+            burn.unshift(next);
+            this.cells[next].setContinent(
+              this.cells[indiceCell].continentNumber
+            );
+          }
+        }
+      }
     }
   }
 
