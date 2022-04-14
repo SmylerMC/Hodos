@@ -28,7 +28,16 @@ class cell {
   }
 
   getCoord() {
-    return [this.x, this.y];
+    return [this.x, this.y, this.z];
+  }
+
+  getPolyCoord() {
+    poly = [];
+    //TODO pb de consitance
+    this.polygon.forEach((point) => {
+      poly.push([point.xCoord, point.yCoord, point.altitude]);
+    });
+    return poly;
   }
 
   createPolygonFromDelaunay(points) {
@@ -49,7 +58,7 @@ class cell {
   setEarth() {
     this.earth = 1;
     //Temporary
-    this.#z = 1;
+    this.#z = 0.1;
   }
 
   //debug function

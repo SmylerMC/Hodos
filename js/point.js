@@ -1,7 +1,7 @@
 class point {
-  xCoord;
-  yCoord;
-  altitude;
+  #xCoord;
+  #yCoord;
+  #altitude;
 
   /**
    *
@@ -10,8 +10,24 @@ class point {
    * @param {float} z altitude of the point
    */
   constructor(x, y, z) {
-    this.xCoord = x;
-    this.yCoord = y;
-    this.altitude = z;
+    this.#xCoord = x;
+    this.#yCoord = y;
+    this.#altitude = z;
+  }
+
+  get xCoord() {
+    return this.#xCoord;
+  }
+
+  get yCoord() {
+    return this.#yCoord;
+  }
+
+  get altitude() {
+    return this.#altitude;
+  }
+
+  getCoord() {
+    return [this.xCoord, this.yCoord, this.altitude];
   }
 }

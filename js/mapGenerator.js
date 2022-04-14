@@ -19,12 +19,21 @@ class MapGenerator {
   // create cell from the voronoid diagram
   createAllCells(voronoid) {
     this.cells = Array();
+    //For evrey cell in Delaunay Graph create a Cell
     for (let i = 0; i < this.delaunay.points.length; i += 2) {
       this.cells.push(
         new cell(this.delaunay.points[i], this.delaunay.points[i + 1], -1)
       );
+      //Create an arrays with the point of the polygon
       this.cells[i / 2].createPolygonFromDelaunay(voronoid.cellPolygon(i / 2));
     }
+  }
+
+  //Create Tile for rendering
+  generateTile(z, x, y) {
+    //TODO create path
+    tile = new Tile(z, x, y, this.cells, []);
+    return Tile;
   }
 
   regenerate() {
@@ -37,9 +46,7 @@ class MapGenerator {
   lloydRelaxation(totalSteps) {
     for (let i = 0; i < totalSteps; i++) {
       var polygons = Array.from(
-          this.delaunay
-            .voronoi([0, 0, SCALE, SCALE])
-            .cellPolygons()
+          this.delaunay.voronoi([0, 0, SCALE, SCALE]).cellPolygons()
         ),
         centroids = polygons.map(d3.polygonCentroid);
 
@@ -89,9 +96,7 @@ class MapGenerator {
 
   colorPolygonAndPoint(i) {
     this.gl.beginPath();
-    this.delaunay
-      .voronoi([0, 0, SCALE, SCALE])
-      .renderCell(i, this.gl);
+    this.delaunay.voronoi([0, 0, SCALE, SCALE]).renderCell(i, this.gl);
     this.gl.fillStyle = "green";
     this.gl.fill();
 
