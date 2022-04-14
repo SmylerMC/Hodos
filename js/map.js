@@ -62,10 +62,10 @@ class MapController {
 			this.move(0, -10 / TILE_PIXEL_SIZE);
 		}
 		if (code === 39) {
-			this.move(10 / TILE_PIXEL, 0);
+			this.move(10 / TILE_PIXEL_SIZE, 0);
 		}
 		if (code === 38) {
-			this.move(0, 10 / TILE_PIXEL);
+			this.move(0, 10 / TILE_PIXEL_SIZE);
 		}
 		if (code === 107) {
 			this.zoom(1);

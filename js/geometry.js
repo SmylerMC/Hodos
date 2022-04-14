@@ -44,8 +44,8 @@ class Tile {
 				let vertex1 = polygonVertices[i - 1];
 				let vertex2 = polygonVertices[i % vertexCount];
 				let vertex3 = cell.getCoord();
-				data.push(...vertex2);
 				data.push(...vertex1);
+				data.push(...vertex2);
 				data.push(...vertex3);
 			}
 
