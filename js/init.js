@@ -3,12 +3,8 @@
  */
 const SCALE = 256;
 
-
-const resize = () => {
-	worldMap.resize(window.innerWidth, window.innerHeight);
-}
-
 const worldMap = new WorldMap(document.getElementById("map"));
+
 window.addEventListener('resize', resize)
 
 worldMap.load().then(() => {

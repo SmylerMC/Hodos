@@ -5,8 +5,8 @@ class WorldMap {
 	#controller;
 
 	constructor(div) {
-		/*Rajouter MapGenerator*/ 
-		this.#renderer = new MapRenderer(div);
+		this.#generator = new MapGenerator();
+		this.#renderer = new MapRenderer(div, this.#generator);
 		this.#controller = new MapController(this);
 	}
 
