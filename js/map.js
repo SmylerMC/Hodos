@@ -53,19 +53,21 @@ class MapController {
 	}
 
 	onKeyPress(keyEvent) {
+		let zoom = this.#map.camera.zoom;
+		let delta = 10 / (TILE_PIXEL_SIZE * Math.pow(2, zoom)) * WORLD_SIZE;
 		let code = keyEvent.keyCode;
 		console.log(code);
 		if (code === 37) {
-			this.move(-10 / TILE_PIXEL_SIZE, 0);
+			this.move(-delta, 0);
 		}
 		if (code === 40) {
-			this.move(0, -10 / TILE_PIXEL_SIZE);
+			this.move(0, -delta);
 		}
 		if (code === 39) {
-			this.move(10 / TILE_PIXEL_SIZE, 0);
+			this.move(delta, 0);
 		}
 		if (code === 38) {
-			this.move(0, 10 / TILE_PIXEL_SIZE);
+			this.move(0, delta);
 		}
 		if (code === 107) {
 			this.zoom(1);

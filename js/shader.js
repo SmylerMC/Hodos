@@ -152,8 +152,8 @@ class Camera {
 		let zoomFactor = Math.pow(2, this.zoom);
 		let scaleX = this.scaleX * zoomFactor;
 		let scaleY = this.scaleY * zoomFactor;
-		let deltaX = - this.posX * zoomFactor;
-		let deltaY = - this.posY * zoomFactor;
+		let deltaX = - this.posX * zoomFactor * scaleX;
+		let deltaY = - this.posY * zoomFactor * scaleY;
 		let matrix = new Float32Array(
 			[scaleX, 0,      0, 0,
 			 0,      scaleY, 0, 0,
