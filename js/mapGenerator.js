@@ -166,6 +166,7 @@ class MapGenerator {
         }
       } else {
         this.cells[indiceCell].setEarth();
+        var tempFuture = Array();
         for (let next of this.delaunay.neighbors(indiceCell)) {
           if (
             Math.random() < proba &&
