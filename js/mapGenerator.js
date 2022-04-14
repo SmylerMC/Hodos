@@ -45,7 +45,7 @@ class MapGenerator {
   lloydRelaxation(totalSteps) {
     for (let i = 0; i < totalSteps; i++) {
       var polygons = Array.from(
-          this.delaunay.voronoi([0, 0, TILE_PIXEL_SIZE, TILE_PIXEL_PIXEL]).cellPolygons()
+          this.delaunay.voronoi([0, 0, TILE_PIXEL_SIZE, TILE_PIXEL_SIZE]).cellPolygons()
         ),
         centroids = polygons.map(d3.polygonCentroid);
 
@@ -62,7 +62,7 @@ class MapGenerator {
     var burn;
     burn = Array();
     burn.push(
-      this.delaunay.find(TILE_PIXEL_SIZE / 2, TILE_PIXEL / 2)
+      this.delaunay.find(TILE_PIXEL_SIZE / 2, TILE_PIXEL_SIZE / 2)
     );
     let proba = 1.0;
     while (burn.length != 0) {
