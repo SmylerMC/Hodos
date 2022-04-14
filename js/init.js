@@ -3,6 +3,14 @@
  */
 const TILE_PIXEL_SIZE = 256;
 
+/**
+ * The maximum world coodinates in the 0/0/0 tile.
+ */
+const WORLD_SIZE = 10_000;
+
+/**
+ * The main map object
+ */
 const worldMap = new WorldMap(document.getElementById("map"));
 
 window.addEventListener('resize', resize)

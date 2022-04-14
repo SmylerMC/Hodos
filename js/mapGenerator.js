@@ -11,7 +11,7 @@ class MapGenerator {
     this.trianglesVertices = fillWithPoints(1000, this);
     this.delaunay = d3.Delaunay.from(this.trianglesVertices);
     this.lloydRelaxation(2);
-    this.createAllCells(this.delaunay.voronoi([0, 0, TILE_PIXEL_SIZE, TILE_PIXEL_SIZE]));
+    this.createAllCells(this.delaunay.voronoi([0, 0, WORLD_SIZE, WORLD_SIZE]));
     this.generateContinentBurn();
     this.generateIsland(0.01);
   }
@@ -45,7 +45,7 @@ class MapGenerator {
   lloydRelaxation(totalSteps) {
     for (let i = 0; i < totalSteps; i++) {
       var polygons = Array.from(
-          this.delaunay.voronoi([0, 0, TILE_PIXEL_SIZE, TILE_PIXEL_SIZE]).cellPolygons()
+          this.delaunay.voronoi([0, 0, WORLD_SIZE, WORLD_SIZE]).cellPolygons()
         ),
         centroids = polygons.map(d3.polygonCentroid);
 
@@ -62,7 +62,7 @@ class MapGenerator {
     var burn;
     burn = Array();
     burn.push(
-      this.delaunay.find(TILE_PIXEL_SIZE / 2, TILE_PIXEL_SIZE / 2)
+      this.delaunay.find(WORLD_SIZE / 2, WORLD_SIZE / 2)
     );
     let proba = 1.0;
     while (burn.length != 0) {
@@ -84,8 +84,8 @@ class MapGenerator {
     var indiceCell;
     for (let i = 0; i < continentNumber; i++) {
       indiceCell = this.delaunay.find(
-        getRandomInRange(0, TILE_PIXEL_SIZE),
-        getRandomInRange(0, TILE_PIXEL_SIZE)
+        getRandomInRange(0, WORLD_SIZE),
+        getRandomInRange(0, WORLD_SIZE)
       );
       this.cells[indiceCell].setContinent(i + 1);
       burn.push(indiceCell);
