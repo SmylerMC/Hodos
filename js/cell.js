@@ -63,27 +63,4 @@ class cell {
     this.#z = 0.1;
   }
 
-  //debug function
-  drawCell(ctx) {
-    if (this.earth == 0) {
-      ctx.fillStyle = "#00FFFF";
-    } else {
-      ctx.fillStyle =
-        "#FF" +
-        this.continentNumber.toString(16) +
-        "0" +
-        this.continentNumber.toString(16) +
-        "0";
-    }
-    ctx.beginPath();
-    this.polygon.forEach((point, i) => {
-      if (i == 0) {
-        ctx.moveTo(point.xCoord, point.yCoord);
-      } else {
-        ctx.lineTo(point.xCoord, point.yCoord);
-      }
-    });
-    ctx.closePath();
-    ctx.fill();
-  }
 }
