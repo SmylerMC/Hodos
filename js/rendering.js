@@ -29,13 +29,12 @@ class MapRenderer {
 		this.camera.updateGl();
 	}
 
-    async load() {
+	async load() {
 		await Promise.all([
 			await this.#loadShaders(),
 			this.#loadData()
 		]);
 	}
-
 
 	render(timestamp) {
 		let start = new Date().getTime();
@@ -55,7 +54,7 @@ class MapRenderer {
 				" | PosY: " + this.camera.posY;
 		}
 		this.#lastFrameStartTime = start;
-		window.requestAnimationFrame(t => this.#render(t));
+		window.requestAnimationFrame(t => this.render(t));
 	}
 
 	async #loadShaders() {
@@ -74,7 +73,6 @@ class MapRenderer {
 
 	async #loadData() {
 		this.tileTest = new BackedTile(this.#gl);
-		this.controller.setupCallback();
 	}
 
 	get shaders() {

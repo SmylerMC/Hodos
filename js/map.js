@@ -15,7 +15,8 @@ class WorldMap {
 	}
 
 	async load() {
-		this.#renderer.load();
+		await this.#renderer.load();
+		this.#controller.setupCallback();
 	}
 
 	startRender() {
