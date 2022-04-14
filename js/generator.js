@@ -19,8 +19,8 @@ const generateSeed = () => {
 const fillWithPoints = (n, worldMap) => {
   let arrayOfPoints = [];
   for (let i = 0; i < n; i++) {
-    let x = getRandomInRange(0, worldMap.canvas.width);
-    let y = getRandomInRange(0, worldMap.canvas.height);
+    let x = getRandomInRange(0, SCALE);
+    let y = getRandomInRange(0, SCALE);
     arrayOfPoints.push([x, y]);
   }
   return arrayOfPoints;

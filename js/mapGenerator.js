@@ -1,17 +1,19 @@
 class MapGenerator {
-  canvas; // Canvas
-  gl; // Context
   seed; // String (int converted to str)
   trianglesVertices; // Array [ [x0, y0], [x1, y1], ... ]
   delaunay; // d3-delaunay object
 
   constructor(canvas) {
-    this.canvas = canvas;
-    this.gl = canvas.getContext("2d");
     this.cells = Array();
     this.seed = generateSeed();
     this.trianglesVertices = fillWithPoints(1000, this);
     this.delaunay = d3.Delaunay.from(this.trianglesVertices);
+    this.trianglesVertices = fillWithPoints(1000, this);
+    this.delaunay = d3.Delaunay.from(this.trianglesVertices);
+    this.lloydRelaxation(2);
+    this.createAllCells(this.delaunay.voronoi([0, 0, SCALE, SCALE]));
+    this.generateMultipleContinentBurn(10, 0.5);
+    this.generateIsland(0.01);
   }
 
   // create cell from the voronoid diagram
@@ -25,22 +27,6 @@ class MapGenerator {
     }
   }
 
-  resize(width, height) {
-    this.canvas.width = width;
-    this.canvas.height = height;
-
-    //this.regenerate();
-
-    this.trianglesVertices = fillWithPoints(1000, this);
-    this.render();
-    this.lloydRelaxation(2);
-    this.createAllCells(this.delaunay.voronoi([0, 0, width, height]));
-    //this.render();
-    this.generateMultipleContinentBurn(10, 0.5);
-    //this.generateIsland(0.01);
-    this.renderCell();
-  }
-
   regenerate() {
     //On regénère une triangulation de delaunay a partir de 1000 points random
     this.delaunay = d3.Delaunay.from(fillWithPoints(1000, this));
@@ -52,7 +38,7 @@ class MapGenerator {
     for (let i = 0; i < totalSteps; i++) {
       var polygons = Array.from(
           this.delaunay
-            .voronoi([0, 0, this.canvas.width, this.canvas.height])
+            .voronoi([0, 0, SCALE, SCALE])
             .cellPolygons()
         ),
         centroids = polygons.map(d3.polygonCentroid);
@@ -62,7 +48,6 @@ class MapGenerator {
     }
 
     console.log("Lloyd's relaxation done in " + totalSteps + " steps !");
-    this.render();
   }
 
   /* DEV METHODS / STATIC */
@@ -105,7 +90,7 @@ class MapGenerator {
   colorPolygonAndPoint(i) {
     this.gl.beginPath();
     this.delaunay
-      .voronoi([0, 0, this.canvas.width, this.canvas.height])
+      .voronoi([0, 0, SCALE, SCALE])
       .renderCell(i, this.gl);
     this.gl.fillStyle = "green";
     this.gl.fill();
@@ -195,7 +180,6 @@ class MapGenerator {
 
   render() {
     //On regénère une triangulation de delaunay a partir de 1000 points random
-    this.delaunay = d3.Delaunay.from(this.trianglesVertices);
     //On vide le canvas
     this.gl.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
