@@ -32,10 +32,12 @@ class cell {
   }
 
   getPolyCoord() {
-    poly = [];
+    let poly = [];
     //TODO pb de consitance
     this.polygon.forEach((point) => {
-      poly.push([point.xCoord, point.yCoord, point.altitude]);
+      let arr = point.getCoord();
+      arr[2] = this.z;
+      poly.push(arr);
     });
     return poly;
   }

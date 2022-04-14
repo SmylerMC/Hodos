@@ -8,7 +8,9 @@ class MapRenderer {
 	#lastFrameStartTime;
 	#lastFramesTimes = [];
 
-	constructor(div) {
+	#generator;
+
+	constructor(div, generator) {
 		this.#div = div;
 		this.#div.classList.add("hodos-map");
 		this.#canvas = document.createElement("canvas");
@@ -18,6 +20,7 @@ class MapRenderer {
 		this.#debugSpan.classList.add("hodos-debug");
 		div.appendChild(this.#debugSpan);
 		this.#gl = this.#canvas.getContext("experimental-webgl");
+		this.#generator = generator;
 	}
 
 	resize(width, height) {
@@ -72,7 +75,8 @@ class MapRenderer {
 	}
 
 	async #loadData() {
-		this.tileTest = new BackedTile(this.#gl);
+		this.tileTest = this.#generator.generateTile(0, 0, 0);
+		this.tileTest.bake(this.#gl);
 	}
 
 	get shaders() {
@@ -85,6 +89,47 @@ class MapRenderer {
 
 	get camera() {
 		return this.#shaderProgram.camera;
+	}
+
+}
+
+class PerlinTestGenerator {
+
+	#generateTile(z, x, y) {
+		// Ugly poorly written test done at 12AM
+		noise.seed(Math.random());
+		cells = []
+		precision = 100;
+		for (let i = 0; i < 100; i++) {
+			let xl = i * 0.01;
+			let xr = (i + 1) * 0.01;
+			for (let j = 0; j < 100; j++) {
+				let yt = j * 0.01;
+				let yb = (j + 1) * 0.01;
+				let ztl = noise.simplex2(xl * 2, yt * 2) + 0.05*noise.simplex2(xl * 20, yt * 20);
+				let zbr = noise.simplex2(xr * 2, yb * 2) + 0.05*noise.simplex2(xr * 20, yb * 20);
+				let zbl = noise.simplex2(xl * 2, yb * 2) + 0.05*noise.simplex2(xl * 20, yb * 20);
+				let ztr = noise.simplex2(xr * 2, yt * 2) + 0.05*noise.simplex2(xr * 20, yt * 20);
+				arr.push(...[xl, yt, ztl]);
+				arr.push(...[xl, yb, zbl]);
+				arr.push(...[xr, yt, ztr]);
+				arr.push(...[xr, yt, ztr]);
+				arr.push(...[xl, yb, zbl]);
+				arr.push(...[xr, yb, zbr]);
+                        }
+                }
+        
+
+	}
+}
+
+class TestCell {
+
+	constructor(x, y, z, polygon) {
+		this.x = x;
+		this.y = y;
+		this.z = z;
+		this.polygon = polygon;
 	}
 
 }

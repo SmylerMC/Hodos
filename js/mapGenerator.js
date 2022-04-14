@@ -12,7 +12,7 @@ class MapGenerator {
     this.delaunay = d3.Delaunay.from(this.trianglesVertices);
     this.lloydRelaxation(2);
     this.createAllCells(this.delaunay.voronoi([0, 0, SCALE, SCALE]));
-    this.generateMultipleContinentBurn(10, 0.5);
+    this.generateContinentBurn();
     this.generateIsland(0.01);
   }
 
@@ -32,8 +32,7 @@ class MapGenerator {
   //Create Tile for rendering
   generateTile(z, x, y) {
     //TODO create path
-    tile = new Tile(z, x, y, this.cells, []);
-    return Tile;
+    return new Tile(z, x, y, this.cells, []);
   }
 
   regenerate() {
@@ -116,7 +115,7 @@ class MapGenerator {
     var burn;
     burn = Array();
     burn.push(
-      this.delaunay.find(window.innerWidth / 2, window.innerHeight / 2)
+      this.delaunay.find(SCALE / 2, SCALE / 2)
     );
     let proba = 1.0;
     while (burn.length != 0) {
@@ -138,8 +137,8 @@ class MapGenerator {
     var indiceCell;
     for (let i = 0; i < continentNumber; i++) {
       indiceCell = this.delaunay.find(
-        getRandomInRange(0, window.innerWidth),
-        getRandomInRange(0, window.innerHeight)
+        getRandomInRange(0, SCALE),
+        getRandomInRange(0, SCALE)
       );
       this.cells[indiceCell].setContinent(i + 1);
       burn.push(indiceCell);
@@ -147,7 +146,6 @@ class MapGenerator {
     burn.unshift(-1);
     let proba = 1.0;
     while (burn.length != 0) {
-      console.log(burn);
       var indiceCell = burn.pop();
       if (indiceCell == -1) {
         proba -= taux;
