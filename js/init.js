@@ -1,7 +1,7 @@
 /**
  * The size of a rendered map tile, in pixels on the screen.
  */
-const SCALE = 256;
+const TILE_PIXEL_SIZE = 256;
 
 const worldMap = new WorldMap(document.getElementById("map"));
 

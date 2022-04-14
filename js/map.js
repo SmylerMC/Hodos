@@ -56,16 +56,16 @@ class MapController {
 		let code = keyEvent.keyCode;
 		console.log(code);
 		if (code === 37) {
-			this.move(-10 / SCALE, 0);
+			this.move(-10 / TILE_PIXEL_SIZE, 0);
 		}
 		if (code === 40) {
-			this.move(0, -10 / SCALE);
+			this.move(0, -10 / TILE_PIXEL_SIZE);
 		}
 		if (code === 39) {
-			this.move(10 / SCALE, 0);
+			this.move(10 / TILE_PIXEL, 0);
 		}
 		if (code === 38) {
-			this.move(0, 10 / SCALE);
+			this.move(0, 10 / TILE_PIXEL);
 		}
 		if (code === 107) {
 			this.zoom(1);

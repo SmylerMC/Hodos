@@ -27,8 +27,8 @@ class MapRenderer {
 		this.#canvas.width = width;
 		this.#canvas.height = height;
 		this.#gl.viewport(0, 0, this.#canvas.width, this.#canvas.height);
-		this.camera.scaleX = SCALE / width;
-		this.camera.scaleY = SCALE / height;
+		this.camera.scaleX = MAP_PIXEL_SIZE / width;
+		this.camera.scaleY = MAP_PIXEL_SIZE / height;
 		this.camera.updateGl();
 	}
 
