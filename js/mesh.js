@@ -68,9 +68,6 @@ class Tile extends Mesh {
     let coordinates = [];
     let dbgColors = [];
     this.#cells.forEach(cell => {
-      let debugR = Math.random();
-      let debugG = Math.random();
-      let debugB = Math.random();
       let polygonVertices = cell.getPolyCoord();
       let vertexCount = polygonVertices.length;
       for (let i = 1; i <= vertexCount; i++) {
@@ -80,7 +77,7 @@ class Tile extends Mesh {
         coordinates.push(...vertex1);
         coordinates.push(...vertex2);
         coordinates.push(...vertex3);
-        for (let j = 0; j < 3; j++) dbgColors.push(...[debugR, debugG, debugB]);
+        for (let j = 0; j < 3; j++) dbgColors.push(...cell.debugColor.components);
       }
     });
     this.#surfaceVertexCount = coordinates.length / 3;
