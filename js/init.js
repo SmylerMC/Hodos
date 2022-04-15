@@ -4,7 +4,7 @@
 const TILE_PIXEL_SIZE = 256;
 
 /**
- * The maximum world coodinates in the 0/0/0 tile.
+ * The maximum world coordinates in the 0/0/0 tile.
  */
 const WORLD_SIZE = 10_000;
 

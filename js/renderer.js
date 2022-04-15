@@ -39,6 +39,11 @@ class MapRenderer {
     ]);
   }
 
+  /**
+   * Renders a frame, and schedules rendering for the next frame.
+   *
+   * @param timestamp when was the method called
+   */
   render(timestamp) {
     let start = new Date().getTime();
     this.#gl.clearColor(0, 0.5, 0.8, 1);

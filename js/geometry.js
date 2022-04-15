@@ -1,42 +1,30 @@
-class cell {
-  #x;
-  #y;
-  #z;
-  polygon = Array();
+/**
+ * A convex polygon and its barycenter.
+ */
+class Cell {
+
+  #center;
+  #ring = Array();
   earth = 0;
 
   constructor(x, y, z) {
-    this.#x = x;
-    this.#y = y;
-    this.#z = z;
-    this.polygon = Array();
+    this.#center = new Point(x, y, z);
+    this.#ring = Array();
 
     this.continentNumber = 0;
     this.earth = 0;
   }
 
-  get x() {
-    return this.#x;
-  }
-
-  get y() {
-    return this.#y;
-  }
-
-  get z() {
-    return this.#z;
-  }
-
-  getCoord() {
-    return [this.x, this.y, this.z];
+  get center() {
+    return this.#center;
   }
 
   getPolyCoord() {
     let poly = [];
     //TODO pb de consitance
-    this.polygon.forEach((point) => {
-      let arr = point.getCoord();
-      arr[2] = this.z;
+    this.#ring.forEach((point) => {
+      let arr = point.coordinates;
+      arr[2] = this.center.z;
       poly.push(arr);
     });
     return poly;
@@ -44,13 +32,14 @@ class cell {
 
   createPolygonFromDelaunay(points) {
     points.forEach((Element) => {
-      this.addPolygonPoint(new point(Element[0], Element[1]));
+      //TODO This is broken and needs to be moved outside of here
+      this.addPolygonPoint(new Point(Element[0], Element[1]));
     });
-    this.polygon.pop();
+    this.#ring.pop();
   }
 
   addPolygonPoint(point) {
-    this.polygon.push(point);
+    this.#ring.push(point);
   }
 
   setContinent(nb) {
@@ -60,42 +49,60 @@ class cell {
   setEarth() {
     this.earth = 1;
     //Temporary
-    this.#z = 0.1;
+    //TODO Actually generate an altitude value, in the MapGenerator class
+    this.center.z = 0.1;
   }
 
 }
 
-class point {
-  #xCoord;
-  #yCoord;
-  #altitude;
+/**
+ * A 3D point object.
+ */
+class Point {
+
+  #x;
+  #y;
+  #z;
 
   /**
    *
    * @param {float} x x coordinate of the point
    * @param {float} y y coordinate of the point
-   * @param {float} z altitude of the point
+   * @param {float} z z coordinate of the point
    */
   constructor(x, y, z) {
-    this.#xCoord = x;
-    this.#yCoord = y;
-    this.#altitude = z;
+    this.#x = x;
+    this.#y = y;
+    this.#z = z;
   }
 
-  get xCoord() {
-    return this.#xCoord;
+  get x() {
+    return this.#x;
   }
 
-  get yCoord() {
-    return this.#yCoord;
+  set x(value) {
+    this.#x = value;
   }
 
-  get altitude() {
-    return this.#altitude;
+  get y() {
+    return this.#y;
   }
 
-  getCoord() {
-    return [this.xCoord, this.yCoord, this.altitude];
+  set y(value) {
+    this.#y = value;
   }
+
+  get z() {
+    return this.#z;
+  }
+
+  set z(value) {
+    this.#z = value;
+  }
+
+  get coordinates() {
+    return [this.#x, this.#y, this.#z];
+  }
+
 }
 

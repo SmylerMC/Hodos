@@ -87,6 +87,11 @@ class FragmentShader extends Shader {
 
 }
 
+/**
+ * Shader programs are responsible for doing the actual rendering.
+ * They have a vertex shader and a fragment shader,
+ * and manage the various variables that control those shaders' behavior.
+ */
 class ShaderProgram {
   
   #gl;
@@ -148,6 +153,9 @@ class Camera {
     this.#matrixLocation = matrixLocation;
   }
 
+  /**
+   * Updates the WebGL context so the values in this camera are used for rendering.
+   */
   updateGl() {
     let zoomFactor = Math.pow(2, this.zoom);
     let scaleX = this.scaleX * zoomFactor;

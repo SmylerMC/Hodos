@@ -22,14 +22,20 @@ class MapGenerator {
     //For evrey cell in Delaunay Graph create a Cell
     for (let i = 0; i < this.delaunay.points.length; i += 2) {
       this.cells.push(
-        new cell(this.delaunay.points[i], this.delaunay.points[i + 1], -1)
+        new Cell(this.delaunay.points[i], this.delaunay.points[i + 1], -1)
       );
       //Create an arrays with the point of the polygon
       this.cells[i / 2].createPolygonFromDelaunay(voronoid.cellPolygon(i / 2));
     }
   }
 
-  //Create Tile for rendering
+  /**
+   * Generates a tile so it can later be rendered.
+   *
+   * @param {int} z the zoom level of the tile
+   * @param {int} x the x coordinate of the tile in the corresponding zoom level grid
+   * @param {int} y the y coordinate of the tile in the corresponding zoom level grid
+   */
   generateTile(z, x, y) {
     //TODO create path
     return new Tile(z, x, y, this.cells, []);

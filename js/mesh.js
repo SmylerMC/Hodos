@@ -43,7 +43,7 @@ class Tile {
       for (let i = 1; i <= vertexCount; i++) {
         let vertex1 = polygonVertices[i - 1];
         let vertex2 = polygonVertices[i % vertexCount];
-        let vertex3 = cell.getCoord();
+        let vertex3 = cell.center.coordinates;
         data.push(...vertex1);
         data.push(...vertex2);
         data.push(...vertex3);

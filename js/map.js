@@ -27,10 +27,6 @@ class WorldMap {
     return this.#renderer.camera;
   }
 
-  get controller() {
-    return this.#controller;
-  }
-
 }
 
 class MapController {
@@ -56,7 +52,6 @@ class MapController {
     let zoom = this.#map.camera.zoom;
     let delta = 10 / (TILE_PIXEL_SIZE * Math.pow(2, zoom)) * WORLD_SIZE;
     let code = keyEvent.keyCode;
-    console.log(code);
     if (code === 37) {
       this.move(-delta, 0);
     }
