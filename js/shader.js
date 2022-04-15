@@ -98,8 +98,6 @@ class ShaderProgram {
   #vertexShader;
   #fragmentShader;
   #glProgram;
-  #glCoordsAttrib;
-  #camera;
 
   constructor(gl, vertexShader, fragmentShader) {
     this.#gl = gl;
@@ -112,35 +110,49 @@ class ShaderProgram {
       await this.#vertexShader.load(),
       await this.#fragmentShader.load()
     ]).then(() => {
-      this.link();
+      this.#link();
     });
   }
 
-  link() {
+  #link() {
     this.#glProgram = this.#gl.createProgram();
     this.#vertexShader.linkTo(this.#glProgram);
     this.#fragmentShader.linkTo(this.#glProgram);
     this.#gl.linkProgram(this.#glProgram);
-    this.#glCoordsAttrib = this.#gl.getAttribLocation(this.#glProgram, "coordinates");
   }
 
   use() {
     this.#gl.useProgram(this.#glProgram);
-    this.#camera = new Camera(this.#gl, this.#gl.getUniformLocation(this.#glProgram, "view"));
   }
 
-  draw(geometry) {
-    this.#gl.bindBuffer(this.#gl.ARRAY_BUFFER, geometry.vbo);
-    this.#gl.vertexAttribPointer(
-      this.#glCoordsAttrib,
-      3, this.#gl.FLOAT,
-      false, 0, 0);
-    this.#gl.enableVertexAttribArray(this.#glCoordsAttrib);
-  
-    this.#gl.drawArrays(
-      this.#gl.TRIANGLES,
-      geometry.verticesStart,
-      geometry.verticesEnd);
+  get gl() {
+    return this.#gl;
+  }
+
+  get glProgram() {
+    return this.#glProgram;
+  }
+
+}
+
+class WorldShaderProgram extends ShaderProgram {
+
+  #glCoordsAttrib;
+  #camera;
+
+  use() {
+    super.use();
+    this.#glCoordsAttrib = this.gl.getAttribLocation(this.glProgram, "coordinates");
+    this.gl.enableVertexAttribArray(this.#glCoordsAttrib);
+    this.#camera = new Camera(this.gl, this.gl.getUniformLocation(this.glProgram, "view"));
+  }
+
+  bindSurfaceVertexPositionBuffer(buffer) {
+    this.gl.bindBuffer(this.gl.ARRAY_BUFFER, buffer);
+    this.gl.vertexAttribPointer(
+        this.#glCoordsAttrib,
+        3, this.gl.FLOAT,
+        false, 0, 0);
   }
 
   get camera() {

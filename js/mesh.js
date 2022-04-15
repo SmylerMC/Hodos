@@ -1,4 +1,38 @@
-class Tile {
+/**
+ * A mesh is a collection of points that gets renders into the canvas.
+ */
+class Mesh {
+
+  /**
+   * Creates the WebGL objects needed to render this mesh.
+   * This method needs to be implemented in a subclass.
+   *
+   * @param gl  {WebGLRenderingContext}
+   */
+  bake(gl) {
+    console.log("Unimplemented Mesh bake method");
+  }
+
+  /**
+   * Draws this tile using the given gl context and shader program.
+   * This method needs to be implemented in a subclass.
+   *
+   * @param program {ShaderProgram}
+   */
+  render(program) {
+    console.log("Unimplemented Mesh daw method");
+  }
+
+  /**
+   * Frees all resources held by this mesh.
+   */
+  destroy(gl) {
+
+  }
+
+}
+
+class Tile extends Mesh {
 
   #z;
   #x;
@@ -6,20 +40,20 @@ class Tile {
   #cells;
   #paths;
 
-  #gl;
-  #vertices;
-  #vertexCount;
+  #surfaceVertexCount;
+  #surfaceVertexPositions;
 
   /**
    * Constructs a new tile object. This is called from the generator side.
    *
-   * @param z    tile zoom level
-   * @param x    tile X coordinate
-   * @param y    tile Y coordinate
-   * @param cells    list of voronoid cells that overlap with the tile
-   * @param path    list of path like objects (TODO)
+   * @param z     {int}         tile zoom level
+   * @param x     {int}         tile X coordinate
+   * @param y     {int}         tile Y coordinate
+   * @param cells {Array[Cell]} list of voronoi cells that overlap with the tile
+   * @param paths {Array[Path]} list of path like objects (TODO)
    */
   constructor(z, x, y, cells, paths) {
+    super();
     this.#z = z;
     this.#x = x;
     this.#y = y;
@@ -27,15 +61,9 @@ class Tile {
     this.#paths = paths;
   }
 
-  /**
-   * Creates the WebGL objects needed to render this tile.
-   *
-   * @param gl  WebGL context
-   */
   bake(gl) {
-    this.#gl = gl;
-    this.#vertices = this.#gl.createBuffer();
-    this.#gl.bindBuffer(this.#gl.ARRAY_BUFFER, this.#vertices);
+    this.#surfaceVertexPositions = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, this.#surfaceVertexPositions);
     let data = [];
     this.#cells.forEach(cell => {
       let polygonVertices = cell.getPolyCoord();
@@ -48,53 +76,27 @@ class Tile {
         data.push(...vertex2);
         data.push(...vertex3);
       }
-
     });
-    this.#vertexCount = data.length;
-    this.#gl.bufferData(this.#gl.ARRAY_BUFFER, new Float32Array(data), this.#gl.STATIC_DRAW);
-    this.#gl.bindBuffer(this.#gl.ARRAY_BUFFER, null);
-  }
-
-  get vbo() {
-    return this.#vertices;
-  }
-
-  get verticesStart() {
-    return 0;
-  }
-
-  get verticesEnd() {
-    return this.#vertexCount / 3;
-  }
-
-}
-
-/**
- * Only there for test purpose
- */
-class Triangle {
-
-  #gl;
-  #glVertexBuffer;
-
-  constructor(gl, ...vertices) {
-    this.gl = gl;
-    this.glVertexBuffer = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, this.glVertexBuffer);
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
+    this.#surfaceVertexCount = data.length / 3;
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(data), gl.STATIC_DRAW);
     gl.bindBuffer(gl.ARRAY_BUFFER, null);
   }
 
-  get vbo() {
-    return this.glVertexBuffer;
+  render(shaderProgram) {
+    if (shaderProgram instanceof WorldShaderProgram) {
+      let gl = shaderProgram.gl;
+      shaderProgram.bindSurfaceVertexPositionBuffer(this.#surfaceVertexPositions);
+      gl.drawArrays(
+          gl.TRIANGLES,
+          0,
+          this.#surfaceVertexCount);
+    } else {
+      console.log("Tile draw function expects the passed ShaderProgram to be a WorldShaderProgram");
+    }
   }
 
-  get verticesStart() {
-    return 0
-  }
-
-  get verticesEnd() {
-    return 3;
+  destroy(gl) {
+    gl.deleteBuffer(this.#surfaceVertexPositions);
   }
 
 }

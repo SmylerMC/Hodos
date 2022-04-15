@@ -48,7 +48,7 @@ class MapRenderer {
     let start = new Date().getTime();
     this.#gl.clearColor(0, 0.5, 0.8, 1);
     this.#gl.clear(this.#gl.COLOR_BUFFER_BIT | this.#gl.DEPTH_BUFFER_BIT);
-    this.shaders.draw(this.tileTest);
+    this.tileTest.render(this.shaders);
     let end = new Date().getTime();
     let frameTime = end - start;
     if (this.#lastFrameStartTime) {
@@ -66,7 +66,7 @@ class MapRenderer {
   }
 
   async #loadShaders() {
-    this.#shaderProgram = new ShaderProgram(this.#gl, "glsl/vertex.vert", "glsl/fragment.frag");
+    this.#shaderProgram = new WorldShaderProgram(this.#gl, "glsl/vertex.vert", "glsl/fragment.frag");
     await this.#shaderProgram.load().then(() => {
       this.#shaderProgram.use();
       console.log("Loaded shader program");
