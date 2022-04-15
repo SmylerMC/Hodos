@@ -66,16 +66,10 @@ class MapRenderer {
   }
 
   async #loadShaders() {
-    let vShader = new VertexShader(this.#gl, "glsl/vertex.glsl");
-    let fShader = new FragmentShader(this.#gl, "glsl/fragment.glsl");
-    await Promise.all([
-      await vShader.load(),
-      await fShader.load()
-    ]).then(() => {
-      let program = new ShaderProgram(this.#gl, [vShader, fShader]);
-      program.link();
-      program.use();
-      this.#shaderProgram = program;
+    this.#shaderProgram = new ShaderProgram(this.#gl, "glsl/vertex.vert", "glsl/fragment.frag");
+    await this.#shaderProgram.load().then(() => {
+      this.#shaderProgram.use();
+      console.log("Loaded shader program");
     }, () => console.log("Failed to load shaders"));
   }
 

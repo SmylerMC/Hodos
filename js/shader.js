@@ -95,19 +95,31 @@ class FragmentShader extends Shader {
 class ShaderProgram {
   
   #gl;
-  #shaders;
+  #vertexShader;
+  #fragmentShader;
   #glProgram;
   #glCoordsAttrib;
   #camera;
 
-  constructor(gl, shaders) {
+  constructor(gl, vertexShader, fragmentShader) {
     this.#gl = gl;
-    this.#shaders = shaders;
+    this.#vertexShader = new VertexShader(gl, vertexShader);
+    this.#fragmentShader = new FragmentShader(gl, fragmentShader);
+  }
+
+  async load() {
+    await Promise.all([
+      await this.#vertexShader.load(),
+      await this.#fragmentShader.load()
+    ]).then(() => {
+      this.link();
+    });
   }
 
   link() {
     this.#glProgram = this.#gl.createProgram();
-    this.#shaders.forEach(shader => shader.linkTo(this.#glProgram));
+    this.#vertexShader.linkTo(this.#glProgram);
+    this.#fragmentShader.linkTo(this.#glProgram);
     this.#gl.linkProgram(this.#glProgram);
     this.#glCoordsAttrib = this.#gl.getAttribLocation(this.#glProgram, "coordinates");
   }
