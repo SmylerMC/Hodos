@@ -1,6 +1,8 @@
 class MapRenderer {
 
-  #shaderProgram;
+  #activeWorldShaderProgram;
+  #worldShaderProgram;
+  #debugWorldShaderProgram;
   #div;
   #canvas;
   #debugSpan;
@@ -48,7 +50,7 @@ class MapRenderer {
     let start = new Date().getTime();
     this.#gl.clearColor(0, 0.5, 0.8, 1);
     this.#gl.clear(this.#gl.COLOR_BUFFER_BIT | this.#gl.DEPTH_BUFFER_BIT);
-    this.tileTest.render(this.shaders);
+    this.tileTest.render(this.#activeWorldShaderProgram);
     let end = new Date().getTime();
     let frameTime = end - start;
     if (this.#lastFrameStartTime) {
@@ -66,11 +68,15 @@ class MapRenderer {
   }
 
   async #loadShaders() {
-    this.#shaderProgram = new WorldShaderProgram(this.#gl, "glsl/vertex.vert", "glsl/fragment.frag");
-    await this.#shaderProgram.load().then(() => {
-      this.#shaderProgram.use();
-      console.log("Loaded shader program");
+    this.#worldShaderProgram = new WorldShaderProgram(this.#gl, "glsl/world.vert", "glsl/world.frag");
+    this.#debugWorldShaderProgram = new DebugWorldShaderProgram(this.#gl, "glsl/world_debug.vert", "glsl/world_debug.frag");
+    this.#activeWorldShaderProgram = this.#debugWorldShaderProgram;
+    await Promise.all(
+        [this.#worldShaderProgram.load(),
+        this.#debugWorldShaderProgram.load()]).then(() => {
+      console.log("Loaded shader programs");
     }, () => console.log("Failed to load shaders"));
+    this.#activeWorldShaderProgram.use();
   }
 
   async #loadData() {
@@ -78,16 +84,12 @@ class MapRenderer {
     this.tileTest.bake(this.#gl);
   }
 
-  get shaders() {
-    return this.#shaderProgram;
-  }
-
   get fps() {
     return Math.round(this.#lastFramesTimes.length  / this.#lastFramesTimes.reduce((sum, val) => sum + val) * 1000);
   }
 
   get camera() {
-    return this.#shaderProgram.camera;
+    return this.#activeWorldShaderProgram.camera;
   }
 
 }

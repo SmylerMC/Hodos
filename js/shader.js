@@ -155,8 +155,31 @@ class WorldShaderProgram extends ShaderProgram {
         false, 0, 0);
   }
 
+  bindDebugSurfaceColorsBuffer(buffer) {
+  }
+
   get camera() {
     return this.#camera;
+  }
+
+}
+
+class DebugWorldShaderProgram extends WorldShaderProgram {
+
+  #glColorsAttrib;
+
+  use() {
+    super.use();
+    this.#glColorsAttrib = this.gl.getAttribLocation(this.glProgram, "dbg_colors");
+    this.gl.enableVertexAttribArray(this.#glColorsAttrib);
+  }
+
+  bindDebugSurfaceColorsBuffer(buffer) {
+    this.gl.bindBuffer(this.gl.ARRAY_BUFFER, buffer);
+    this.gl.vertexAttribPointer(
+        this.#glColorsAttrib,
+        3, this.gl.FLOAT,
+        false, 0, 0);
   }
 
 }
@@ -193,4 +216,5 @@ class Camera {
        deltaX, deltaY, 0, 1]);
     this.#gl.uniformMatrix4fv(this.#matrixLocation, false, matrix);
   }
+
 }
