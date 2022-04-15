@@ -16,7 +16,7 @@ const worldMap = new WorldMap(document.getElementById("map"));
 window.addEventListener('resize', resize)
 
 worldMap.load().then(() => {
-	resize();
-	console.log("Map loaded");
-	worldMap.startRender();
+  resize();
+  console.log("Map loaded");
+  worldMap.startRender();
 });
