@@ -14,6 +14,7 @@ class MapGenerator {
     this.createAllCells(this.delaunay.voronoi([0, 0, WORLD_SIZE, WORLD_SIZE]));
     this.generateMultipleContinentBurn(15, 0.4);
     this.generateIsland(0.01);
+    this.generateAltitude();
   }
 
   // create cell from the voronoid diagram
@@ -146,7 +147,10 @@ class MapGenerator {
   generateAltitude() {
     noise.seed(this.seed);
     this.cells.forEach((cell) => {
-      cell.z(noise.simplex2(x / 100, y / 100));
+      if (cell.earth == 1) {
+        // + 1) / 2 is for the ouput is between 0 and 1
+        cell.setZ((noise.simplex2(cell.x, cell.x) + 1) / 2);
+      }
     });
   }
 }

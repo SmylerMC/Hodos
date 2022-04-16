@@ -26,7 +26,8 @@ class Cell {
     return this.#center.z;
   }
 
-  set z(value) {
+  //TODO Proper setter
+  setZ(value) {
     this.#center.z = value;
   }
 
