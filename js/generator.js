@@ -12,20 +12,31 @@ class MapGenerator {
     this.delaunay = d3.Delaunay.from(this.trianglesVertices);
     this.lloydRelaxation(2);
     this.createAllCells(this.delaunay.voronoi([0, 0, WORLD_SIZE, WORLD_SIZE]));
-    this.generateContinentBurn();
+    this.generateMultipleContinentBurn(15, 0.4);
     this.generateIsland(0.01);
   }
 
   // create cell from the voronoid diagram
   createAllCells(voronoid) {
     this.cells = Array();
+    let createdPoint = new Map();
     //For evrey cell in Delaunay Graph create a Cell
     for (let i = 0; i < this.delaunay.points.length; i += 2) {
       this.cells.push(
         new Cell(this.delaunay.points[i], this.delaunay.points[i + 1], -1)
       );
       //Create an arrays with the point of the polygon
-      this.cells[i / 2].createPolygonFromDelaunay(voronoid.cellPolygon(i / 2));
+      voronoid.cellPolygon(i / 2).forEach((Element) => {
+        if (!createdPoint.has(Element.toString())) {
+          createdPoint.set(
+            Element.toString(),
+            new Point(Element[0], Element[1], 0)
+          );
+        }
+        this.cells[i / 2].addPolygonPoint(createdPoint.get(Element.toString()));
+      });
+      this.cells[i / 2].removePolygonPoint();
+      //this.cells[i / 2].createPolygonFromDelaunay(voronoid.cellPolygon(i / 2));
     }
   }
 
@@ -67,9 +78,7 @@ class MapGenerator {
   generateContinentBurn() {
     var burn;
     burn = Array();
-    burn.push(
-      this.delaunay.find(WORLD_SIZE / 2, WORLD_SIZE / 2)
-    );
+    burn.push(this.delaunay.find(WORLD_SIZE / 2, WORLD_SIZE / 2));
     let proba = 1.0;
     while (burn.length != 0) {
       var current_cell = burn.pop();
@@ -131,7 +140,6 @@ class MapGenerator {
       }
     });
   }
-
 }
 
 /* Generate a seed for the session */

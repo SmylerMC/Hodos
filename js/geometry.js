@@ -2,7 +2,6 @@
  * A convex polygon and its barycenter.
  */
 class Cell {
-
   #center;
   #ring = Array();
   earth = 0;
@@ -33,13 +32,17 @@ class Cell {
   createPolygonFromDelaunay(points) {
     points.forEach((Element) => {
       //TODO This is broken and needs to be moved outside of here
-      this.addPolygonPoint(new Point(Element[0], Element[1]));
+      this.addPolygonPoint(new Point(Element[0], Element[1], 0));
     });
     this.#ring.pop();
   }
 
   addPolygonPoint(point) {
     this.#ring.push(point);
+  }
+
+  removePolygonPoint() {
+    return this.#ring.pop();
   }
 
   setContinent(nb) {
@@ -52,14 +55,12 @@ class Cell {
     //TODO Actually generate an altitude value, in the MapGenerator class
     this.center.z = 0.1;
   }
-
 }
 
 /**
  * A 3D point object.
  */
 class Point {
-
   #x;
   #y;
   #z;
@@ -103,6 +104,4 @@ class Point {
   get coordinates() {
     return [this.#x, this.#y, this.#z];
   }
-
 }
-
