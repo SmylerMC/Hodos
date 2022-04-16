@@ -14,6 +14,22 @@ class Cell {
     this.earth = 0;
   }
 
+  get x() {
+    return this.#center.x;
+  }
+
+  get y() {
+    return this.#center.y;
+  }
+
+  get z() {
+    return this.#center.z;
+  }
+
+  set z(value) {
+    this.#center.z = value;
+  }
+
   get center() {
     return this.#center;
   }

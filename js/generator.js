@@ -19,6 +19,7 @@ class MapGenerator {
   // create cell from the voronoid diagram
   createAllCells(voronoid) {
     this.cells = Array();
+    //all previous created point are temporary store here
     let createdPoint = new Map();
     //For evrey cell in Delaunay Graph create a Cell
     for (let i = 0; i < this.delaunay.points.length; i += 2) {
@@ -138,6 +139,14 @@ class MapGenerator {
       if (Math.random() < taux) {
         cell.setEarth();
       }
+    });
+  }
+
+  /* Generate altitude V1*/
+  generateAltitude() {
+    noise.seed(this.seed);
+    this.cells.forEach((cell) => {
+      cell.z(noise.simplex2(x / 100, y / 100));
     });
   }
 }
