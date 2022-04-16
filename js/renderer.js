@@ -21,6 +21,7 @@ class MapRenderer {
     div.appendChild(this.#canvas);
     this.#debugSpan = document.createElement("span");
     this.#debugSpan.classList.add("hodos-debug");
+    this.#debugSpan.style.visibility = "hidden";
     div.appendChild(this.#debugSpan);
     this.#gl = this.#canvas.getContext("experimental-webgl");
     this.#generator = generator;
@@ -100,8 +101,10 @@ class MapRenderer {
   set debug(value) {
     if (value && !this.debug) {
       this.#changeShaderProgram(this.#debugWorldShaderProgram);
+      this.#debugSpan.style.visibility = "visible";
     } else if (!value && this.debug) {
       this.#changeShaderProgram(this.#worldShaderProgram);
+      this.#debugSpan.style.visibility = "hidden";
     }
   }
 

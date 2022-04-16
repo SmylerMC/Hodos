@@ -6,7 +6,7 @@
 }
 
 .map-controls {
-	background: black;
+	background: rgba(20, 20, 20, 80%);
 	color: white;
 	padding: 10px;
 	margin: 0;
@@ -14,4 +14,7 @@
 	position: fixed;
 	left: 0;
 	bottom: 0;
+	border-top-style: solid;
+	border-top-color: rgba(255, 255, 255, 30%);
+	font-family: sans-serif;
 }
