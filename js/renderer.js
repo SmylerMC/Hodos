@@ -72,7 +72,7 @@ class MapRenderer {
   async #loadShaders() {
     this.#worldShaderProgram = new WorldShaderProgram(this.#gl, "glsl/world.vert", "glsl/world.frag");
     this.#debugWorldShaderProgram = new DebugWorldShaderProgram(this.#gl, "glsl/world_debug.vert", "glsl/world_debug.frag");
-    this.#activeWorldShaderProgram = this.#debugWorldShaderProgram;
+    this.#activeWorldShaderProgram = this.#worldShaderProgram;
     await Promise.all(
         [this.#worldShaderProgram.load(),
         this.#debugWorldShaderProgram.load()]).then(() => {
