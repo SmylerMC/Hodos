@@ -37,6 +37,14 @@ class WorldMap {
     return this.#renderer.camera;
   }
 
+  get renderer() {
+    return this.#renderer;
+  }
+
+  get generator() {
+    return this.#generator;
+  }
+
 }
 
 class MapController {
@@ -80,6 +88,11 @@ class MapController {
     if (code === 109) {
       this.zoom(-1);
     }
+    if (code === 32) {
+      let renderer = this.#map.renderer;
+      renderer.debug = !renderer.debug;
+    }
+
   }
 
   setupCallback() {

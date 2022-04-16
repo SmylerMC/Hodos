@@ -9,6 +9,7 @@ class MapRenderer {
   #gl;
   #lastFrameStartTime;
   #lastFramesTimes = [];
+  #camera;
 
   #generator;
 
@@ -23,6 +24,7 @@ class MapRenderer {
     div.appendChild(this.#debugSpan);
     this.#gl = this.#canvas.getContext("experimental-webgl");
     this.#generator = generator;
+    this.#camera = new Camera(this);
   }
 
   resize(width, height) {
@@ -84,12 +86,68 @@ class MapRenderer {
     this.tileTest.bake(this.#gl);
   }
 
+  #changeShaderProgram(newShaders) {
+    this.#activeWorldShaderProgram.stopUsing();
+    newShaders.use();
+    this.#activeWorldShaderProgram = newShaders;
+    this.camera.updateGl();
+  }
+
+  get debug() {
+    return this.#activeWorldShaderProgram !== this.#worldShaderProgram;
+  }
+
+  set debug(value) {
+    if (value && !this.debug) {
+      this.#changeShaderProgram(this.#debugWorldShaderProgram);
+    } else if (!value && this.debug) {
+      this.#changeShaderProgram(this.#worldShaderProgram);
+    }
+  }
+
   get fps() {
     return Math.round(this.#lastFramesTimes.length  / this.#lastFramesTimes.reduce((sum, val) => sum + val) * 1000);
   }
 
   get camera() {
-    return this.#activeWorldShaderProgram.camera;
+    return this.#camera;
+  }
+
+  get worldShaderProgram() {
+    return this.#activeWorldShaderProgram;
+  }
+
+}
+
+class Camera {
+
+  #renderer;
+
+  scaleX = 1;
+  scaleY = 1;
+  posX = 0;
+  posY = 0;
+  zoom = 0;
+
+  constructor(renderer) {
+    this.#renderer = renderer;
+  }
+
+  /**
+   * Updates the WebGL context so the values in this camera are used for rendering.
+   */
+  updateGl() {
+    let zoomFactor = Math.pow(2, this.zoom);
+    let scaleX = this.scaleX * zoomFactor;
+    let scaleY = this.scaleY * zoomFactor;
+    let deltaX = - (this.posX + WORLD_SIZE / 2) * scaleX;
+    let deltaY = - (this.posY + WORLD_SIZE / 2) * scaleY;
+    let matrix = new Float32Array(
+        [scaleX, 0,      0, 0,
+          0,      scaleY, 0, 0,
+          0,      0,      0, 0,
+          deltaX, deltaY, 0, 1]);
+    this.#renderer.worldShaderProgram.setViewMatrix(matrix);
   }
 
 }
