@@ -97,10 +97,6 @@ class MapController {
     if (code === 109) {
       this.zoom(-1);
     }
-    if (code === 32) {
-      this.toggleDebug();
-    }
-
   }
 
   setupCallback() {
