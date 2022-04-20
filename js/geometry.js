@@ -26,6 +26,10 @@ class Cell {
     return this.#center.z;
   }
 
+  get ring() {
+    return this.#ring;
+  }
+
   //TODO Proper setter
   setZ(value) {
     this.#center.z = value;
@@ -40,7 +44,6 @@ class Cell {
     //TODO pb de consitance
     this.#ring.forEach((point) => {
       let arr = point.coordinates;
-      arr[2] = this.center.z;
       poly.push(arr);
     });
     return poly;
@@ -81,6 +84,7 @@ class Point {
   #x;
   #y;
   #z;
+  #nbUse;
 
   /**
    *
@@ -92,6 +96,7 @@ class Point {
     this.#x = x;
     this.#y = y;
     this.#z = z;
+    this.#nbUse = 0;
   }
 
   get x() {
@@ -120,5 +125,13 @@ class Point {
 
   get coordinates() {
     return [this.#x, this.#y, this.#z];
+  }
+
+  get nbUse() {
+    return this.#nbUse;
+  }
+
+  incrementUse() {
+    this.#nbUse += 1;
   }
 }

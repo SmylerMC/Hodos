@@ -5,6 +5,7 @@ class MapGenerator {
 
   constructor() {
     this.cells = Array();
+    this.seedCells = Array();
     this.seed = generateSeed();
     this.trianglesVertices = fillWithPoints(1000, this);
     this.delaunay = d3.Delaunay.from(this.trianglesVertices);
@@ -12,7 +13,7 @@ class MapGenerator {
     this.delaunay = d3.Delaunay.from(this.trianglesVertices);
     this.lloydRelaxation(2);
     this.createAllCells(this.delaunay.voronoi([0, 0, WORLD_SIZE, WORLD_SIZE]));
-    this.generateMultipleContinentBurn(15, 0.4);
+    this.generateMultipleContinentBurn(1, 0.2);
     this.generateIsland(0.01);
     this.generateAltitude();
   }
@@ -32,10 +33,12 @@ class MapGenerator {
         if (!createdPoint.has(Element.toString())) {
           createdPoint.set(
             Element.toString(),
-            new Point(Element[0], Element[1], 0)
+            new Point(Element[0], Element[1], -1) // -1 is for point is sea y default
           );
         }
         this.cells[i / 2].addPolygonPoint(createdPoint.get(Element.toString()));
+        //increment the numer of use of the point
+        createdPoint.get(Element.toString()).incrementUse();
       });
       this.cells[i / 2].removePolygonPoint();
       //this.cells[i / 2].createPolygonFromDelaunay(voronoid.cellPolygon(i / 2));
@@ -80,7 +83,8 @@ class MapGenerator {
   generateContinentBurn() {
     var burn;
     burn = Array();
-    burn.push(this.delaunay.find(WORLD_SIZE / 2, WORLD_SIZE / 2));
+    this.seedCells.push(this.delaunay.find(WORLD_SIZE / 2, WORLD_SIZE / 2));
+    burn.push(this.seedCells[0]);
     let proba = 1.0;
     while (burn.length != 0) {
       var current_cell = burn.pop();
@@ -105,6 +109,7 @@ class MapGenerator {
         getRandomInRange(0, WORLD_SIZE)
       );
       this.cells[indiceCell].setContinent(i + 1);
+      this.seedCells.push(indiceCell);
       burn.push(indiceCell);
     }
     burn.unshift(-1);
@@ -146,11 +151,16 @@ class MapGenerator {
   /* Generate altitude V1*/
   generateAltitude() {
     noise.seed(this.seed);
+    var altitude;
     this.cells.forEach((cell) => {
       if (cell.earth == 1) {
         // + 1) / 2 is for the ouput is between 0 and 1
-        cell.setZ((noise.simplex2(cell.x, cell.x) + 1) / 2);
+        cell.setZ((noise.perlin2(cell.x, cell.y) + 1) / 2);
+        cell.ring.forEach((point) => {
+          point.z = (noise.perlin2(point.x, point.y) + 1) / 2;
+        });
       }
+      console.log(cell);
     });
   }
 }
