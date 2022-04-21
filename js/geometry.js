@@ -30,8 +30,7 @@ class Cell {
     return this.#ring;
   }
 
-  //TODO Proper setter
-  setZ(value) {
+  set z(value) {
     this.#center.z = value;
   }
 

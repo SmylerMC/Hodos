@@ -13,7 +13,7 @@ class MapGenerator {
     this.delaunay = d3.Delaunay.from(this.trianglesVertices);
     this.lloydRelaxation(2);
     this.createAllCells(this.delaunay.voronoi([0, 0, WORLD_SIZE, WORLD_SIZE]));
-    this.generateMultipleContinentBurn(1, 0.2);
+    this.generateMultipleContinentBurn(15, 0.4);
     this.generateIsland(0.01);
     this.generateAltitude();
   }
@@ -142,7 +142,7 @@ class MapGenerator {
 
   generateIsland(taux) {
     this.cells.forEach((cell) => {
-      if (Math.random() < taux) {
+      if (Math.random() < taux && cell.earth == 0) {
         cell.setEarth();
       }
     });
@@ -151,16 +151,18 @@ class MapGenerator {
   /* Generate altitude V1*/
   generateAltitude() {
     noise.seed(this.seed);
-    var altitude;
     this.cells.forEach((cell) => {
       if (cell.earth == 1) {
         // + 1) / 2 is for the ouput is between 0 and 1
-        cell.setZ((noise.perlin2(cell.x, cell.y) + 1) / 2);
+        cell.z = (noise.simplex2(cell.x, cell.y) + 1) / 2;
         cell.ring.forEach((point) => {
-          point.z = (noise.perlin2(point.x, point.y) + 1) / 2;
+          point.z = (noise.simplex2(point.x, point.y) + 1) / 2;
+        });
+      } else {
+        cell.ring.forEach((point) => {
+          point.z = -0.1;
         });
       }
-      console.log(cell);
     });
   }
 }
