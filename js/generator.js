@@ -4,6 +4,7 @@ class MapGenerator {
   delaunay; // d3-delaunay object
 
   constructor() {
+    let time = Date.now();
     this.cells = Array();
     this.seedCells = Array();
     this.seed = generateSeed();
@@ -16,6 +17,8 @@ class MapGenerator {
     this.generateMultipleContinentBurn(15, 0.4);
     this.generateIsland(0.01);
     this.generateAltitude();
+    time = Date.now() - time;
+    console.log("Map generates in " + time + " ms");
   }
 
   // create cell from the voronoid diagram
@@ -54,7 +57,8 @@ class MapGenerator {
    */
   generateTile(z, x, y) {
     //TODO create path
-    return new Tile(z, x, y, this.cells, []);
+    let tile = new Tile(z, x, y, this.cells, []);
+    return tile;
   }
 
   regenerate() {
@@ -103,6 +107,7 @@ class MapGenerator {
     var burn;
     burn = Array();
     var indiceCell;
+    // select i cell to be the seed of continent
     for (let i = 0; i < continentNumber; i++) {
       indiceCell = this.delaunay.find(
         getRandomInRange(0, WORLD_SIZE),
@@ -114,8 +119,10 @@ class MapGenerator {
     }
     burn.unshift(-1);
     let proba = 1.0;
+    // for evrery cell that can be earth
     while (burn.length != 0) {
       var indiceCell = burn.pop();
+      //check if one cycle is do
       if (indiceCell == -1) {
         proba -= taux;
         if (burn.length != 0) {
@@ -123,13 +130,8 @@ class MapGenerator {
         }
       } else {
         this.cells[indiceCell].setEarth();
-        var tempFuture = Array();
         for (let next of this.delaunay.neighbors(indiceCell)) {
-          if (
-            Math.random() < proba &&
-            !this.delaunay.hull.includes(next) &&
-            this.cells[next].earth == 0
-          ) {
+          if (Math.random() < proba && this.cells[next].earth == 0) {
             burn.unshift(next);
             this.cells[next].setContinent(
               this.cells[indiceCell].continentNumber
