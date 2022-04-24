@@ -5,18 +5,32 @@ class Cell {
 
   #center;
   #ring = Array();
+  #debugColor;
+
   earth = 0;
 
-  constructor(x, y, z) {
+  /**
+   * Constructs a world cell.
+   *
+   * @param x           {float}   the X coordinate of the cell's centroid
+   * @param y           {float}   the Y coordinate of the cell's centroid
+   * @param z           {float}   the altitude of the cell's centroid
+   * @param debugColor  {GlColor} the color to draw this cell with when in debug mode
+   */
+  constructor(x, y, z, debugColor) {
     this.#center = new Point(x, y, z);
     this.#ring = Array();
-
+    this.#debugColor = debugColor ? debugColor : new GlColor(Math.random(), Math.random(), Math.random());
     this.continentNumber = 0;
     this.earth = 0;
   }
 
   get center() {
     return this.#center;
+  }
+
+  get debugColor() {
+    return this.#debugColor;
   }
 
   getPolyCoord() {
@@ -51,6 +65,10 @@ class Cell {
     //Temporary
     //TODO Actually generate an altitude value, in the MapGenerator class
     this.center.z = 0.1;
+  }
+
+  set debugColor(value) {
+    this.#debugColor = value;
   }
 
 }
@@ -106,3 +124,36 @@ class Point {
 
 }
 
+/**
+ * A color as used in WebGL.
+ * The coordinate space is normalized rgb (each color value is between 0 and 1).
+ */
+class GlColor {
+
+  #red;
+  #green;
+  #blue;
+
+  constructor(r, g, b) {
+    this.#red = r;
+    this.#green = g;
+    this.#blue = b;
+  }
+
+  get red() {
+    return this.#red;
+  }
+
+  get green() {
+    return this.#green;
+  }
+
+  get blue() {
+    return this.#blue;
+  }
+
+  get components() {
+    return [this.red, this.green, this.blue]
+  }
+
+}

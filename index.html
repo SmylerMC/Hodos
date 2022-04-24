@@ -16,6 +16,11 @@
 	</head>
 	<body>
 		<div id="map"></div>
+		<footer class="map-controls">
+			<label>
+				Debug: <input type="checkbox" onclick="worldMap.controller.toggleDebug()">
+			</label>
+		</footer>
 		<script src="https://d3js.org/d3.v7.min.js"></script>
 		<script src="js/libs/aleaPRNG.min.js"></script>
 		<script src="js/libs/perlin.js"></script>
