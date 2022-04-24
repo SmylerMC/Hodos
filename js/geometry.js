@@ -41,24 +41,6 @@ class Cell {
     return this.#debugColor;
   }
 
-  getPolyCoord() {
-    let poly = [];
-    //TODO pb de consitance
-    this.#ring.forEach((point) => {
-      let arr = point.coordinates;
-      poly.push(arr);
-    });
-    return poly;
-  }
-
-  createPolygonFromDelaunay(points) {
-    points.forEach((Element) => {
-      //TODO This is broken and needs to be moved outside of here
-      this.addPolygonPoint(new Point(Element[0], Element[1], 0));
-    });
-    this.#ring.pop();
-  }
-
   addPolygonPoint(point) {
     this.#ring.push(point);
   }
@@ -96,9 +78,9 @@ class Point {
 
   /**
    *
-   * @param {float} x x coordinate of the point
-   * @param {float} y y coordinate of the point
-   * @param {float} z z coordinate of the point
+   * @param {Number} x x coordinate of the point
+   * @param {Number} y y coordinate of the point
+   * @param {Number} z z coordinate of the point
    */
   constructor(x, y, z) {
     this.#x = x;
