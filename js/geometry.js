@@ -12,9 +12,9 @@ class Cell {
   /**
    * Constructs a world cell.
    *
-   * @param x           {float}   the X coordinate of the cell's centroid
-   * @param y           {float}   the Y coordinate of the cell's centroid
-   * @param z           {float}   the altitude of the cell's centroid
+   * @param x           {Number}   the X coordinate of the cell's centroid
+   * @param y           {Number}   the Y coordinate of the cell's centroid
+   * @param z           {Number}   the altitude of the cell's centroid
    * @param debugColor  {GlColor} the color to draw this cell with when in debug mode
    */
   constructor(x, y, z, debugColor) {
@@ -25,6 +25,14 @@ class Cell {
     this.earth = 0;
   }
 
+  get ring() {
+    return this.#ring;
+  }
+
+  set z(value) {
+    this.#center.z = value;
+  }
+
   get center() {
     return this.#center;
   }
@@ -33,27 +41,12 @@ class Cell {
     return this.#debugColor;
   }
 
-  getPolyCoord() {
-    let poly = [];
-    //TODO pb de consitance
-    this.#ring.forEach((point) => {
-      let arr = point.coordinates;
-      arr[2] = this.center.z;
-      poly.push(arr);
-    });
-    return poly;
-  }
-
-  createPolygonFromDelaunay(points) {
-    points.forEach((Element) => {
-      //TODO This is broken and needs to be moved outside of here
-      this.addPolygonPoint(new Point(Element[0], Element[1]));
-    });
-    this.#ring.pop();
-  }
-
   addPolygonPoint(point) {
     this.#ring.push(point);
+  }
+
+  removePolygonPoint() {
+    return this.#ring.pop();
   }
 
   setContinent(nb) {
@@ -84,9 +77,9 @@ class Point {
 
   /**
    *
-   * @param {float} x x coordinate of the point
-   * @param {float} y y coordinate of the point
-   * @param {float} z z coordinate of the point
+   * @param {Number} x x coordinate of the point
+   * @param {Number} y y coordinate of the point
+   * @param {Number} z z coordinate of the point
    */
   constructor(x, y, z) {
     this.#x = x;

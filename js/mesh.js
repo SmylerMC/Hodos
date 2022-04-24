@@ -68,15 +68,15 @@ class Tile extends Mesh {
     let coordinates = [];
     let dbgColors = [];
     this.#cells.forEach(cell => {
-      let polygonVertices = cell.getPolyCoord();
+      let polygonVertices = cell.ring;
       let vertexCount = polygonVertices.length;
       for (let i = 1; i <= vertexCount; i++) {
         let vertex1 = polygonVertices[i - 1];
         let vertex2 = polygonVertices[i % vertexCount];
-        let vertex3 = cell.center.coordinates;
-        coordinates.push(...vertex1);
-        coordinates.push(...vertex2);
-        coordinates.push(...vertex3);
+        let vertex3 = cell.center;
+        coordinates.push(...vertex1.coordinates);
+        coordinates.push(...vertex2.coordinates);
+        coordinates.push(...vertex3.coordinates);
         for (let j = 0; j < 3; j++) dbgColors.push(...cell.debugColor.components);
       }
     });
