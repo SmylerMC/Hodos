@@ -58,8 +58,6 @@ class MapGenerator {
           );
         }
         cells[i / 2].addPolygonPoint(createdPoint.get(Element.toString()));
-        //increment the number of use of the point
-        createdPoint.get(Element.toString()).incrementUse();
       });
       cells[i / 2].removePolygonPoint();
       //cells[i / 2].createPolygonFromDelaunay(voronoid.cellPolygon(i / 2));

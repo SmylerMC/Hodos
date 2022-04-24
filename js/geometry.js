@@ -74,7 +74,6 @@ class Point {
   #x;
   #y;
   #z;
-  #nbUse;
 
   /**
    *
@@ -86,7 +85,6 @@ class Point {
     this.#x = x;
     this.#y = y;
     this.#z = z;
-    this.#nbUse = 0;
   }
 
   get x() {
@@ -117,13 +115,6 @@ class Point {
     return [this.#x, this.#y, this.#z];
   }
 
-  get nbUse() {
-    return this.#nbUse;
-  }
-
-  incrementUse() {
-    this.#nbUse += 1;
-  }
 }
 
 /**
