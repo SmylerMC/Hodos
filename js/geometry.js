@@ -12,9 +12,9 @@ class Cell {
   /**
    * Constructs a world cell.
    *
-   * @param x           {float}   the X coordinate of the cell's centroid
-   * @param y           {float}   the Y coordinate of the cell's centroid
-   * @param z           {float}   the altitude of the cell's centroid
+   * @param x           {Number}   the X coordinate of the cell's centroid
+   * @param y           {Number}   the Y coordinate of the cell's centroid
+   * @param z           {Number}   the altitude of the cell's centroid
    * @param debugColor  {GlColor} the color to draw this cell with when in debug mode
    */
   constructor(x, y, z, debugColor) {
