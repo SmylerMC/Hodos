@@ -14,8 +14,8 @@ class WorldMap {
   #renderer;
   #controller;
 
-  constructor(div) {
-    this.#generator = new MapGenerator();
+  constructor(div, seed) {
+    this.#generator = new MapGenerator(seed);
     this.#renderer = new MapRenderer(div, this.#generator);
     this.#controller = new MapController(this);
   }

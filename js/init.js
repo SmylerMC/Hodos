@@ -3,7 +3,7 @@ window.addEventListener('resize', resize)
 /**
  * The main map object
  */
-const worldMap = new WorldMap(document.getElementById("map"));
+const worldMap = new WorldMap(document.getElementById("map"), getSeedFromURL());
 
 worldMap.load().then(() => {
   resize();

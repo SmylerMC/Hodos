@@ -1,7 +1,18 @@
 class MapGenerator {
-  seed; // String (int converted to str)
+
+  #seed; // String (int converted to str)
   trianglesVertices; // Array [ [x0, y0], [x1, y1], ... ]
   delaunay; // d3-delaunay object
+  #random;
+
+  constructor(seed) {
+    if (seed) {
+      this.#seed = seed;
+    } else {
+      this.#seed = getRandomSeed();
+    }
+    this.#random = aleaPRNG(this.#seed);
+  }
 
   /**
    * Generates a tile so it can later be rendered.
@@ -13,11 +24,10 @@ class MapGenerator {
   generateTile(z, x, y) {
     let time = Date.now();
     this.seedCells = Array();
-    this.seed = generateSeed();
-    this.trianglesVertices = getRandomPointsIn2dRange(1000, 0, WORLD_SIZE);
-    this.delaunay = d3.Delaunay.from(this.trianglesVertices);
-    this.trianglesVertices = getRandomPointsIn2dRange(1000, 0, WORLD_SIZE);
-    this.delaunay = d3.Delaunay.from(this.trianglesVertices);
+    let trianglesVertices = getRandomPointsIn2dRange(1000, 0, WORLD_SIZE);
+    this.delaunay = d3.Delaunay.from(trianglesVertices);
+    trianglesVertices = getRandomPointsIn2dRange(1000, 0, WORLD_SIZE);
+    this.delaunay = d3.Delaunay.from(trianglesVertices);
     this.lloydRelaxation(2);
     let cells = this.createAllCells(this.delaunay.voronoi([0, 0, WORLD_SIZE, WORLD_SIZE]));
     this.generateMultipleContinentBurn(cells, 15, 0.4);
@@ -32,9 +42,9 @@ class MapGenerator {
   // create cell from the voronoid diagram
   createAllCells(voronoid) {
     let cells = Array();
-    //all previous created point are temporary store here
+    // All previously created point are temporary store here
     let createdPoint = new Map();
-    //For every cell in Delaunay Graph create a Cell
+    // For every cell in Delaunay Graph create a Cell
     for (let i = 0; i < this.delaunay.points.length; i += 2) {
       cells.push(
         new Cell(this.delaunay.points[i], this.delaunay.points[i + 1], -1, new GlColor(0, 0, 1))
@@ -55,12 +65,6 @@ class MapGenerator {
       //cells[i / 2].createPolygonFromDelaunay(voronoid.cellPolygon(i / 2));
     }
     return cells;
-  }
-
-
-  regenerate() {
-    //On regénère une triangulation de delaunay a partir de 1000 points random
-    this.delaunay = d3.Delaunay.from(getRandomPointsIn2dRange(1000, 0, WORLD_SIZE));
   }
 
   /* Lloyd's relaxation of voronoi cells */
@@ -91,7 +95,7 @@ class MapGenerator {
         cells[currentCell].setEarth();
         cells[currentCell].debugColor = new GlColor(0, 1, 0);
         for (let next of this.delaunay.neighbors(currentCell)) {
-          if (Math.random() < proba && !this.delaunay.hull.includes(next))
+          if (this.#random() < proba && !this.delaunay.hull.includes(next))
             burn.unshift(next);
         }
       }
@@ -127,7 +131,7 @@ class MapGenerator {
         cells[cellIndex].setEarth();
         cells[cellIndex].debugColor = new GlColor(0, 1, 0);
         for (let next of this.delaunay.neighbors(cellIndex)) {
-          if (Math.random() < proba && cells[next].earth === 0) {
+          if (this.#random() < proba && cells[next].earth === 0) {
             burn.unshift(next);
             cells[next].setContinent(
               cells[cellIndex].continentNumber
@@ -140,7 +144,7 @@ class MapGenerator {
 
   generateIsland(cells, taux) {
     cells.forEach((cell) => {
-      if (Math.random() < taux && cell.earth === 0) {
+      if (this.#random() < taux && cell.earth === 0) {
         cell.setEarth();
         cell.debugColor = new GlColor(1, 0, 0);
       }
@@ -149,7 +153,7 @@ class MapGenerator {
 
   /* Generate altitude V1*/
   generateAltitude(cells) {
-    noise.seed(this.seed);
+    noise.seed(this.#seed);
     cells.forEach((cell) => {
       if (cell.earth === 1) {
         // + 1) / 2 is for the output is between 0 and 1
@@ -165,19 +169,3 @@ class MapGenerator {
     });
   }
 }
-
-/* Generate a seed for the session */
-const generateSeed = () => {
-  // Check URL for GET parameter "seed"
-  const url = new URL(window.location.href);
-  const urlSeed = url.searchParams.get("seed");
-
-  // If seed in GET parameter, then use it...
-  if (urlSeed) seed = urlSeed;
-  // If not, generate it.
-  else seed = Math.floor(Math.random() * 1e9).toString();
-
-  Math.random = aleaPRNG(seed);
-
-  return seed;
-};
