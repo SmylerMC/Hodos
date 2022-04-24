@@ -8,9 +8,9 @@ class MapGenerator {
     this.cells = Array();
     this.seedCells = Array();
     this.seed = generateSeed();
-    this.trianglesVertices = fillWithPoints(1000, this);
+    this.trianglesVertices = getRandomPointsIn2dRange(1000, 0, WORLD_SIZE);
     this.delaunay = d3.Delaunay.from(this.trianglesVertices);
-    this.trianglesVertices = fillWithPoints(1000, this);
+    this.trianglesVertices = getRandomPointsIn2dRange(1000, 0, WORLD_SIZE);
     this.delaunay = d3.Delaunay.from(this.trianglesVertices);
     this.lloydRelaxation(2);
     this.createAllCells(this.delaunay.voronoi([0, 0, WORLD_SIZE, WORLD_SIZE]));
@@ -26,7 +26,7 @@ class MapGenerator {
     this.cells = Array();
     //all previous created point are temporary store here
     let createdPoint = new Map();
-    //For evrey cell in Delaunay Graph create a Cell
+    //For every cell in Delaunay Graph create a Cell
     for (let i = 0; i < this.delaunay.points.length; i += 2) {
       this.cells.push(
         new Cell(this.delaunay.points[i], this.delaunay.points[i + 1], -1, new GlColor(0, 0, 1))
@@ -40,7 +40,7 @@ class MapGenerator {
           );
         }
         this.cells[i / 2].addPolygonPoint(createdPoint.get(Element.toString()));
-        //increment the numer of use of the point
+        //increment the number of use of the point
         createdPoint.get(Element.toString()).incrementUse();
       });
       this.cells[i / 2].removePolygonPoint();
@@ -51,9 +51,9 @@ class MapGenerator {
   /**
    * Generates a tile so it can later be rendered.
    *
-   * @param {int} z the zoom level of the tile
-   * @param {int} x the x coordinate of the tile in the corresponding zoom level grid
-   * @param {int} y the y coordinate of the tile in the corresponding zoom level grid
+   * @param {Number} z the zoom level of the tile as an integer
+   * @param {Number} x the x coordinate of the tile in the corresponding zoom level grid as an integer
+   * @param {Number} y the y coordinate of the tile in the corresponding zoom level grid as an integer
    */
   generateTile(z, x, y) {
     //TODO create path
@@ -62,7 +62,7 @@ class MapGenerator {
 
   regenerate() {
     //On regénère une triangulation de delaunay a partir de 1000 points random
-    this.delaunay = d3.Delaunay.from(fillWithPoints(1000, this));
+    this.delaunay = d3.Delaunay.from(getRandomPointsIn2dRange(1000, 0, WORLD_SIZE));
   }
 
   /* Lloyd's relaxation of voronoi cells */
@@ -71,10 +71,8 @@ class MapGenerator {
     for (let i = 0; i < totalSteps; i++) {
       var polygons = Array.from(
           this.delaunay.voronoi([0, 0, WORLD_SIZE, WORLD_SIZE]).cellPolygons()
-        ),
-        centroids = polygons.map(d3.polygonCentroid);
-
-      this.trianglesVertices = centroids;
+        );
+      this.trianglesVertices = polygons.map(d3.polygonCentroid);
       this.delaunay = d3.Delaunay.from(this.trianglesVertices);
     }
 
@@ -84,17 +82,17 @@ class MapGenerator {
   /* GENERATION METHOD */
 
   generateContinentBurn() {
-    var burn;
+    let burn;
     burn = Array();
     this.seedCells.push(this.delaunay.find(WORLD_SIZE / 2, WORLD_SIZE / 2));
     burn.push(this.seedCells[0]);
     let proba = 1.0;
-    while (burn.length != 0) {
-      var current_cell = burn.pop();
-      if (this.cells[current_cell].earth == 0) {
-        this.cells[current_cell].setEarth();
-        this.cells[current_cell].debugColor = new GlColor(0, 1, 0);
-        for (let next of this.delaunay.neighbors(current_cell)) {
+    while (burn.length !== 0) {
+      let currentCell = burn.pop();
+      if (this.cells[currentCell].earth === 0) {
+        this.cells[currentCell].setEarth();
+        this.cells[currentCell].debugColor = new GlColor(0, 1, 0);
+        for (let next of this.delaunay.neighbors(currentCell)) {
           if (Math.random() < proba && !this.delaunay.hull.includes(next))
             burn.unshift(next);
         }
@@ -104,38 +102,37 @@ class MapGenerator {
   }
 
   generateMultipleContinentBurn(continentNumber, taux) {
-    var burn;
+    let burn;
     burn = Array();
-    var indiceCell;
     // select i cell to be the seed of continent
     for (let i = 0; i < continentNumber; i++) {
-      indiceCell = this.delaunay.find(
+      let cellIndex = this.delaunay.find(
         getRandomInRange(0, WORLD_SIZE),
         getRandomInRange(0, WORLD_SIZE)
       );
-      this.cells[indiceCell].setContinent(i + 1);
-      this.seedCells.push(indiceCell);
-      burn.push(indiceCell);
+      this.cells[cellIndex].setContinent(i + 1);
+      this.seedCells.push(cellIndex);
+      burn.push(cellIndex);
     }
     burn.unshift(-1);
     let proba = 1.0;
-    // for evrery cell that can be earth
-    while (burn.length != 0) {
-      var indiceCell = burn.pop();
+    // for every cell that can be earth
+    while (burn.length > 0) {
+      let cellIndex = burn.pop();
       //check if one cycle is do
-      if (indiceCell == -1) {
+      if (cellIndex === -1) {
         proba -= taux;
-        if (burn.length != 0) {
+        if (burn.length !== 0) {
           burn.unshift(-1);
         }
       } else {
-        this.cells[indiceCell].setEarth();
-        this.cells[indiceCell].debugColor = new GlColor(0, 1, 0);
-        for (let next of this.delaunay.neighbors(indiceCell)) {
-          if (Math.random() < proba && this.cells[next].earth == 0) {
+        this.cells[cellIndex].setEarth();
+        this.cells[cellIndex].debugColor = new GlColor(0, 1, 0);
+        for (let next of this.delaunay.neighbors(cellIndex)) {
+          if (Math.random() < proba && this.cells[next].earth === 0) {
             burn.unshift(next);
             this.cells[next].setContinent(
-              this.cells[indiceCell].continentNumber
+              this.cells[cellIndex].continentNumber
             );
           }
         }
@@ -145,7 +142,7 @@ class MapGenerator {
 
   generateIsland(taux) {
     this.cells.forEach((cell) => {
-      if (Math.random() < taux && cell.earth == 0) {
+      if (Math.random() < taux && cell.earth === 0) {
         cell.setEarth();
         cell.debugColor = new GlColor(1, 0, 0);
       }
@@ -156,9 +153,9 @@ class MapGenerator {
   generateAltitude() {
     noise.seed(this.seed);
     this.cells.forEach((cell) => {
-      if (cell.earth == 1) {
-        // + 1) / 2 is for the ouput is between 0 and 1
-        cell.z = (noise.simplex2(cell.x, cell.y) + 1) / 2;
+      if (cell.earth === 1) {
+        // + 1) / 2 is for the output is between 0 and 1
+        cell.z = (noise.simplex2(cell.center.x, cell.center.y) + 1) / 2;
         cell.ring.forEach((point) => {
           point.z = (noise.simplex2(point.x, point.y) + 1) / 2;
         });
@@ -175,7 +172,6 @@ class MapGenerator {
 const generateSeed = () => {
   // Check URL for GET parameter "seed"
   const url = new URL(window.location.href);
-  const params = url.searchParams;
   const urlSeed = url.searchParams.get("seed");
 
   // If seed in GET parameter, then use it...
@@ -186,15 +182,4 @@ const generateSeed = () => {
   Math.random = aleaPRNG(seed);
 
   return seed;
-};
-
-/* Generate n points on a WorldMap surface */
-const fillWithPoints = (n, worldMap) => {
-  let arrayOfPoints = [];
-  for (let i = 0; i < n; i++) {
-    let x = getRandomInRange(0, WORLD_SIZE);
-    let y = getRandomInRange(0, WORLD_SIZE);
-    arrayOfPoints.push([x, y]);
-  }
-  return arrayOfPoints;
 };
