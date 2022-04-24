@@ -167,4 +167,9 @@ class MapGenerator {
       }
     });
   }
+
+  get seed() {
+    return this.#seed;
+  }
+
 }
