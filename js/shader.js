@@ -125,6 +125,13 @@ class ShaderProgram {
     this.#gl.useProgram(this.#glProgram);
   }
 
+  /**
+   * Disables everything which is specific to this shader program,
+   * like attributes.
+   */
+  stopUsing () {
+  }
+
   get gl() {
     return this.#gl;
   }
@@ -135,16 +142,17 @@ class ShaderProgram {
 
 }
 
+/**
+ * The world shader program is in charge of rendering the actual map.
+ */
 class WorldShaderProgram extends ShaderProgram {
 
   #glCoordsAttrib;
-  #camera;
 
   use() {
     super.use();
     this.#glCoordsAttrib = this.gl.getAttribLocation(this.glProgram, "coordinates");
     this.gl.enableVertexAttribArray(this.#glCoordsAttrib);
-    this.#camera = new Camera(this.gl, this.gl.getUniformLocation(this.glProgram, "view"));
   }
 
   bindSurfaceVertexPositionBuffer(buffer) {
@@ -155,42 +163,42 @@ class WorldShaderProgram extends ShaderProgram {
         false, 0, 0);
   }
 
-  get camera() {
-    return this.#camera;
+  bindDebugSurfaceColorsBuffer(buffer) {
+    // This is a no-op here, but is used in case of the DebugWorldShaderProgram
+  }
+
+  stopUsing() {
+    this.gl.disableVertexAttribArray(this.#glCoordsAttrib);
+  }
+
+  setViewMatrix(matrix) {
+    let pointer = this.gl.getUniformLocation(this.glProgram, "view");
+    this.gl.uniformMatrix4fv(pointer, false, matrix);
   }
 
 }
 
-class Camera {
+class DebugWorldShaderProgram extends WorldShaderProgram {
 
-  #gl;
-  #matrixLocation;
+  #glColorsAttrib;
 
-  scaleX = 1;
-  scaleY = 1;
-  posX = 0;
-  posY = 0;
-  zoom = 0;
-
-  constructor(gl, matrixLocation) {
-    this.#gl = gl;
-    this.#matrixLocation = matrixLocation;
+  use() {
+    super.use();
+    this.#glColorsAttrib = this.gl.getAttribLocation(this.glProgram, "dbg_colors");
+    this.gl.enableVertexAttribArray(this.#glColorsAttrib);
   }
 
-  /**
-   * Updates the WebGL context so the values in this camera are used for rendering.
-   */
-  updateGl() {
-    let zoomFactor = Math.pow(2, this.zoom);
-    let scaleX = this.scaleX * zoomFactor;
-    let scaleY = this.scaleY * zoomFactor;
-    let deltaX = - (this.posX + WORLD_SIZE / 2) * scaleX;
-    let deltaY = - (this.posY + WORLD_SIZE / 2) * scaleY;
-    let matrix = new Float32Array(
-      [scaleX, 0,      0, 0,
-       0,      scaleY, 0, 0,
-       0,      0,      0, 0,
-       deltaX, deltaY, 0, 1]);
-    this.#gl.uniformMatrix4fv(this.#matrixLocation, false, matrix);
+  bindDebugSurfaceColorsBuffer(buffer) {
+    this.gl.bindBuffer(this.gl.ARRAY_BUFFER, buffer);
+    this.gl.vertexAttribPointer(
+        this.#glColorsAttrib,
+        3, this.gl.FLOAT,
+        false, 0, 0);
   }
+
+  stopUsing() {
+    super.stopUsing();
+    this.gl.disableVertexAttribArray(this.#glColorsAttrib);
+  }
+
 }

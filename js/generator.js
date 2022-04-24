@@ -29,7 +29,7 @@ class MapGenerator {
     //For evrey cell in Delaunay Graph create a Cell
     for (let i = 0; i < this.delaunay.points.length; i += 2) {
       this.cells.push(
-        new Cell(this.delaunay.points[i], this.delaunay.points[i + 1], -1)
+        new Cell(this.delaunay.points[i], this.delaunay.points[i + 1], -1, new GlColor(0, 0, 1))
       );
       //Create an arrays with the point of the polygon
       voronoid.cellPolygon(i / 2).forEach((Element) => {
@@ -57,8 +57,7 @@ class MapGenerator {
    */
   generateTile(z, x, y) {
     //TODO create path
-    let tile = new Tile(z, x, y, this.cells, []);
-    return tile;
+    return new Tile(z, x, y, this.cells, []);
   }
 
   regenerate() {
@@ -94,6 +93,7 @@ class MapGenerator {
       var current_cell = burn.pop();
       if (this.cells[current_cell].earth == 0) {
         this.cells[current_cell].setEarth();
+        this.cells[current_cell].debugColor = new GlColor(0, 1, 0);
         for (let next of this.delaunay.neighbors(current_cell)) {
           if (Math.random() < proba && !this.delaunay.hull.includes(next))
             burn.unshift(next);
@@ -130,6 +130,7 @@ class MapGenerator {
         }
       } else {
         this.cells[indiceCell].setEarth();
+        this.cells[indiceCell].debugColor = new GlColor(0, 1, 0);
         for (let next of this.delaunay.neighbors(indiceCell)) {
           if (Math.random() < proba && this.cells[next].earth == 0) {
             burn.unshift(next);
@@ -146,6 +147,7 @@ class MapGenerator {
     this.cells.forEach((cell) => {
       if (Math.random() < taux && cell.earth == 0) {
         cell.setEarth();
+        cell.debugColor = new GlColor(1, 0, 0);
       }
     });
   }

@@ -42,6 +42,7 @@ class Tile extends Mesh {
 
   #surfaceVertexCount;
   #surfaceVertexPositions;
+  #surfaceVertexDebugColors;
 
   /**
    * Constructs a new tile object. This is called from the generator side.
@@ -63,8 +64,9 @@ class Tile extends Mesh {
 
   bake(gl) {
     this.#surfaceVertexPositions = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, this.#surfaceVertexPositions);
-    let data = [];
+    this.#surfaceVertexDebugColors = gl.createBuffer()
+    let coordinates = [];
+    let dbgColors = [];
     this.#cells.forEach(cell => {
       let polygonVertices = cell.getPolyCoord();
       let vertexCount = polygonVertices.length;
@@ -72,13 +74,17 @@ class Tile extends Mesh {
         let vertex1 = polygonVertices[i - 1];
         let vertex2 = polygonVertices[i % vertexCount];
         let vertex3 = cell.center.coordinates;
-        data.push(...vertex1);
-        data.push(...vertex2);
-        data.push(...vertex3);
+        coordinates.push(...vertex1);
+        coordinates.push(...vertex2);
+        coordinates.push(...vertex3);
+        for (let j = 0; j < 3; j++) dbgColors.push(...cell.debugColor.components);
       }
     });
-    this.#surfaceVertexCount = data.length / 3;
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(data), gl.STATIC_DRAW);
+    this.#surfaceVertexCount = coordinates.length / 3;
+    gl.bindBuffer(gl.ARRAY_BUFFER, this.#surfaceVertexPositions);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(coordinates), gl.STATIC_DRAW);
+    gl.bindBuffer(gl.ARRAY_BUFFER, this.#surfaceVertexDebugColors);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(dbgColors), gl.STATIC_DRAW);
     gl.bindBuffer(gl.ARRAY_BUFFER, null);
   }
 
@@ -86,6 +92,7 @@ class Tile extends Mesh {
     if (shaderProgram instanceof WorldShaderProgram) {
       let gl = shaderProgram.gl;
       shaderProgram.bindSurfaceVertexPositionBuffer(this.#surfaceVertexPositions);
+      shaderProgram.bindDebugSurfaceColorsBuffer(this.#surfaceVertexDebugColors)
       gl.drawArrays(
           gl.TRIANGLES,
           0,

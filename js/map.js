@@ -37,6 +37,18 @@ class WorldMap {
     return this.#renderer.camera;
   }
 
+  get renderer() {
+    return this.#renderer;
+  }
+
+  get generator() {
+    return this.#generator;
+  }
+
+  get controller() {
+    return this.#controller;
+  }
+
 }
 
 class MapController {
@@ -56,6 +68,11 @@ class MapController {
   zoom(deltaZoom) {
     this.#map.camera.zoom += deltaZoom;
     this.#map.camera.updateGl();
+  }
+
+  toggleDebug() {
+      let renderer = this.#map.renderer;
+      renderer.debug = !renderer.debug;
   }
 
   onKeyPress(keyEvent) {
