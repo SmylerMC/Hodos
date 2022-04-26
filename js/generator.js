@@ -101,14 +101,14 @@ class MapGenerator {
     }
   }
 
-  generateMultipleContinentBurn(cells, continentNumber, taux) {
-    let burn;
-    burn = Array();
+  generateMultipleContinentBurn(cells, numberOfContinent, taux) {
+    let burn = Array();
+    const MAP_SIZE_PERCENT_MARGIN = 0.1;
     // select i cell to be the seed of continent
-    for (let i = 0; i < continentNumber; i++) {
+    for (let i = 0; i < numberOfContinent; i++) {
       let cellIndex = this.delaunay.find(
-        getRandomInRange(0, WORLD_SIZE),
-        getRandomInRange(0, WORLD_SIZE)
+        getRandomInRange(WORLD_SIZE*MAP_SIZE_PERCENT_MARGIN, WORLD_SIZE*(1-MAP_SIZE_PERCENT_MARGIN)),
+        getRandomInRange(WORLD_SIZE*MAP_SIZE_PERCENT_MARGIN, WORLD_SIZE*(1-MAP_SIZE_PERCENT_MARGIN))
       );
       cells[cellIndex].setContinent(i + 1);
       this.seedCells.push(cellIndex);
@@ -129,7 +129,8 @@ class MapGenerator {
         cells[cellIndex].setEarth();
         cells[cellIndex].debugColor = new GlColor(0, 1, 0);
         for (let next of this.delaunay.neighbors(cellIndex)) {
-          if (this.#random() < proba && cells[next].earth === 0) {
+          let distanceFromCenter = taxiDistance(cells[next].center.x, cells[next].center.y, WORLD_SIZE/2, WORLD_SIZE/2);
+          if (this.#random() < proba*sigma(distanceFromCenter, WORLD_SIZE) && cells[next].earth === 0) {
             burn.unshift(next);
             cells[next].setContinent(
               cells[cellIndex].continentNumber
@@ -143,8 +144,11 @@ class MapGenerator {
   generateIsland(cells, taux) {
     cells.forEach((cell) => {
       if (this.#random() < taux && cell.earth === 0) {
-        cell.setEarth();
-        cell.debugColor = new GlColor(1, 0, 0);
+        let distanceFromCenter = taxiDistance(cell.center.x, cell.center.y, WORLD_SIZE/2, WORLD_SIZE/2);
+        if (distanceFromCenter < WORLD_SIZE*0.95/2) {
+          cell.setEarth();
+          cell.debugColor = new GlColor(1, 0, 0);
+        } 
       }
     });
   }
