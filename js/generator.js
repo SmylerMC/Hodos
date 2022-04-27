@@ -160,11 +160,12 @@ class MapGenerator {
     cells.forEach((cell) => {
       if (cell.earth === 1) {
         // + 1) / 2 is for the output is between 0 and 1
-        cell.z = (noise.simplex2(cell.center.x * frequency, cell.center.y * frequency) + 1) / 2;
+        cell.center.z = (noise.simplex2(cell.center.x * frequency, cell.center.y * frequency) + 1) / 2;
         cell.ring.forEach((point) => {
           point.z = (noise.simplex2(point.x * frequency, point.y * frequency) + 1) / 2;
         });
       } else {
+        cell.center.z = -0.1;
         cell.ring.forEach((point) => {
           point.z = -0.1;
         });
