@@ -5,7 +5,7 @@
 	position: absolute;
 }
 
-.map-controls {
+.map-settings {
 	background: rgba(20, 20, 20, 80%);
 	color: white;
 	padding: 10px;
@@ -17,4 +17,20 @@
 	border-top-style: solid;
 	border-top-color: rgba(255, 255, 255, 30%);
 	font-family: sans-serif;
+}
+
+.map-controls {
+	position: fixed;
+	top: 0;
+	right: 9px;
+	z-index: 1;
+	margin: 1em;
+	width: 1em;
+	height: 2.5em;
+}
+
+.map-controls button {
+	width: 2em;
+	height: 2em;
+	margin: 3px;
 }

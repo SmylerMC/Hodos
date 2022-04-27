@@ -15,8 +15,13 @@
 		</style>
 	</head>
 	<body>
-		<div id="map"></div>
-		<footer class="map-controls">
+		<div id="map">
+			<div class="map-controls">
+				<button onclick="worldMap.controller.zoom(1)">+</button>
+				<button onclick="worldMap.controller.zoom(-1)">-</button>
+			</div>
+		</div>
+		<footer class="map-settings">
 			<label>
 				Debug: <input type="checkbox" onclick="worldMap.controller.toggleDebug()">
 			</label>
