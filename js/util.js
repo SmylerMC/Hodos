@@ -70,3 +70,16 @@ const sigma = (x, T) => {
 const taxiDistance = (x1, y1, x2, y2) => {
   return Math.max(Math.abs(x1-x2), Math.abs(y1-y2));
 }
+
+class Counter {
+  #value;
+
+  constructor(initialValue) {
+    this.#value = initialValue;
+  }
+
+  next() {
+    return this.#value++;
+  }
+
+}
