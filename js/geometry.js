@@ -2,11 +2,10 @@
  * A convex polygon and its barycenter.
  */
 class Cell {
-
   #center;
   #ring = Array();
   #debugColor;
-
+  biome;
   earth = 0;
 
   /**
@@ -20,9 +19,12 @@ class Cell {
   constructor(x, y, z, debugColor) {
     this.#center = new Point(x, y, z);
     this.#ring = Array();
-    this.#debugColor = debugColor ? debugColor : new GlColor(Math.random(), Math.random(), Math.random());
+    this.#debugColor = debugColor
+      ? debugColor
+      : new GlColor(Math.random(), Math.random(), Math.random());
     this.continentNumber = 0;
     this.earth = 0;
+    this.biome = BIOMES["ocean"];
   }
 
   get ring() {
@@ -54,23 +56,29 @@ class Cell {
   }
 
   setEarth() {
-    this.earth = 1;
+    this.biome = BIOMES["continent"];
     //Temporary
     //TODO Actually generate an altitude value, in the MapGenerator class
     this.center.z = 0.1;
   }
 
+  isContinent() {
+    return this.biome.isContinent();
+  }
+
+  isMaritime() {
+    return this.biome.isMaritime();
+  }
+
   set debugColor(value) {
     this.#debugColor = value;
   }
-
 }
 
 /**
  * A 3D point object.
  */
 class Point {
-
   #x;
   #y;
   #z;
@@ -114,7 +122,6 @@ class Point {
   get coordinates() {
     return [this.#x, this.#y, this.#z];
   }
-
 }
 
 /**
@@ -122,7 +129,6 @@ class Point {
  * The coordinate space is normalized rgb (each color value is between 0 and 1).
  */
 class GlColor {
-
   #red;
   #green;
   #blue;
@@ -146,7 +152,6 @@ class GlColor {
   }
 
   get components() {
-    return [this.red, this.green, this.blue]
+    return [this.red, this.green, this.blue];
   }
-
 }

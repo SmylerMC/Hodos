@@ -1,44 +1,44 @@
 <!DOCTYPE html>
 
 <html lang="en-us">
-	<head>
-		<title>Hodos</title>
-		<meta charset="UTF-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<link rel="stylesheet" href="css/map.css">
-		<style>
-			html,
-			body {
-				margin: 0;
-				padding: 0;
-			}
-		</style>
-	</head>
-	<body>
-		<div id="map">
-			<div class="map-controls">
-				<button onclick="worldMap.controller.zoom(1)">+</button>
-				<button onclick="worldMap.controller.zoom(-1)">-</button>
-			</div>
-		</div>
-		<footer class="map-settings">
-			<label>
-				Debug: <input type="checkbox" onclick="worldMap.controller.toggleDebug()">
-			</label>
-			<label>
-				Seed: <input type="text" class="seed-input" disabled>
-			</label>
-		</footer>
-		<script src="https://d3js.org/d3.v7.min.js"></script>
-		<script src="js/libs/aleaPRNG.min.js"></script>
-		<script src="js/libs/perlin.js"></script>
-		<script src="js/util.js"></script>
-		<script src="js/generator.js"></script>
-		<script src="js/geometry.js"></script>
-		<script src="js/mesh.js"></script>
-		<script src="js/map.js"></script>
-		<script src="js/renderer.js"></script>
-		<script src="js/shader.js"></script>
-		<script src="js/init.js"></script>
-	</body>
+  <head>
+    <title>Hodos</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="css/map.css" />
+    <style>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="map">
+      <div class="map-controls">
+        <button onclick="worldMap.controller.zoom(1)">+</button>
+        <button onclick="worldMap.controller.zoom(-1)">-</button>
+      </div>
+    </div>
+    <footer class="map-settings">
+      <label>
+        Debug:
+        <input type="checkbox" onclick="worldMap.controller.toggleDebug()" />
+      </label>
+      <label> Seed: <input type="text" class="seed-input" disabled /> </label>
+    </footer>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="js/libs/aleaPRNG.min.js"></script>
+    <script src="js/libs/perlin.js"></script>
+    <script src="js/util.js"></script>
+    <script src="js/generator.js"></script>
+    <script src="js/geometry.js"></script>
+    <script src="js/mesh.js"></script>
+    <script src="js/map.js"></script>
+    <script src="js/renderer.js"></script>
+    <script src="js/shader.js"></script>
+    <script src="js/biomes.js"></script>
+    <script src="js/init.js"></script>
+  </body>
 </html>
