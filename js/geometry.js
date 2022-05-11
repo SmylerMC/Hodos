@@ -70,6 +70,10 @@ class Cell {
     return this.biome.isMaritime();
   }
 
+  getBiomePool() {
+    return this.biome.biomePool;
+  }
+
   set debugColor(value) {
     this.#debugColor = value;
   }
