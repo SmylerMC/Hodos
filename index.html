@@ -22,11 +22,19 @@
       </div>
     </div>
     <footer class="map-settings">
-      <label>
-        Debug:
-        <input type="checkbox" onclick="worldMap.controller.toggleDebug()" />
-      </label>
-      <label> Seed: <input type="text" class="seed-input" disabled /> </label>
+      <form action="" id="debug-form">
+        <label for="debug-toggle">Debug:</label>
+        <input
+          name="debug-toggle"
+          type="checkbox"
+          onclick="worldMap.controller.toggleDebug()"
+        />
+      </form>
+      <form method="GET" action="" id="seed-form">
+        <label for="seed">Seed:</label>
+        <input type="text" class="seed-placeholder" id="seed" name="seed" />
+        <input type="submit" value="Change" />
+      </form>
     </footer>
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <script src="js/libs/aleaPRNG.min.js"></script>

@@ -23,9 +23,19 @@ class MapGenerator {
   generateTile(z, x, y) {
     let time = Date.now();
     this.seedCells = Array();
-    let trianglesVertices = getRandomPointsIn2dRange(1000, 0, WORLD_SIZE);
+    let trianglesVertices = getRandomPointsIn2dRange(
+      1000,
+      0,
+      WORLD_SIZE,
+      this.#random
+    );
     this.delaunay = d3.Delaunay.from(trianglesVertices);
-    trianglesVertices = getRandomPointsIn2dRange(1000, 0, WORLD_SIZE);
+    trianglesVertices = getRandomPointsIn2dRange(
+      1000,
+      0,
+      WORLD_SIZE,
+      this.#random
+    );
     this.delaunay = d3.Delaunay.from(trianglesVertices);
     this.lloydRelaxation(2);
     this.cells = this.createAllCells(
@@ -115,11 +125,13 @@ class MapGenerator {
       let cellIndex = this.delaunay.find(
         getRandomInRange(
           WORLD_SIZE * MAP_SIZE_PERCENT_MARGIN,
-          WORLD_SIZE * (1 - MAP_SIZE_PERCENT_MARGIN)
+          WORLD_SIZE * (1 - MAP_SIZE_PERCENT_MARGIN),
+          this.#random
         ),
         getRandomInRange(
           WORLD_SIZE * MAP_SIZE_PERCENT_MARGIN,
-          WORLD_SIZE * (1 - MAP_SIZE_PERCENT_MARGIN)
+          WORLD_SIZE * (1 - MAP_SIZE_PERCENT_MARGIN),
+          this.#random
         )
       );
       this.cells[cellIndex].setContinent(i + 1);
@@ -172,6 +184,7 @@ class MapGenerator {
         );
         if (distanceFromCenter < (WORLD_SIZE * 0.95) / 2) {
           cell.setEarth();
+          cell.biome["island"];
           cell.debugColor = new GlColor(1, 0, 0);
         }
       }

@@ -2,8 +2,8 @@ const resize = () => {
   worldMap.resize(window.innerWidth, window.innerHeight);
 };
 
-const getRandomInRange = (min, max) => {
-  return Math.random() * (max - min) + min;
+const getRandomInRange = (min, max, randomFunction) => {
+  return randomFunction() * (max - min) + min;
 };
 
 /**
@@ -14,11 +14,11 @@ const getRandomInRange = (min, max) => {
  * @param {Number} upperBound   the upper bound for the points coordinates (exclusive)
  * @returns {*[]}               the array of random 2d points, as an array of arrays
  */
-const getRandomPointsIn2dRange = (n, lowerBound, upperBound) => {
+const getRandomPointsIn2dRange = (n, lowerBound, upperBound, randomFunction) => {
   let arrayOfPoints = [];
   while (arrayOfPoints.length < n) {
-    let x = getRandomInRange(lowerBound, upperBound);
-    let y = getRandomInRange(lowerBound, upperBound);
+    let x = getRandomInRange(lowerBound, upperBound, randomFunction);
+    let y = getRandomInRange(lowerBound, upperBound, randomFunction);
     arrayOfPoints.push([x, y]);
   }
   return arrayOfPoints;
@@ -30,7 +30,7 @@ const getRandomPointsIn2dRange = (n, lowerBound, upperBound) => {
  * @returns {string}  the "seed" GET parameter, or null if not set
  */
 const getSeedFromURL = () => {
-  const url = new URL(window.location.href);
+  let url = new URL(window.location.href);
   return url.searchParams.get("seed");
 }
 
