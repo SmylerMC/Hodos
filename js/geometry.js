@@ -81,6 +81,10 @@ class Cell {
     }
     return longitudeBiomesProbability;
   }
+  
+  getBiomePool() {
+    return this.biome.biomePool;
+  }
 
   set debugColor(value) {
     this.#debugColor = value;
