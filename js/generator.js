@@ -24,9 +24,9 @@ class MapGenerator {
   generateTile(z, x, y) {
     let time = Date.now();
     this.seedCells = Array();
-    let trianglesVertices = getRandomPointsIn2dRange(1000, 0, WORLD_SIZE);
+    let trianglesVertices = getRandomPointsIn2dRange(1000, 0, WORLD_SIZE, this.#random);
     this.delaunay = d3.Delaunay.from(trianglesVertices);
-    trianglesVertices = getRandomPointsIn2dRange(1000, 0, WORLD_SIZE);
+    trianglesVertices = getRandomPointsIn2dRange(1000, 0, WORLD_SIZE, this.#random);
     this.delaunay = d3.Delaunay.from(trianglesVertices);
     this.lloydRelaxation(2);
     let cells = this.createAllCells(this.delaunay.voronoi([0, 0, WORLD_SIZE, WORLD_SIZE]));
@@ -107,8 +107,8 @@ class MapGenerator {
     // select i cell to be the seed of continent
     for (let i = 0; i < numberOfContinent; i++) {
       let cellIndex = this.delaunay.find(
-        getRandomInRange(WORLD_SIZE*MAP_SIZE_PERCENT_MARGIN, WORLD_SIZE*(1-MAP_SIZE_PERCENT_MARGIN)),
-        getRandomInRange(WORLD_SIZE*MAP_SIZE_PERCENT_MARGIN, WORLD_SIZE*(1-MAP_SIZE_PERCENT_MARGIN))
+        getRandomInRange(WORLD_SIZE*MAP_SIZE_PERCENT_MARGIN, WORLD_SIZE*(1-MAP_SIZE_PERCENT_MARGIN), this.#random),
+        getRandomInRange(WORLD_SIZE*MAP_SIZE_PERCENT_MARGIN, WORLD_SIZE*(1-MAP_SIZE_PERCENT_MARGIN), this.#random)
       );
       cells[cellIndex].setContinent(i + 1);
       this.seedCells.push(cellIndex);

@@ -11,7 +11,7 @@ worldMap.load().then(() => {
   worldMap.startRender();
 }).then(() => {
   let seed = worldMap.generator.seed;
-  for (let element of document.getElementsByClassName("seed-input")) {
+  for (let element of document.getElementsByClassName("seed-placeholder")) {
     element.value = seed;
   }
 });
