@@ -83,3 +83,16 @@ class Counter {
   }
 
 }
+
+/**
+ * Normal function as seen here : https://zupimages.net/up/22/19/y80o.png
+ * 
+ * @param {Number} x value between 0 and 100
+ * @param {Number} μ average value of gaussian
+ * @param {Number} σ sigma value of gaussian
+ * @returns {Number} value between 0 and 1
+ */
+const normalFunction = (x, μ, σ) => {
+  let arg = -((x-μ)**2)/(2*σ**2);
+  return k*Math.exp(arg);
+}

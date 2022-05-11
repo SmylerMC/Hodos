@@ -70,6 +70,18 @@ class Cell {
     return this.biome.isMaritime();
   }
 
+  getListOfLongitudeBiomesProbability() {
+    let longitudeBiomesProbability = {};
+    /*Value between 0 and 1 telling how North is a cell*/
+    let longitudeRatio = this.#center.x / WORLD_SIZE;
+    for (const biome in BIOMES) {
+      let μ = BIOMES[biome].longitudeAverage;
+      let σ = BIOMES[biome].longitudeSigma;
+      longitudeBiomesProbability[biome] = normalFunction(longitudeRatio*100, μ, σ);
+    }
+    return longitudeBiomesProbability;
+  }
+
   set debugColor(value) {
     this.#debugColor = value;
   }
