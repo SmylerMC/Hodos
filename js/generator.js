@@ -226,17 +226,43 @@ class MapGenerator {
   generateBiome() {
     let burn = Array();
     this.seedCells.forEach((cell) => {
+      let nextBiome = ;
+      this.cells[next].biome = BIOMES[BIOMESPOOL[nextBiome].index(getRandomInRange(0, 1, this.#random))]
       burn.push(cell);
     });
-
     while (burn.length > 0) {
       let current = burn.pop();
 
       for (let next of this.delaunay.neighbors(current)) {
         if (this.cells[next].isContinent) {
+          if (this.cells[next].z > 0.8) {
+            this.cells[next].biome = BIOMES[Mountain]
+          } else {
+            //Magnifique repartiteur de biome
+            let nextBiome = ;
+            if (this.cells[current].getBiomePool == nextBiome) {
+              this.cells[next].biome = BIOMES[this.cells[current].biome.stay()]
+            } else {
+              this.cells[next].biome = BIOMES[BIOMESPOOL[nextBiome].index(getRandomInRange(0, 1, this.#random))]
+            }
+          }
           burn.shift(next);
         }
       }
     }
   }
+  /* truc moche*/
+    colorizeBiome() {      
+      this.cells.forEach((cell) => {
+        if (cell.biome = BIOMES[Taiga]) cell.debugColor = new GlColor(0.2, 0.2, 0.2);
+        if (cell.biome = BIOMES[Tundra]) cell.debugColor = new GlColor(0.5, 0.5, 0.5);
+        if (cell.biome = BIOMES[Forest]) cell.debugColor = new GlColor(0.13, 0.54, 0.13);
+        if (cell.biome = BIOMES[Plain]) cell.debugColor = new GlColor(0.5, 1, 0);
+        if (cell.biome = BIOMES[Swamp]) cell.debugColor = new GlColor(0, 1, 1);
+        if (cell.biome = BIOMES[Jungle]) cell.debugColor = new GlColor(1, 0, 1);
+        if (cell.biome = BIOMES[Desert]) cell.debugColor = new GlColor(1, 1, 0);
+        if (cell.biome = BIOMES[Savana]) cell.debugColor = new GlColor(0, 1, 0.5);
+        if (cell.biome = BIOMES[Mountain]) cell.debugColor = new GlColor(0.8, 0.8, 0.8);
+      })
+    }
 }
