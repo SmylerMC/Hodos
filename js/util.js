@@ -94,5 +94,5 @@ class Counter {
  */
 const normalFunction = (x, μ, σ) => {
   let arg = -((x-μ)**2)/(2*σ**2);
-  return k*Math.exp(arg);
+  return Math.exp(arg);
 }

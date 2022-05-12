@@ -72,16 +72,19 @@ class Cell {
 
   getListOfLongitudeBiomesProbability() {
     let longitudeBiomesProbability = {};
+    let sumOfAllProbabilities = 0;
     /*Value between 0 and 1 telling how North is a cell*/
-    let longitudeRatio = this.#center.x / WORLD_SIZE;
-    for (const biome in BIOMES) {
-      let μ = BIOMES[biome].longitudeAverage;
-      let σ = BIOMES[biome].longitudeSigma;
-      longitudeBiomesProbability[biome] = normalFunction(longitudeRatio*100, μ, σ);
+    let longitudeRatio = 1-(this.#center.y / WORLD_SIZE);
+    for (const biomeCategory in BIOMESPOOL) {
+      let μ = BIOMES[BIOMESPOOL[biomeCategory][0]].longitudeAverage;
+      let s = BIOMES[BIOMESPOOL[biomeCategory][0]].longitudeSigma;
+      let res = normalFunction(longitudeRatio*100, μ, s);
+      longitudeBiomesProbability[biomeCategory] = res;
+      sumOfAllProbabilities += res;
     }
-    return longitudeBiomesProbability;
+    return [longitudeBiomesProbability, sumOfAllProbabilities];
   }
-  
+
   getBiomePool() {
     return this.biome.biomePool;
   }
