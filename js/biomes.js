@@ -205,6 +205,11 @@ class SavanaBiome extends Biome {
 
 //Mountain
 class MountainBiome extends Biome {
+  biomePool;
+  constructor(random) {
+    super(random);
+    this.biomePool = "Mountain";
+  }
   stay() {
     return 1;
   }

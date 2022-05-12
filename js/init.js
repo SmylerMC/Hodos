@@ -1,20 +1,9 @@
-window.addEventListener('resize', resize)
+window.addEventListener("resize", resize);
 
 /**
  * The main map object
  */
 const worldMap = new WorldMap(document.getElementById("map"), getSeedFromURL());
-
-worldMap.load().then(() => {
-  resize();
-  console.log("Map loaded");
-  worldMap.startRender();
-}).then(() => {
-  let seed = worldMap.generator.seed;
-  for (let element of document.getElementsByClassName("seed-placeholder")) {
-    element.value = seed;
-  }
-});
 
 const BIOMES = {
   ocean: new OceanBiome(worldMap.generator.random),
@@ -30,3 +19,17 @@ const BIOMES = {
   Savana: new SavanaBiome(worldMap.generator.random),
   Mountain: new MountainBiome(worldMap.generator.random),
 };
+
+worldMap
+  .load()
+  .then(() => {
+    resize();
+    console.log("Map loaded");
+    worldMap.startRender();
+  })
+  .then(() => {
+    let seed = worldMap.generator.seed;
+    for (let element of document.getElementsByClassName("seed-placeholder")) {
+      element.value = seed;
+    }
+  });

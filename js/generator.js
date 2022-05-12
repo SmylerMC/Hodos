@@ -186,8 +186,8 @@ class MapGenerator {
         );
         if (distanceFromCenter < (WORLD_SIZE * 0.95) / 2) {
           cell.setEarth();
-          cell.biome["island"];
-          cell.debugColor = new GlColor(1, 0, 0);
+          cell.biome = BIOMES["island"];
+          cell.debugColor = new GlColor(1, 0, 1);
         }
       }
     });
@@ -232,23 +232,28 @@ class MapGenerator {
   generateBiome() {
     let burn = Array();
     this.seedCells.forEach((nbCell) => {
-      console.log(nbCell);
       let nextBiome = this.cells[nbCell].getBiomeType(this.#random);
       this.cells[nbCell].biome =
         BIOMES[BIOMESPOOL[nextBiome].at(getRandomInRange(0, 1, this.#random))];
       if (this.cells[nbCell].z > 0.6) {
         this.cells[nbCell].biome = BIOMES[Mountain];
       }
-      console.log(this.cells[nbCell].biome);
       burn.push(nbCell);
     });
     while (burn.length > 0) {
       let current = burn.pop();
 
       for (let next of this.delaunay.neighbors(current)) {
-        if (this.cells[next].isContinent) {
-          if (this.cells[next].z > 0.6) {
-            this.cells[next].biome = BIOMES[Mountain];
+        console.log(
+          this.cells[next].isContinent() &&
+            this.cells[next].getBiomePool() == "default"
+        );
+        if (
+          this.cells[next].isContinent() &&
+          this.cells[next].getBiomePool() == "default"
+        ) {
+          if (this.cells[next].center.z > 0.8) {
+            this.cells[next].biome = BIOMES["Mountain"];
           } else {
             //Magnifique repartiteur de biome
             let nextBiome = this.cells[next].getBiomeType(this.#random);
@@ -261,7 +266,7 @@ class MapGenerator {
                 ];
             }
           }
-          burn.shift(next);
+          burn.unshift(next);
         }
       }
     }
@@ -269,33 +274,33 @@ class MapGenerator {
   /* truc moche*/
   colorizeBiome() {
     this.cells.forEach((cell) => {
-      //console.log(cell);
+      console.log(cell.biome);
       if (cell.biome == BIOMES["Taiga"]) {
-        cell.debugColor = new GlColor(0.2, 0.2, 0.2);
+        cell.debugColor = new GlColor(1, 1, 1);
       }
       if (cell.biome == BIOMES["Tundra"]) {
-        cell.debugColor = new GlColor(0.5, 0.5, 0.5);
+        cell.debugColor = new GlColor(1, 1, 1);
       }
       if (cell.biome == BIOMES["Forest"]) {
-        cell.debugColor = new GlColor(0.13, 0.54, 0.13);
+        cell.debugColor = new GlColor(0, 1, 0);
       }
       if (cell.biome == BIOMES["Plain"]) {
-        cell.debugColor = new GlColor(0.5, 1, 0);
+        cell.debugColor = new GlColor(0, 1, 0);
       }
       if (cell.biome == BIOMES["Swamp"]) {
-        cell.debugColor = new GlColor(0, 1, 1);
+        cell.debugColor = new GlColor(0, 0, 1);
       }
       if (cell.biome == BIOMES["Jungle"]) {
-        cell.debugColor = new GlColor(1, 0, 1);
+        cell.debugColor = new GlColor(0, 0, 1);
       }
       if (cell.biome == BIOMES["Desert"]) {
-        cell.debugColor = new GlColor(1, 1, 0);
+        cell.debugColor = new GlColor(1, 0, 0);
       }
       if (cell.biome == BIOMES["Savana"]) {
-        cell.debugColor = new GlColor(0, 1, 0.5);
+        cell.debugColor = new GlColor(1, 0, 0);
       }
       if (cell.biome == BIOMES["Mountain"]) {
-        cell.debugColor = new GlColor(0.8, 0.8, 0.8);
+        cell.debugColor = new GlColor(0.5, 0.5, 0.5);
       }
     });
   }

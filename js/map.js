@@ -9,7 +9,6 @@ const TILE_PIXEL_SIZE = 256;
 const WORLD_SIZE = 10_000;
 
 class WorldMap {
-
   #generator;
   #renderer;
   #controller;
@@ -21,7 +20,7 @@ class WorldMap {
   }
 
   resize(width, height) {
-    this.#renderer.resize(width,height);
+    this.#renderer.resize(width, height);
   }
 
   async load() {
@@ -30,7 +29,7 @@ class WorldMap {
   }
 
   startRender() {
-    window.requestAnimationFrame(t => this.#renderer.render(t));
+    window.requestAnimationFrame((t) => this.#renderer.render(t));
   }
 
   get camera() {
@@ -48,11 +47,9 @@ class WorldMap {
   get controller() {
     return this.#controller;
   }
-
 }
 
 class MapController {
-
   #map;
 
   constructor(map) {
@@ -71,13 +68,13 @@ class MapController {
   }
 
   toggleDebug() {
-      let renderer = this.#map.renderer;
-      renderer.debug = !renderer.debug;
+    let renderer = this.#map.renderer;
+    renderer.debug = !renderer.debug;
   }
 
   onKeyPress(keyEvent) {
     let zoom = this.#map.camera.zoom;
-    let delta = 10 / (TILE_PIXEL_SIZE * Math.pow(2, zoom)) * WORLD_SIZE;
+    let delta = (10 / (TILE_PIXEL_SIZE * Math.pow(2, zoom))) * WORLD_SIZE;
     let code = keyEvent.keyCode;
     if (code === 37) {
       this.move(-delta, 0);
@@ -100,9 +97,8 @@ class MapController {
   }
 
   setupCallback() {
-    window.onkeydown = e => {
+    window.onkeydown = (e) => {
       this.onKeyPress(e);
-    }
+    };
   }
-
 }

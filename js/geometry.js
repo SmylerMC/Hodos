@@ -23,7 +23,6 @@ class Cell {
       ? debugColor
       : new GlColor(Math.random(), Math.random(), Math.random());
     this.continentNumber = 0;
-    this.earth = 0;
     this.biome = BIOMES["ocean"];
   }
 
