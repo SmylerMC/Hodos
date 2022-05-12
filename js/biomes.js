@@ -1,9 +1,11 @@
 class Biome {
   #id;
   #biomePool;
+  #random;
 
-  constructor() {
-    this.#biomePool = "deafult";
+  constructor(random) {
+    this.#random = random;
+    this.#biomePool = "default";
   }
 
   isMaritime() {
@@ -20,6 +22,10 @@ class Biome {
 
   get id() {
     return this.#id;
+  }
+
+  get random() {
+    return this.#random;
   }
 
   stay() {
@@ -39,11 +45,18 @@ class IslandBiome extends Biome {}
 
 //Froid
 class TundraBiome extends Biome {
-  constructor() {
+  biomePool;
+  longitudeAverage;
+  longitudeSigma;
+
+  constructor(random) {
+    super(random);
     this.biomePool = "Cold";
+    this.longitudeAverage = 80;
+    this.longitudeSigma = 4;
   }
   stay() {
-    if (this.#random() < 0.7) {
+    if (this.random() < 0.7) {
       return "Tundra";
     } else {
       return "Taiga";
@@ -51,11 +64,18 @@ class TundraBiome extends Biome {
   }
 }
 class TaigaBiome extends Biome {
-  constructor() {
+  biomePool;
+  longitudeAverage;
+  longitudeSigma;
+
+  constructor(random) {
+    super(random);
     this.biomePool = "Cold";
+    this.longitudeAverage = 80;
+    this.longitudeSigma = 4;
   }
   stay() {
-    if (this.#random() < 0.3) {
+    if (this.random() < 0.3) {
       return "Tundra";
     } else {
       return "Taiga";
@@ -65,11 +85,18 @@ class TaigaBiome extends Biome {
 
 //Tempere
 class ForestBiome extends Biome {
-  constructor() {
+  biomePool;
+  longitudeAverage;
+  longitudeSigma;
+
+  constructor(random) {
+    super(random);
     this.biomePool = "Temperate";
+    this.longitudeAverage = 55;
+    this.longitudeSigma = 12;
   }
   stay() {
-    if (this.#random() < 0.7) {
+    if (this.random() < 0.7) {
       return "Forest";
     } else {
       return "Plain";
@@ -77,11 +104,18 @@ class ForestBiome extends Biome {
   }
 }
 class PlainBiome extends Biome {
-  constructor() {
+  biomePool;
+  longitudeAverage;
+  longitudeSigma;
+
+  constructor(random) {
+    super(random);
     this.biomePool = "Temperate";
+    this.longitudeAverage = 55;
+    this.longitudeSigma = 12;
   }
   stay() {
-    if (this.#random() < 0.3) {
+    if (this.random() < 0.3) {
       return "Forest";
     } else {
       return "Plain";
@@ -91,11 +125,18 @@ class PlainBiome extends Biome {
 
 //Humide
 class SwampBiome extends Biome {
-  constructor() {
+  biomePool;
+  longitudeAverage;
+  longitudeSigma;
+
+  constructor(random) {
+    super(random);
     this.biomePool = "Humid";
+    this.longitudeAverage = 31;
+    this.longitudeSigma = 4.5;
   }
   stay() {
-    if (this.#random() < 0.6) {
+    if (this.random() < 0.6) {
       return "Swamp";
     } else {
       return "Jungle";
@@ -103,11 +144,18 @@ class SwampBiome extends Biome {
   }
 }
 class JungleBiome extends Biome {
-  constructor() {
+  biomePool;
+  longitudeAverage;
+  longitudeSigma;
+
+  constructor(random) {
+    super(random);
     this.biomePool = "Humid";
+    this.longitudeAverage = 31;
+    this.longitudeSigma = 4.5;
   }
   stay() {
-    if (this.#random() < 0.2) {
+    if (this.random() < 0.2) {
       return "Swamp";
     } else {
       return "Jungle";
@@ -117,11 +165,18 @@ class JungleBiome extends Biome {
 
 //Desert
 class DesertBiome extends Biome {
-  constructor() {
+  biomePool;
+  longitudeAverage;
+  longitudeSigma;
+
+  constructor(random) {
+    super(random);
     this.biomePool = "Dry";
+    this.longitudeAverage = 17.5;
+    this.longitudeSigma = 3.5;
   }
   stay() {
-    if (this.#random() < 0.8) {
+    if (this.random() < 0.8) {
       return "Desert";
     } else {
       return "Savana";
@@ -129,11 +184,18 @@ class DesertBiome extends Biome {
   }
 }
 class SavanaBiome extends Biome {
-  constructor() {
+  biomePool;
+  longitudeAverage;
+  longitudeSigma;
+
+  constructor(random) {
+    super(random);
     this.biomePool = "Dry";
+    this.longitudeAverage = 17.5;
+    this.longitudeSigma = 3.5;
   }
   stay() {
-    if (this.#random() < 0.2) {
+    if (this.random() < 0.2) {
       return "Desert";
     } else {
       return "Savana";
@@ -147,21 +209,6 @@ class MountainBiome extends Biome {
     return 1;
   }
 }
-
-const BIOMES = {
-  ocean: new OceanBiome(),
-  continent: new ContinentBiome(),
-  island: new IslandBiome(),
-  Tundra: new TundraBiome(),
-  Taiga: new TaigaBiome(),
-  Forest: new ForestBiome(),
-  Plain: new PlainBiome(),
-  Swamp: new SwampBiome(),
-  Jungle: new JungleBiome(),
-  Desert: new DesertBiome(),
-  Savana: new SavanaBiome(),
-  Mountain: new MountainBiome(),
-};
 
 const BIOMESPOOL = {
   Temperate: ["Forest", "Plain"],

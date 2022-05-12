@@ -222,6 +222,10 @@ class MapGenerator {
     return this.#seed;
   }
 
+  get random() {
+    return this.#random;
+  }
+
   /* Biome générator V1*/
   generateBiome() {
     let burn = Array();
