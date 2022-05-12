@@ -44,6 +44,8 @@ class MapGenerator {
     this.generateMultipleContinentBurn(15, 0.4);
     this.generateIsland(0.01);
     this.generateAltitude();
+    this.generateBiome();
+    this.colorizeBiome();
     time = Date.now() - time;
     console.log("Map generates in " + time + " ms");
     //TODO create paths
@@ -229,25 +231,34 @@ class MapGenerator {
   /* Biome générator V1*/
   generateBiome() {
     let burn = Array();
-    this.seedCells.forEach((cell) => {
-      let nextBiome = ;
-      this.cells[next].biome = BIOMES[BIOMESPOOL[nextBiome].index(getRandomInRange(0, 1, this.#random))]
-      burn.push(cell);
+    this.seedCells.forEach((nbCell) => {
+      console.log(nbCell);
+      let nextBiome = this.cells[nbCell].getBiomeType(this.#random);
+      this.cells[nbCell].biome =
+        BIOMES[BIOMESPOOL[nextBiome].at(getRandomInRange(0, 1, this.#random))];
+      if (this.cells[nbCell].z > 0.6) {
+        this.cells[nbCell].biome = BIOMES[Mountain];
+      }
+      console.log(this.cells[nbCell].biome);
+      burn.push(nbCell);
     });
     while (burn.length > 0) {
       let current = burn.pop();
 
       for (let next of this.delaunay.neighbors(current)) {
         if (this.cells[next].isContinent) {
-          if (this.cells[next].z > 0.8) {
-            this.cells[next].biome = BIOMES[Mountain]
+          if (this.cells[next].z > 0.6) {
+            this.cells[next].biome = BIOMES[Mountain];
           } else {
             //Magnifique repartiteur de biome
-            let nextBiome = ;
+            let nextBiome = this.cells[next].getBiomeType(this.#random);
             if (this.cells[current].getBiomePool == nextBiome) {
-              this.cells[next].biome = BIOMES[this.cells[current].biome.stay()]
+              this.cells[next].biome = BIOMES[this.cells[current].biome.stay()];
             } else {
-              this.cells[next].biome = BIOMES[BIOMESPOOL[nextBiome].index(getRandomInRange(0, 1, this.#random))]
+              this.cells[next].biome =
+                BIOMES[
+                  BIOMESPOOL[nextBiome].at(getRandomInRange(0, 1, this.#random))
+                ];
             }
           }
           burn.shift(next);
@@ -256,17 +267,36 @@ class MapGenerator {
     }
   }
   /* truc moche*/
-    colorizeBiome() {      
-      this.cells.forEach((cell) => {
-        if (cell.biome = BIOMES[Taiga]) cell.debugColor = new GlColor(0.2, 0.2, 0.2);
-        if (cell.biome = BIOMES[Tundra]) cell.debugColor = new GlColor(0.5, 0.5, 0.5);
-        if (cell.biome = BIOMES[Forest]) cell.debugColor = new GlColor(0.13, 0.54, 0.13);
-        if (cell.biome = BIOMES[Plain]) cell.debugColor = new GlColor(0.5, 1, 0);
-        if (cell.biome = BIOMES[Swamp]) cell.debugColor = new GlColor(0, 1, 1);
-        if (cell.biome = BIOMES[Jungle]) cell.debugColor = new GlColor(1, 0, 1);
-        if (cell.biome = BIOMES[Desert]) cell.debugColor = new GlColor(1, 1, 0);
-        if (cell.biome = BIOMES[Savana]) cell.debugColor = new GlColor(0, 1, 0.5);
-        if (cell.biome = BIOMES[Mountain]) cell.debugColor = new GlColor(0.8, 0.8, 0.8);
-      })
-    }
+  colorizeBiome() {
+    this.cells.forEach((cell) => {
+      //console.log(cell);
+      if (cell.biome == BIOMES["Taiga"]) {
+        cell.debugColor = new GlColor(0.2, 0.2, 0.2);
+      }
+      if (cell.biome == BIOMES["Tundra"]) {
+        cell.debugColor = new GlColor(0.5, 0.5, 0.5);
+      }
+      if (cell.biome == BIOMES["Forest"]) {
+        cell.debugColor = new GlColor(0.13, 0.54, 0.13);
+      }
+      if (cell.biome == BIOMES["Plain"]) {
+        cell.debugColor = new GlColor(0.5, 1, 0);
+      }
+      if (cell.biome == BIOMES["Swamp"]) {
+        cell.debugColor = new GlColor(0, 1, 1);
+      }
+      if (cell.biome == BIOMES["Jungle"]) {
+        cell.debugColor = new GlColor(1, 0, 1);
+      }
+      if (cell.biome == BIOMES["Desert"]) {
+        cell.debugColor = new GlColor(1, 1, 0);
+      }
+      if (cell.biome == BIOMES["Savana"]) {
+        cell.debugColor = new GlColor(0, 1, 0.5);
+      }
+      if (cell.biome == BIOMES["Mountain"]) {
+        cell.debugColor = new GlColor(0.8, 0.8, 0.8);
+      }
+    });
+  }
 }
