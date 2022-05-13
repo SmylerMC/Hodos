@@ -5,37 +5,49 @@
     <title>Hodos</title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-height, initial-scale=1.0" />
     <link rel="stylesheet" href="css/map.css" />
-    <style>
-      html,
-      body {
-        margin: 0;
-        padding: 0;
-      }
-    </style>
+    <link rel="shortcut icon" href="./assets/img/favicon.ico" type="image/x-icon">
   </head>
   <body>
-    <div id="map">
-      <div class="map-controls">
-        <button onclick="worldMap.controller.zoom(1)">+</button>
-        <button onclick="worldMap.controller.zoom(-1)">-</button>
+    <div class="main-content">
+      <div class="header">
+        <div class="logo">
+          <img src="./assets/img/HodosLogo.png" alt="Logo Hodos">
+        </div>
       </div>
+      <div id="map">
+        <div class="map-controls">
+          <button onclick="worldMap.controller.zoom(1)">+</button>
+          <button onclick="worldMap.controller.zoom(-1)">-</button>
+        </div>
+      </div>
+      <div class="borders-container" style="opacity: 1;">
+        <div class="border-top"></div>
+        <div class="border-left"></div>
+        <div class="border-bottom"></div>
+        <div class="border-right"></div>
+      </div>
+      <footer class="map-settings">
+        <div class="setting-container">
+          <form action="" id="debug-form">
+            <label for="debug-toggle">Debug:</label>
+            <input
+              name="debug-toggle"
+              type="checkbox"
+              onclick="worldMap.controller.toggleDebug()"
+            />
+          </form>
+        </div>
+        <div class="setting-container">
+          <form method="GET" action="" id="seed-form">
+            <label for="seed">Seed:</label>
+            <input type="text" class="seed-placeholder" id="seed" name="seed" />
+            <input type="submit" value="Change" />
+          </form>
+        </div>
+      </footer>
     </div>
-    <footer class="map-settings">
-      <form action="" id="debug-form">
-        <label for="debug-toggle">Debug:</label>
-        <input
-          name="debug-toggle"
-          type="checkbox"
-          onclick="worldMap.controller.toggleDebug()"
-        />
-      </form>
-      <form method="GET" action="" id="seed-form">
-        <label for="seed">Seed:</label>
-        <input type="text" class="seed-placeholder" id="seed" name="seed" />
-        <input type="submit" value="Change" />
-      </form>
-    </footer>
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <script src="js/libs/aleaPRNG.min.js"></script>
     <script src="js/libs/perlin.js"></script>
@@ -47,6 +59,7 @@
     <script src="js/map.js"></script>
     <script src="js/renderer.js"></script>
     <script src="js/shader.js"></script>
+    <script src="js/interface-controls.js"></script>
     <script src="js/init.js"></script>
   </body>
 </html>
