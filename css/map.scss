@@ -34,7 +34,7 @@
 	bottom: 0;
 	display: flex;
 	flex-direction: row;
-	justify-content: space-around;
+	justify-content: center;
 	align-items: center;
 	border: 3px solid rgba(0,0,0,0.5);
 
@@ -46,6 +46,13 @@
 		justify-content: center;
 		align-items: center;
 		position: relative;
+		cursor: pointer;
+		transition: all 0.3s ease;
+
+		&:hover {
+			padding: 1rem 2.5rem;
+			background-color: rgba(0,0,0,0.2)
+		}
 
 		&::after {
 			content: "";
@@ -93,6 +100,7 @@
 
 		img {
 			height: 100%;
+			opacity: 0.8;
 		}
 	}
 
@@ -143,5 +151,145 @@
     -webkit-transform: rotate(180deg);
     transform: rotate(180deg);
     width: 6px;
+	}
+}
+
+.modal-box {
+	color: #040403;
+  font-style: normal;
+  font-weight: 400;
+  pointer-events: auto;
+  position: fixed;
+  right: 27px;
+	bottom: 13.6vh;
+	left: auto;
+	top: auto;
+  z-index: 600;
+	line-height: 1.15;
+	tab-size: 4;
+	transition: transform .3s ease;
+	font-family: 'IM Fell Double Pica', serif;
+
+	.bg {
+    height: 100%;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 100%;
+	}
+
+	.inner {
+    background-image: url(../assets/img/popin-bg.jpg);
+    background-repeat: repeat;
+    display: block;
+    position: relative;
+		top: 0;
+		bottom: 0;
+		left: 0;
+		right: 0;
+
+		&::before {
+			border: 1px solid #040403;
+			bottom: 4px;
+			content: "";
+			display: block;
+			left: 4px;
+			pointer-events: none;
+			position: absolute;
+			right: 4px;
+			top: 4px;
+		}
+
+		.content {
+			min-width: 520px;
+			padding: 25px 95px 35px;
+
+			&::before {
+				border: 1px solid #040403;
+				bottom: 8px;
+				content: "";
+				display: block;
+				left: 8px;
+				pointer-events: none;
+				position: absolute;
+				right: 8px;
+				top: 8px;
+			}
+
+			.title {
+				left: 0;
+				position: absolute;
+				right: 0;
+				top: -15px;
+				text-align: center;
+
+				.title-inner {
+					background: #d0c9b7;
+					font-size: 24px;
+					letter-spacing: .38em;
+					line-height: 33px;
+					color: #040403;
+					display: inline-block;
+					padding: 0 15px;
+    			position: relative;
+    			text-transform: uppercase;
+
+					img {
+						left: 0;
+						position: absolute;
+						width: 100%;
+						vertical-align: middle;
+						display: block;
+					}
+				}
+			}
+
+			.main-modal-content {
+				margin: 1rem 0;
+				display: flex;
+				flex-direction: column;
+				justify-content: flex-start;
+				align-items: center;
+
+				.modal-section {
+					margin: 0.5rem 0;
+
+					label {
+						font-size: 1.2rem;
+					}
+
+					input {
+						background: transparent;
+						border: 1px #040403 solid;
+						padding: 2px 5px;
+						font-family: 'IM Fell Double Pica', serif;
+					}
+
+					input[type="text"] {
+						font-family: Arial, Helvetica, sans-serif;
+					}
+				}
+			}
+
+			.back-desktop {
+				display: block;
+				font-size: 12px;
+				margin-top: 30px;
+				text-align: center;
+				text-transform: uppercase;
+
+				span {
+					cursor: pointer;
+				}
+
+				img {
+					margin: auto;
+					padding-top: 5px;
+					width: 40px;
+					display: block;
+					vertical-align: middle;
+				}
+			}
+		}
 	}
 }

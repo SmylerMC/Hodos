@@ -29,28 +29,55 @@
         <div class="border-right"></div>
       </div>
       <footer class="map-settings">
-        <div class="setting-container">
-          <form action="" id="debug-form">
-            <label for="debug-toggle">Debug:</label>
-            <input
-              id="debug-toggle"
-              name="debug-toggle"
-              type="checkbox"
-            />
-          </form>
+        <div class="setting-container" id="settings-modal-open">
+          <span>Paramètres</span>
         </div>
         <div class="setting-container">
-          <form method="GET" action="" id="seed-form">
-            <label for="seed">Seed:</label>
-            <input type="text" class="seed-placeholder" id="seed" name="seed" />
-            <input type="submit" value="Change" />
-          </form>
+          <span>GitHub</span>
         </div>
       </footer>
+    </div>
+    <div class="modal-box" id="settings-modal" style="transform: translateY(80px); display: none">
+      <div class="bg"></div>
+      <div class="inner">
+        <div class="content">
+          <div class="title">
+            <div class="title-inner">
+              <img class="upper" src="./assets/img/upperline.png">
+              Parametres
+              <img class="under" src="./assets/img/underline.png">
+            </div>
+          </div>
+          <div class="main-modal-content">
+            <div class="modal-section">
+              <form action="" id="debug-form">
+                <label for="debug-toggle">Debug:</label>
+                <input
+                  id="debug-toggle"
+                  name="debug-toggle"
+                  type="checkbox"
+                />
+              </form>
+            </div>
+            <div class="modal-section">
+              <form method="GET" action="" id="seed-form">
+                <label for="seed">Seed:</label>
+                <input type="text" class="seed-placeholder" id="seed" name="seed" />
+                <input type="submit" value="Change" />
+              </form>
+            </div>
+          </div>
+          <div class="back-desktop">
+            <span id="settings-modal-close">Retour</span>
+            <img class="underline" src="./assets/img/menu-underline.png">
+          </div>
+        </div>
+      </div>
     </div>
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <script src="js/libs/aleaPRNG.min.js"></script>
     <script src="js/libs/perlin.js"></script>
+    <script src="js/libs/jquery-3.6.0.min.js"></script>
     <script src="js/util.js"></script>
     <script src="js/biomes.js"></script>
     <script src="js/generator.js"></script>
