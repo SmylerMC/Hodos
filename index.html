@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html lang="en-us">
+<html lang="fr">
   <head>
     <title>Hodos</title>
     <meta charset="UTF-8" />
@@ -13,7 +13,7 @@
     <div class="main-content">
       <div class="header">
         <div class="logo">
-          <img src="./assets/img/HodosLogo.png" alt="Logo Hodos">
+          <img src="./assets/img/HodosLogoWhite.png" alt="Logo Hodos">
         </div>
       </div>
       <div id="map">
@@ -29,15 +29,15 @@
         <div class="border-right"></div>
       </div>
       <footer class="map-settings">
-        <div class="setting-container" id="settings-modal-open">
+        <div class="setting-container debug-modal-toggle">
           <span>Paramètres</span>
         </div>
-        <div class="setting-container">
-          <span>GitHub</span>
+        <div class="setting-container project-modal-toggle">
+          <span>Projet</span>
         </div>
       </footer>
     </div>
-    <div class="modal-box" id="settings-modal" style="transform: translateY(80px); display: none">
+    <div class="modal-box" id="debug-modal" style="transform: translateY(80px); display: none">
       <div class="bg"></div>
       <div class="inner">
         <div class="content">
@@ -63,12 +63,48 @@
               <form method="GET" action="" id="seed-form">
                 <label for="seed">Seed:</label>
                 <input type="text" class="seed-placeholder" id="seed" name="seed" />
-                <input type="submit" value="Change" />
+                <input type="submit" value="Changer" />
               </form>
             </div>
           </div>
           <div class="back-desktop">
-            <span id="settings-modal-close">Retour</span>
+            <span class="debug-modal-toggle">Retour</span>
+            <img class="underline" src="./assets/img/menu-underline.png">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-box" id="project-modal" style="transform: translateY(80px); display: none">
+      <div class="bg"></div>
+      <div class="inner">
+        <div class="content">
+          <div class="title">
+            <div class="title-inner">
+              Projet
+              <img class="under" src="./assets/img/underline.png">
+            </div>
+          </div>
+          <div class="main-modal-content">
+            <div class="modal-section">
+              <p>L'application web <i>Hodos</i> a été développée dans le cadre du projet de développement informatique (PRO3600) de l'école d'ingénieurs Télécom SudParis.
+              Pendant cinq mois, notre de groupe de quatre étudiants en première année a travaillé pour créer le site que vous consultez actuellement.
+              </p>
+              <p>
+                L'idée originale était de créer un générateur procédural de carte du monde, utilisable notamment par quiconque aurait besoin de créer un monde à partir de zéro : auteurs, rôlistes, etc...
+              </p>
+              <p>Dans l'état actuel de projet, vous avez la possibilité de générer une carte unique, avec plusieurs continents, des îles, un relief et des biomes différents. Le système de débuggage mis à disposition
+                vous permet d'avoir un aperçu de la façon dont la carte est générée et vous permet également d'utiliser un système de seed pour retrouver une carte que vous avez générée et qui vous a plu.
+              </p>
+              <p>Pour plus d'informations sur la façon dont l'application fonctionne, vous pouvez consulter notre repo GitHub public.</p>
+            </div>
+            <div class="modal-section">
+              <a href="https://github.com/SmylerMC/Hodos" target="_blank" class="github-link">
+                <img src="./assets/img/github.png" alt="GitHub">
+              </a>
+            </div>
+          </div>
+          <div class="back-desktop">
+            <span class="project-modal-toggle">Retour</span>
             <img class="underline" src="./assets/img/menu-underline.png">
           </div>
         </div>

@@ -91,17 +91,38 @@
 .map-controls {
   position: fixed;
   top: 0;
-  right: 9px;
+  right: 1rem;
   z-index: 1;
   margin: 1em;
-  width: 1em;
-  height: 2.5em;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: flex-start;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
 }
 
 .map-controls button {
   width: 2em;
   height: 2em;
   margin: 3px;
+  background: #d0c9b7;
+  color: #040403;
+  border: 1px solid #040403;
+  cursor: pointer;
+  -webkit-transition: background-color 0.2s ease;
+  transition: background-color 0.2s ease;
+}
+
+.map-controls button:hover {
+  background: #a5a091;
 }
 
 /*Header*/
@@ -195,7 +216,7 @@
   font-weight: 400;
   pointer-events: auto;
   position: fixed;
-  right: 27px;
+  right: 2vw;
   bottom: 13.6vh;
   left: auto;
   top: auto;
@@ -243,8 +264,9 @@
 }
 
 .modal-box .inner .content {
-  min-width: 520px;
-  padding: 25px 95px 35px;
+  width: 620px;
+  max-width: 90vw;
+  padding: 2rem 3rem 2.5rem;
 }
 
 .modal-box .inner .content::before {
@@ -308,6 +330,11 @@
   margin: 0.5rem 0;
 }
 
+.modal-box .inner .content .main-modal-content .modal-section p {
+  margin: 0;
+  text-align: justify;
+}
+
 .modal-box .inner .content .main-modal-content .modal-section label {
   font-size: 1.2rem;
 }
@@ -317,10 +344,21 @@
   border: 1px #040403 solid;
   padding: 2px 5px;
   font-family: 'IM Fell Double Pica', serif;
+  -webkit-transition: background-color 0.2s ease;
+  transition: background-color 0.2s ease;
 }
 
 .modal-box .inner .content .main-modal-content .modal-section input[type="text"] {
   font-family: Arial, Helvetica, sans-serif;
+}
+
+.modal-box .inner .content .main-modal-content .modal-section input[type="text"]:focus, .modal-box .inner .content .main-modal-content .modal-section input[type="text"]:focus-visible {
+  border: 1px #040403 solid;
+}
+
+.modal-box .inner .content .main-modal-content .modal-section input[type="submit"]:hover {
+  background-color: rgba(0, 0, 0, 0.2);
+  cursor: pointer;
 }
 
 .modal-box .inner .content .back-desktop {
@@ -341,5 +379,21 @@
   width: 40px;
   display: block;
   vertical-align: middle;
+}
+
+.github-link {
+  width: 3rem;
+  display: block;
+  -webkit-transition: all 0.2s ease;
+  transition: all 0.2s ease;
+}
+
+.github-link:hover {
+  -webkit-filter: invert(0.4);
+          filter: invert(0.4);
+}
+
+.github-link img {
+  width: 100%;
 }
 /*# sourceMappingURL=map.css.map */

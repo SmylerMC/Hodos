@@ -68,17 +68,28 @@
 .map-controls {
 	position: fixed;
 	top: 0;
-	right: 9px;
+	right: 1rem;
 	z-index: 1;
 	margin: 1em;
-	width: 1em;
-	height: 2.5em;
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+	align-items: center;
 }
 
 .map-controls button {
 	width: 2em;
 	height: 2em;
 	margin: 3px;
+	background: #d0c9b7;
+	color: #040403;
+	border: 1px solid #040403;
+	cursor: pointer;
+	transition: background-color 0.2s ease;
+
+	&:hover {
+		background: #a5a091;
+	}
 }
 
 /*Header*/
@@ -160,7 +171,7 @@
   font-weight: 400;
   pointer-events: auto;
   position: fixed;
-  right: 27px;
+  right: 2vw;
 	bottom: 13.6vh;
 	left: auto;
 	top: auto;
@@ -201,8 +212,9 @@
 		}
 
 		.content {
-			min-width: 520px;
-			padding: 25px 95px 35px;
+			width: 620px;
+			max-width: 90vw;
+			padding: 2rem 3rem 2.5rem;
 
 			&::before {
 				border: 1px solid #040403;
@@ -254,6 +266,11 @@
 				.modal-section {
 					margin: 0.5rem 0;
 
+					p {
+						margin: 0;
+						text-align: justify;
+					}
+
 					label {
 						font-size: 1.2rem;
 					}
@@ -263,10 +280,20 @@
 						border: 1px #040403 solid;
 						padding: 2px 5px;
 						font-family: 'IM Fell Double Pica', serif;
+						transition: background-color 0.2s ease;
 					}
 
 					input[type="text"] {
 						font-family: Arial, Helvetica, sans-serif;
+
+						&:focus, &:focus-visible {
+							border: 1px #040403 solid;
+						}
+					}
+
+					input[type="submit"]:hover {
+						background-color: rgba(0,0,0,0.2);
+						cursor: pointer;
 					}
 				}
 			}
@@ -291,5 +318,19 @@
 				}
 			}
 		}
+	}
+}
+
+.github-link {
+	width: 3rem;
+	display: block;
+	transition: all 0.2s ease;
+
+	&:hover {
+		filter: invert(0.4);
+	}
+
+	img {
+		width: 100%;
 	}
 }
