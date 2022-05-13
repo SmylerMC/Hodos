@@ -18,8 +18,8 @@
       </div>
       <div id="map">
         <div class="map-controls">
-          <button onclick="worldMap.controller.zoom(1)">+</button>
-          <button onclick="worldMap.controller.zoom(-1)">-</button>
+          <button id="map-zoom-in-button">+</button>
+          <button id="map-zoom-out-button">-</button>
         </div>
       </div>
       <div class="borders-container" style="opacity: 1;">
@@ -33,9 +33,9 @@
           <form action="" id="debug-form">
             <label for="debug-toggle">Debug:</label>
             <input
+              id="debug-toggle"
               name="debug-toggle"
               type="checkbox"
-              onclick="worldMap.controller.toggleDebug()"
             />
           </form>
         </div>
