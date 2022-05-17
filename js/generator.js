@@ -42,10 +42,10 @@ class MapGenerator {
       this.delaunay.voronoi([0, 0, WORLD_SIZE, WORLD_SIZE])
     );
     this.generateMultipleContinentBurn(15, 0.4);
-    this.generateIsland(0.01);
+    this.generateIsland(0.01, 0.4);
     this.generateAltitude();
     this.generateBiome();
-    this.generateCrruptedBurn();
+    this.generateCorruptedBurn();
 
     this.colorizeBiome();
     time = Date.now() - time;
@@ -177,7 +177,7 @@ class MapGenerator {
     }
   }
 
-  generateIsland(taux) {
+  generateIsland(taux, fairyRate) {
     this.cells.forEach((cell) => {
       if (this.#random() < taux && cell.isMaritime()) {
         let distanceFromCenter = taxiDistance(
@@ -187,9 +187,13 @@ class MapGenerator {
           WORLD_SIZE / 2
         );
         if (distanceFromCenter < (WORLD_SIZE * 0.95) / 2) {
-          cell.setEarth();
-          cell.biome = BIOMES["island"];
-          cell.debugColor = new GlColor(1, 0, 1);
+          if (this.#random() < fairyRate) {
+            console.log("fée");
+            cell.biome = BIOMES["Fairy"];
+          } else {
+            cell.biome = BIOMES["island"];
+            cell.debugColor = new GlColor(0, 0, 0);
+          }
         }
       }
     });
@@ -270,7 +274,7 @@ class MapGenerator {
     }
   }
 
-  generateCrruptedBurn() {
+  generateCorruptedBurn() {
     let burn;
     burn = Array();
     let x = Math.ceil(
@@ -281,7 +285,6 @@ class MapGenerator {
     while (burn.length !== 0) {
       let currentCell = burn.pop();
       if (this.cells[currentCell].isContinent()) {
-        console.log(currentCell);
         this.cells[currentCell].biome = BIOMES["Corrupted"];
         for (let next of this.delaunay.neighbors(currentCell)) {
           if (this.#random() < proba && this.cells[next].isContinent())
@@ -324,6 +327,9 @@ class MapGenerator {
       }
       if (cell.biome === BIOMES["Corrupted"]) {
         cell.debugColor = new GlColor(0.5, 0, 1);
+      }
+      if (cell.biome === BIOMES["Fairy"]) {
+        cell.debugColor = new GlColor(1, 0.75, 0.8);
       }
     });
   }
