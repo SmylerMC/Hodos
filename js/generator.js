@@ -1,5 +1,4 @@
 class MapGenerator {
-
   #seed; // String (int converted to str)
   trianglesVertices; // Array [ [x0, y0], [x1, y1], ... ]
   delaunay; // d3-delaunay object
@@ -24,19 +23,33 @@ class MapGenerator {
   generateTile(z, x, y) {
     let time = Date.now();
     this.seedCells = Array();
-    let trianglesVertices = getRandomPointsIn2dRange(1000, 0, WORLD_SIZE);
+    let trianglesVertices = getRandomPointsIn2dRange(
+      1000,
+      0,
+      WORLD_SIZE,
+      this.#random
+    );
     this.delaunay = d3.Delaunay.from(trianglesVertices);
-    trianglesVertices = getRandomPointsIn2dRange(1000, 0, WORLD_SIZE);
+    trianglesVertices = getRandomPointsIn2dRange(
+      1000,
+      0,
+      WORLD_SIZE,
+      this.#random
+    );
     this.delaunay = d3.Delaunay.from(trianglesVertices);
     this.lloydRelaxation(2);
-    let cells = this.createAllCells(this.delaunay.voronoi([0, 0, WORLD_SIZE, WORLD_SIZE]));
-    this.generateMultipleContinentBurn(cells, 15, 0.4);
-    this.generateIsland(cells, 0.01);
-    this.generateAltitude(cells);
+    this.cells = this.createAllCells(
+      this.delaunay.voronoi([0, 0, WORLD_SIZE, WORLD_SIZE])
+    );
+    this.generateMultipleContinentBurn(15, 0.4);
+    this.generateIsland(0.01);
+    this.generateAltitude();
+    this.generateBiome();
+    this.colorizeBiome();
     time = Date.now() - time;
     console.log("Map generates in " + time + " ms");
     //TODO create paths
-    return new Tile(z, x, y, cells, []);
+    return new Tile(z, x, y, this.cells, []);
   }
 
   // create cell from the voronoid diagram
@@ -47,7 +60,12 @@ class MapGenerator {
     // For every cell in Delaunay Graph create a Cell
     for (let i = 0; i < this.delaunay.points.length; i += 2) {
       cells.push(
-        new Cell(this.delaunay.points[i], this.delaunay.points[i + 1], -1, new GlColor(0, 0, 1))
+        new Cell(
+          this.delaunay.points[i],
+          this.delaunay.points[i + 1],
+          -1,
+          new GlColor(0, 0, 1)
+        )
       );
       //Create an arrays with the point of the polygon
       voronoid.cellPolygon(i / 2).forEach((Element) => {
@@ -70,8 +88,8 @@ class MapGenerator {
   lloydRelaxation(totalSteps) {
     for (let i = 0; i < totalSteps; i++) {
       var polygons = Array.from(
-          this.delaunay.voronoi([0, 0, WORLD_SIZE, WORLD_SIZE]).cellPolygons()
-        );
+        this.delaunay.voronoi([0, 0, WORLD_SIZE, WORLD_SIZE]).cellPolygons()
+      );
       this.trianglesVertices = polygons.map(d3.polygonCentroid);
       this.delaunay = d3.Delaunay.from(this.trianglesVertices);
     }
@@ -81,7 +99,7 @@ class MapGenerator {
 
   /* GENERATION METHOD */
 
-  generateContinentBurn(cells) {
+  generateContinentBurn() {
     let burn;
     burn = Array();
     this.seedCells.push(this.delaunay.find(WORLD_SIZE / 2, WORLD_SIZE / 2));
@@ -89,9 +107,9 @@ class MapGenerator {
     let proba = 1.0;
     while (burn.length !== 0) {
       let currentCell = burn.pop();
-      if (cells[currentCell].earth === 0) {
-        cells[currentCell].setEarth();
-        cells[currentCell].debugColor = new GlColor(0, 1, 0);
+      if (this.cells[currentCell].isMaritime()) {
+        this.cells[currentCell].setEarth();
+        this.cells[currentCell].debugColor = new GlColor(0, 1, 0);
         for (let next of this.delaunay.neighbors(currentCell)) {
           if (this.#random() < proba && !this.delaunay.hull.includes(next))
             burn.unshift(next);
@@ -101,16 +119,24 @@ class MapGenerator {
     }
   }
 
-  generateMultipleContinentBurn(cells, numberOfContinent, taux) {
+  generateMultipleContinentBurn(numberOfContinent, taux) {
     let burn = Array();
     const MAP_SIZE_PERCENT_MARGIN = 0.1;
     // select i cell to be the seed of continent
     for (let i = 0; i < numberOfContinent; i++) {
       let cellIndex = this.delaunay.find(
-        getRandomInRange(WORLD_SIZE*MAP_SIZE_PERCENT_MARGIN, WORLD_SIZE*(1-MAP_SIZE_PERCENT_MARGIN)),
-        getRandomInRange(WORLD_SIZE*MAP_SIZE_PERCENT_MARGIN, WORLD_SIZE*(1-MAP_SIZE_PERCENT_MARGIN))
+        getRandomInRange(
+          WORLD_SIZE * MAP_SIZE_PERCENT_MARGIN,
+          WORLD_SIZE * (1 - MAP_SIZE_PERCENT_MARGIN),
+          this.#random
+        ),
+        getRandomInRange(
+          WORLD_SIZE * MAP_SIZE_PERCENT_MARGIN,
+          WORLD_SIZE * (1 - MAP_SIZE_PERCENT_MARGIN),
+          this.#random
+        )
       );
-      cells[cellIndex].setContinent(i + 1);
+      this.cells[cellIndex].setContinent(i + 1);
       this.seedCells.push(cellIndex);
       burn.push(cellIndex);
     }
@@ -126,14 +152,22 @@ class MapGenerator {
           burn.unshift(-1);
         }
       } else {
-        cells[cellIndex].setEarth();
-        cells[cellIndex].debugColor = new GlColor(0, 1, 0);
+        this.cells[cellIndex].setEarth();
+        this.cells[cellIndex].debugColor = new GlColor(0, 1, 0);
         for (let next of this.delaunay.neighbors(cellIndex)) {
-          let distanceFromCenter = taxiDistance(cells[next].center.x, cells[next].center.y, WORLD_SIZE/2, WORLD_SIZE/2);
-          if (this.#random() < proba*sigma(distanceFromCenter, WORLD_SIZE) && cells[next].earth === 0) {
+          let distanceFromCenter = taxiDistance(
+            this.cells[next].center.x,
+            this.cells[next].center.y,
+            WORLD_SIZE / 2,
+            WORLD_SIZE / 2
+          );
+          if (
+            this.#random() < proba * sigma(distanceFromCenter, WORLD_SIZE) &&
+            this.cells[next].earth === 0
+          ) {
             burn.unshift(next);
-            cells[next].setContinent(
-              cells[cellIndex].continentNumber
+            this.cells[next].setContinent(
+              this.cells[cellIndex].continentNumber
             );
           }
         }
@@ -141,28 +175,41 @@ class MapGenerator {
     }
   }
 
-  generateIsland(cells, taux) {
-    cells.forEach((cell) => {
-      if (this.#random() < taux && cell.earth === 0) {
-        let distanceFromCenter = taxiDistance(cell.center.x, cell.center.y, WORLD_SIZE/2, WORLD_SIZE/2);
-        if (distanceFromCenter < WORLD_SIZE*0.95/2) {
+  generateIsland(taux) {
+    this.cells.forEach((cell) => {
+      if (this.#random() < taux && cell.isMaritime()) {
+        let distanceFromCenter = taxiDistance(
+          cell.center.x,
+          cell.center.y,
+          WORLD_SIZE / 2,
+          WORLD_SIZE / 2
+        );
+        if (distanceFromCenter < (WORLD_SIZE * 0.95) / 2) {
           cell.setEarth();
-          cell.debugColor = new GlColor(1, 0, 0);
-        } 
+          cell.biome = BIOMES["island"];
+          cell.debugColor = new GlColor(1, 0, 1);
+        }
       }
     });
   }
 
   /* Generate altitude V1*/
-  generateAltitude(cells) {
-    const frequency = 1 / WORLD_SIZE * 15;
+  generateAltitude() {
+    const frequency = (1 / WORLD_SIZE) * 15;
     noise.seed(this.#seed);
-    cells.forEach((cell) => {
-      if (cell.earth === 1) {
+    this.cells.forEach((cell) => {
+      if (cell.isContinent()) {
         // + 1) / 2 is for the output is between 0 and 1
-        cell.center.z = (noise.simplex2(cell.center.x * frequency, cell.center.y * frequency) + 1) / 2;
+        cell.center.z =
+          (noise.simplex2(
+            cell.center.x * frequency,
+            cell.center.y * frequency
+          ) +
+            1) /
+          2;
         cell.ring.forEach((point) => {
-          point.z = (noise.simplex2(point.x * frequency, point.y * frequency) + 1) / 2;
+          point.z =
+            (noise.simplex2(point.x * frequency, point.y * frequency) + 1) / 2;
         });
       } else {
         cell.center.z = -0.1;
@@ -177,4 +224,84 @@ class MapGenerator {
     return this.#seed;
   }
 
+  get random() {
+    return this.#random;
+  }
+
+  /* Biome générator V1*/
+  generateBiome() {
+    let burn = Array();
+    this.seedCells.forEach((nbCell) => {
+      let nextBiome = this.cells[nbCell].getBiomeType(this.#random);
+      this.cells[nbCell].biome =
+        BIOMES[BIOMESPOOL[nextBiome].at(getRandomInRange(0, 1, this.#random))];
+      if (this.cells[nbCell].z > 0.6) {
+        this.cells[nbCell].biome = BIOMES[Mountain];
+      }
+      burn.push(nbCell);
+    });
+    while (burn.length > 0) {
+      let current = burn.pop();
+
+      for (let next of this.delaunay.neighbors(current)) {
+        console.log(
+          this.cells[next].isContinent() &&
+            this.cells[next].getBiomePool() == "default"
+        );
+        if (
+          this.cells[next].isContinent() &&
+          this.cells[next].getBiomePool() == "default"
+        ) {
+          if (this.cells[next].center.z > 0.8) {
+            this.cells[next].biome = BIOMES["Mountain"];
+          } else {
+            //Magnifique repartiteur de biome
+            let nextBiome = this.cells[next].getBiomeType(this.#random);
+            if (this.cells[current].getBiomePool == nextBiome) {
+              this.cells[next].biome = BIOMES[this.cells[current].biome.stay()];
+            } else {
+              this.cells[next].biome =
+                BIOMES[
+                  BIOMESPOOL[nextBiome].at(getRandomInRange(0, 1, this.#random))
+                ];
+            }
+          }
+          burn.unshift(next);
+        }
+      }
+    }
+  }
+  /* truc moche*/
+  colorizeBiome() {
+    this.cells.forEach((cell) => {
+      console.log(cell.biome);
+      if (cell.biome == BIOMES["Taiga"]) {
+        cell.debugColor = new GlColor(1, 1, 1);
+      }
+      if (cell.biome == BIOMES["Tundra"]) {
+        cell.debugColor = new GlColor(1, 1, 1);
+      }
+      if (cell.biome == BIOMES["Forest"]) {
+        cell.debugColor = new GlColor(0, 1, 0);
+      }
+      if (cell.biome == BIOMES["Plain"]) {
+        cell.debugColor = new GlColor(0, 1, 0);
+      }
+      if (cell.biome == BIOMES["Swamp"]) {
+        cell.debugColor = new GlColor(0, 0, 1);
+      }
+      if (cell.biome == BIOMES["Jungle"]) {
+        cell.debugColor = new GlColor(0, 0, 1);
+      }
+      if (cell.biome == BIOMES["Desert"]) {
+        cell.debugColor = new GlColor(1, 0, 0);
+      }
+      if (cell.biome == BIOMES["Savana"]) {
+        cell.debugColor = new GlColor(1, 0, 0);
+      }
+      if (cell.biome == BIOMES["Mountain"]) {
+        cell.debugColor = new GlColor(0.5, 0.5, 0.5);
+      }
+    });
+  }
 }
