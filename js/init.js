@@ -18,6 +18,8 @@ const BIOMES = {
   Desert: new DesertBiome(worldMap.generator.random),
   Savana: new SavanaBiome(worldMap.generator.random),
   Mountain: new MountainBiome(worldMap.generator.random),
+  Corrupted: new CorruptedBiome(worldMap.generator.random),
+  Fairy: new FairyBiome(worldMap.generator.random),
 };
 
 worldMap
