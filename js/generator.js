@@ -45,6 +45,8 @@ class MapGenerator {
     this.generateIsland(0.01);
     this.generateAltitude();
     this.generateBiome();
+    this.generateCrruptedBurn();
+
     this.colorizeBiome();
     time = Date.now() - time;
     console.log("Map generates in " + time + " ms");
@@ -244,10 +246,6 @@ class MapGenerator {
       let current = burn.pop();
 
       for (let next of this.delaunay.neighbors(current)) {
-        console.log(
-          this.cells[next].isContinent() &&
-            this.cells[next].getBiomePool() == "default"
-        );
         if (
           this.cells[next].isContinent() &&
           this.cells[next].getBiomePool() == "default"
@@ -271,10 +269,32 @@ class MapGenerator {
       }
     }
   }
+
+  generateCrruptedBurn() {
+    let burn;
+    burn = Array();
+    let x = Math.ceil(
+      getRandomInRange(0, this.seedCells.length - 1, this.#random)
+    );
+    burn.push(this.seedCells[x]);
+    let proba = 1.0;
+    while (burn.length !== 0) {
+      let currentCell = burn.pop();
+      if (this.cells[currentCell].isContinent()) {
+        console.log(currentCell);
+        this.cells[currentCell].biome = BIOMES["Corrupted"];
+        for (let next of this.delaunay.neighbors(currentCell)) {
+          if (this.#random() < proba && this.cells[next].isContinent())
+            burn.push(next);
+          proba -= 0.2;
+        }
+      }
+    }
+  }
+
   /* truc moche*/
   colorizeBiome() {
     this.cells.forEach((cell) => {
-      console.log(cell.biome);
       if (cell.biome == BIOMES["Taiga"]) {
         cell.debugColor = new GlColor(1, 1, 1);
       }
@@ -301,6 +321,9 @@ class MapGenerator {
       }
       if (cell.biome == BIOMES["Mountain"]) {
         cell.debugColor = new GlColor(0.5, 0.5, 0.5);
+      }
+      if (cell.biome === BIOMES["Corrupted"]) {
+        cell.debugColor = new GlColor(0.5, 0, 1);
       }
     });
   }
