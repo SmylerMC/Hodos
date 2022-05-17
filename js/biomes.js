@@ -242,6 +242,30 @@ class MountainBiome extends Biome {
   }
 }
 
+//Corrupted
+class CorruptedBiome extends Biome {
+  biomePool;
+  constructor(random) {
+    super(random);
+    this.biomePool = "Special";
+  }
+  stay() {
+    return 1;
+  }
+}
+
+//Fairy
+class FairyBiome extends Biome {
+  biomePool;
+  constructor(random) {
+    super(random);
+    this.biomePool = "Special";
+  }
+  stay() {
+    return 1;
+  }
+}
+
 const BIOMESPOOL = {
   Temperate: ["Forest", "Plain"],
   Dry: ["Desert", "Savana"],
