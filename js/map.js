@@ -25,6 +25,7 @@ class WorldMap {
 
   async load() {
     await this.#renderer.load();
+    this.#renderer.setBiomes(BIOMES);
     this.#controller.setupCallback();
   }
 

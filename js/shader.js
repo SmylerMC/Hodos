@@ -176,6 +176,11 @@ class WorldShaderProgram extends ShaderProgram {
     this.gl.uniformMatrix4fv(pointer, false, matrix);
   }
 
+  setBiomesColors(colors) {
+    let pointer = this.gl.getUniformLocation(this.glProgram, "biomes");
+    this.gl.uniform3fv(pointer, [1, 1, 1]);
+  }
+
 }
 
 class DebugWorldShaderProgram extends WorldShaderProgram {

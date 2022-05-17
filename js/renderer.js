@@ -59,7 +59,7 @@ class MapRenderer {
     if (this.#lastFrameStartTime) {
       this.#lastFramesTimes.push(start - this.#lastFrameStartTime);
       if (this.#lastFramesTimes.length > 100) this.#lastFramesTimes.shift();
-      this.#debugSpan.innerText = 
+      this.#debugSpan.innerText =
         "FPS: " + this.fps +
         " | Frame time: " + frameTime + "ms" +
         " | Zoom: " + this.camera.zoom +
@@ -85,6 +85,15 @@ class MapRenderer {
   async #loadData() {
     this.tileTest = this.#generator.generateTile(0, 0, 0);
     this.tileTest.bake(this.#gl);
+  }
+
+  setBiomes(biomes) {
+    biomes = Object.values(biomes);
+    let biomesArray = new Array(Math.max(...biomes.map(b => b.id)) * 2 + 2);
+    for (const biome in biomes) {
+      biomesArray[2 * biome.index] = biome.lowColor;
+      biomesArray[2 * biome.index + 1] = biome.highColor;
+    }
   }
 
   #changeShaderProgram(newShaders) {

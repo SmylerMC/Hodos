@@ -1,5 +1,8 @@
+/**
+ * A generic Biome class actual biomes inherit from.
+ */
 class Biome {
-  #id;
+  #id = BIOME_COUNTER.next();
   #biomePool;
   #random;
 
@@ -20,6 +23,12 @@ class Biome {
     return this.#biomePool;
   }
 
+  /**
+   * A unique id the renderer uses to refer to a specific biome.
+   * Biome IDs are assigned automatically when they are instantiated.
+   *
+   * @returns {Number} this biome's ID
+   */
   get id() {
     return this.#id;
   }
@@ -28,9 +37,26 @@ class Biome {
     return this.#random;
   }
 
+  /**
+   * The color of the map at a given point is calculated by interpolating between lowColor at altitude 0 and highColor at altitude 1.
+   * @returns {GlColor}
+   */
+  get lowColor() {
+    return new GlColor(0, 255, 0);
+  }
+
+  /**
+   * The color of the map at a given point is calculated by interpolating between lowColor at altitude 0 and highColor at altitude 1.
+   * @returns {GlColor}
+   */
+  get highColor() {
+    return new GlColor(255, 255, 255);
+  }
+
   stay() {
     return 1;
   }
+
 }
 
 class OceanBiome extends Biome {
@@ -103,6 +129,7 @@ class ForestBiome extends Biome {
     }
   }
 }
+
 class PlainBiome extends Biome {
   biomePool;
   longitudeAverage;
@@ -221,3 +248,5 @@ const BIOMESPOOL = {
   Humid: ["Swamp", "Jungle"],
   Cold: ["Taiga", "Tundra"],
 };
+
+const BIOME_COUNTER = new Counter(0);

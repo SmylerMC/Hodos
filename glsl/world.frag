@@ -1,5 +1,7 @@
 precision mediump float;
 
+uniform vec3 biomes[256];
+
 varying vec4 position;
 
 void main(void) {
@@ -19,4 +21,5 @@ void main(void) {
         plains * plainsColor +
         mountains * mountainsColor +
         snow * snowColor;
+    gl_FragColor = vec4(biomes[0], 1.0);
 }
