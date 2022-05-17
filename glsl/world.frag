@@ -76,8 +76,8 @@ float snoise(vec2 v) {
 
 float elevationnoise(vec2 point) {
     float octave1 = snoise(point.xy / 500.0) / 10.0;
-    float octave2 = snoise(point.xy / 100.0) / 50.0;
-    float octave3 = snoise(point.xy / 50.0) / 100.0;
+    float octave2 = snoise(point.xy / 100.0) / 20.0;
+    float octave3 = snoise(point.xy / 50.0) / 40.0;
     return octave1 +
             octave2 +
             octave3;
@@ -86,7 +86,7 @@ float elevationnoise(vec2 point) {
 // Hodos rendering routine
 void main(void) {
     float altitude = position.z;
-    altitude += elevationnoise(position.xy);
+    altitude += step(-0.05, altitude) * elevationnoise(position.xy);
     float water = 1.0 - step(0.0, altitude);
     float beach = (1.0 - step(0.1, altitude)) * (1.0 - water);
     float plains = (1.0 - step(0.65, altitude)) * (1.0 - water) * (1.0 - beach);
