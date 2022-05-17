@@ -73,7 +73,7 @@ class Cell {
     let longitudeBiomesProbability = {};
     let sumOfAllProbabilities = 0;
     /*Value between 0 and 1 telling how North is a cell*/
-    let longitudeRatio = 1 - this.#center.y / WORLD_SIZE;
+    let longitudeRatio = this.#center.y / WORLD_SIZE;
     for (const biomeCategory in BIOMESPOOL) {
       let μ = BIOMES[BIOMESPOOL[biomeCategory][0]].longitudeAverage;
       let s = BIOMES[BIOMESPOOL[biomeCategory][0]].longitudeSigma;
