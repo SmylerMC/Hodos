@@ -54,7 +54,7 @@ class MapRenderer {
    */
   render(timestamp) {
     let start = new Date().getTime();
-    this.#gl.clearColor(0, 0.5, 0.8, 1);
+    this.#gl.clearColor(0.278, 0.460, 0.525, 1);
     this.#gl.clear(this.#gl.COLOR_BUFFER_BIT | this.#gl.DEPTH_BUFFER_BIT);
     this.tileTest.render(this.#activeWorldShaderProgram);
     let end = new Date().getTime();
