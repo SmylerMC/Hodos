@@ -187,9 +187,20 @@ class WorldShaderProgram extends ShaderProgram {
     this.gl.uniformMatrix4fv(pointer, false, matrix);
   }
 
-  setBiomesColors(colors) {
+  /**
+   * Sets the biome color sampling texture.
+   *
+   * @param biomeTexture  the gl texture handle
+   * @param maxId         the maximum id stored in the texture
+   */
+  setBiomesColors(biomeTexture, maxId) {
+    let textureUnit = 0;  // from 0 to 15 is ok
     let pointer = this.gl.getUniformLocation(this.glProgram, "biomes");
-    this.gl.uniform3fv(pointer, colors);
+    this.gl.activeTexture(this.gl.TEXTURE0);
+    this.gl.bindTexture(this.gl.TEXTURE_2D, biomeTexture);
+    this.gl.uniform1i(pointer, textureUnit);
+    pointer = this.gl.getUniformLocation(this.glProgram, "max_id");
+    this.gl.uniform1f(pointer, maxId);
   }
 
 }

@@ -111,6 +111,8 @@ class Tile extends Mesh {
 
   destroy(gl) {
     gl.deleteBuffer(this.#surfaceVertexPositions);
+    gl.destroy(this.#surfaceVertexDebugColors);
+    gl.destroy(this.#biomeIds);
   }
 
 }
