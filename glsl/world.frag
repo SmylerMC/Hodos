@@ -3,7 +3,7 @@ precision mediump float;
 uniform vec3 biomes[256];
 
 varying vec4 position;
-varying float biomeId;
+varying float b_id;
 
 void main(void) {
     float water = 1.0 - step(0.0, position.z);
@@ -22,6 +22,8 @@ void main(void) {
         plains * plainsColor +
         mountains * mountainsColor +
         snow * snowColor;
-    vec4 color = mix(vec4(biomes[0], 1), vec4(biomes[1], 1), position.z);
+    int lowColor = 2 * int(b_id);
+    int highColor = 2 * int(b_id) + 1;
+    vec4 color = mix(vec4(biomes[lowColor], 1), vec4(biomes[highColor], 1), position.z);
     gl_FragColor = color;
 }

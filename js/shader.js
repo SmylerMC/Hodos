@@ -148,11 +148,14 @@ class ShaderProgram {
 class WorldShaderProgram extends ShaderProgram {
 
   #glCoordsAttrib;
+  #glBiomeIdAttrib;
 
   use() {
     super.use();
     this.#glCoordsAttrib = this.gl.getAttribLocation(this.glProgram, "coordinates");
+    this.#glBiomeIdAttrib = this.gl.getAttribLocation(this.glProgram, "biome_id");
     this.gl.enableVertexAttribArray(this.#glCoordsAttrib);
+    this.gl.enableVertexAttribArray(this.#glBiomeIdAttrib);
   }
 
   bindSurfaceVertexPositionBuffer(buffer) {
@@ -160,6 +163,14 @@ class WorldShaderProgram extends ShaderProgram {
     this.gl.vertexAttribPointer(
         this.#glCoordsAttrib,
         3, this.gl.FLOAT,
+        false, 0, 0);
+  }
+
+  bindBiomeIdBuffer(buffer) {
+    this.gl.bindBuffer(this.gl.ARRAY_BUFFER, buffer);
+    this.gl.vertexAttribPointer(
+        this.#glBiomeIdAttrib,
+        1, this.gl.FLOAT,
         false, 0, 0);
   }
 

@@ -2,6 +2,7 @@ precision mediump float;
 
 attribute vec3 coordinates;
 attribute vec3 dbg_colors;
+attribute float biome_id;
 
 uniform mat4 view;
 

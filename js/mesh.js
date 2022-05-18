@@ -43,6 +43,7 @@ class Tile extends Mesh {
   #surfaceVertexCount;
   #surfaceVertexPositions;
   #surfaceVertexDebugColors;
+  #biomeIds;
 
   /**
    * Constructs a new tile object. This is called from the generator side.
@@ -64,9 +65,11 @@ class Tile extends Mesh {
 
   bake(gl) {
     this.#surfaceVertexPositions = gl.createBuffer();
-    this.#surfaceVertexDebugColors = gl.createBuffer()
+    this.#surfaceVertexDebugColors = gl.createBuffer();
+    this.#biomeIds = gl.createBuffer();
     let coordinates = [];
     let dbgColors = [];
+    let biomeIds = [];
     this.#cells.forEach(cell => {
       let polygonVertices = cell.ring;
       let vertexCount = polygonVertices.length;
@@ -78,6 +81,7 @@ class Tile extends Mesh {
         coordinates.push(...vertex2.coordinates);
         coordinates.push(...vertex3.coordinates);
         for (let j = 0; j < 3; j++) dbgColors.push(...cell.debugColor.components);
+        for (let j = 0; j < 3; j++) biomeIds.push(cell.biome.id);
       }
     });
     this.#surfaceVertexCount = coordinates.length / 3;
@@ -85,6 +89,8 @@ class Tile extends Mesh {
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(coordinates), gl.STATIC_DRAW);
     gl.bindBuffer(gl.ARRAY_BUFFER, this.#surfaceVertexDebugColors);
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(dbgColors), gl.STATIC_DRAW);
+    gl.bindBuffer(gl.ARRAY_BUFFER, this.#biomeIds);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(biomeIds), gl.STATIC_DRAW);
     gl.bindBuffer(gl.ARRAY_BUFFER, null);
   }
 
@@ -93,6 +99,7 @@ class Tile extends Mesh {
       let gl = shaderProgram.gl;
       shaderProgram.bindSurfaceVertexPositionBuffer(this.#surfaceVertexPositions);
       shaderProgram.bindDebugSurfaceColorsBuffer(this.#surfaceVertexDebugColors)
+      shaderProgram.bindBiomeIdBuffer(this.#biomeIds)
       gl.drawArrays(
           gl.TRIANGLES,
           0,
