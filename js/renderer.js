@@ -89,11 +89,16 @@ class MapRenderer {
 
   setBiomes(biomes) {
     biomes = Object.values(biomes);
-    let biomesArray = new Array(Math.max(...biomes.map(b => b.id)) * 2 + 2);
-    for (const biome in biomes) {
-      biomesArray[2 * biome.index] = biome.lowColor;
-      biomesArray[2 * biome.index + 1] = biome.highColor;
-    }
+    let colorArray = new Array(256*3);
+    biomes.forEach(biome => {
+      colorArray[6 * biome.id + 0] = biome.lowColor.red;
+      colorArray[6 * biome.id + 1] = biome.lowColor.green;
+      colorArray[6 * biome.id + 2] = biome.lowColor.blue;
+      colorArray[6 * biome.id + 3] = biome.highColor.red;
+      colorArray[6 * biome.id + 4] = biome.highColor.green;
+      colorArray[6 * biome.id + 5] = biome.highColor.blue;
+    });
+    this.#worldShaderProgram.setBiomesColors(colorArray);
   }
 
   #changeShaderProgram(newShaders) {

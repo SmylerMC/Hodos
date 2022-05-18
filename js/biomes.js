@@ -42,7 +42,7 @@ class Biome {
    * @returns {GlColor}
    */
   get lowColor() {
-    return new GlColor(0, 255, 0);
+    return new GlColor(0, 0, 0);
   }
 
   /**
@@ -50,7 +50,7 @@ class Biome {
    * @returns {GlColor}
    */
   get highColor() {
-    return new GlColor(255, 255, 255);
+    return new GlColor(1, 1, 1);
   }
 
   stay() {

@@ -178,7 +178,7 @@ class WorldShaderProgram extends ShaderProgram {
 
   setBiomesColors(colors) {
     let pointer = this.gl.getUniformLocation(this.glProgram, "biomes");
-    this.gl.uniform3fv(pointer, [1, 1, 1]);
+    this.gl.uniform3fv(pointer, colors);
   }
 
 }
