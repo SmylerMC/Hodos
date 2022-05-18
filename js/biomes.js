@@ -5,10 +5,14 @@ class Biome {
   #id = BIOME_COUNTER.next();
   #biomePool;
   #random;
+  #lowColor;
+  #highColor;
 
-  constructor(random) {
+  constructor(random, lowColor, highColor) {
     this.#random = random;
     this.#biomePool = "default";
+    this.#lowColor = lowColor ? lowColor : new GlColor(0, 0, 0);
+    this.#highColor = highColor ? highColor : new GlColor(1, 1, 1);
   }
 
   isMaritime() {
@@ -42,7 +46,7 @@ class Biome {
    * @returns {GlColor}
    */
   get lowColor() {
-    return new GlColor(0, 0, 0);
+    return this.#lowColor;
   }
 
   /**
@@ -50,7 +54,7 @@ class Biome {
    * @returns {GlColor}
    */
   get highColor() {
-    return new GlColor(1, 1, 1);
+    return this.#highColor;
   }
 
   stay() {
@@ -60,6 +64,9 @@ class Biome {
 }
 
 class OceanBiome extends Biome {
+  constructor() {
+    super(new GlColor(0, 0.5, 0.8), new GlColor(0, 0.5, 0.8));
+  }
   isContinent() {
     return false;
   }
@@ -76,7 +83,7 @@ class TundraBiome extends Biome {
   longitudeSigma;
 
   constructor(random) {
-    super(random);
+    super(random, new GlColor(44 / 0xFF, 58 / 0xFF, 57 / 0xFF), new GlColor(80 / 0xFF, 112 / 0xFF, 117 / 0xFF));
     this.biomePool = "Cold";
     this.longitudeAverage = 80;
     this.longitudeSigma = 4;
@@ -116,7 +123,7 @@ class ForestBiome extends Biome {
   longitudeSigma;
 
   constructor(random) {
-    super(random);
+    super(random, new GlColor(0 / 0xFF, 147 / 0xFF, 61 / 0xFF), new GlColor(0 / 0xFF, 86 / 0xFF, 40 / 0xFF));
     this.biomePool = "Temperate";
     this.longitudeAverage = 55;
     this.longitudeSigma = 12;
@@ -136,7 +143,7 @@ class PlainBiome extends Biome {
   longitudeSigma;
 
   constructor(random) {
-    super(random);
+    super(random, new GlColor(222 / 0xFF, 252 / 0xFF, 126 / 0xFF), new GlColor(141 / 0xFF, 252 / 0xFF, 100 / 0xFF));
     this.biomePool = "Temperate";
     this.longitudeAverage = 55;
     this.longitudeSigma = 12;
@@ -197,7 +204,7 @@ class DesertBiome extends Biome {
   longitudeSigma;
 
   constructor(random) {
-    super(random);
+    super(random, new GlColor(252 / 0xFF, 144 / 0xFF, 100 / 0xFF), new GlColor(252 / 0xFF, 209 / 0xFF, 100 / 0xFF));
     this.biomePool = "Dry";
     this.longitudeAverage = 17.5;
     this.longitudeSigma = 3.5;
