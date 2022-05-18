@@ -188,7 +188,6 @@ class MapGenerator {
         );
         if (distanceFromCenter < (WORLD_SIZE * 0.95) / 2) {
           if (this.#random() < fairyRate) {
-            console.log("fée");
             cell.biome = BIOMES["Fairy"];
           } else {
             cell.biome = BIOMES["island"];
