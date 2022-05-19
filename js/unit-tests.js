@@ -1,19 +1,35 @@
 const { test } = QUnit;
 
-QUnit.module('Group A');
+/**
+ * utils.js
+ */
+QUnit.module("Utils");
 
-test('basic test example', assert => {
-  assert.true(true, 'this is fine');
-});
-test('basic test example 2', assert => {
-  assert.true(true, 'this is also fine');
+//getRandomInRange
+test("getRandomInRange", (assert) => {
+  let res = getRandomInRange(0, 1, Math.random);
+  assert.true(0 < res && res < 1, "Correct range");
 });
 
-QUnit.module('Group B');
+test("getRandomPointsIn2dRange", (assert) => {
+  let n = 10;
+  let lowerBound = 0;
+  let higherBound = 1000;
+  let arrayRes = getRandomPointsIn2dRange(
+    n,
+    lowerBound,
+    higherBound,
+    Math.random
+  );
 
-test('basic test example 3', assert => {
-  assert.true(true, 'this is fine');
-});
-test('basic test example 4', assert => {
-  assert.true(true, 'this is also fine');
+  arrayRes.forEach((coord) => {
+    assert.true(
+      lowerBound < coord[0] && coord[0] < higherBound,
+      "Correct range for x value"
+    );
+    assert.true(
+      lowerBound < coord[1] && coord[1] < higherBound,
+      "Correct range for y value"
+    );
+  });
 });
