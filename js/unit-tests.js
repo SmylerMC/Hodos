@@ -1,10 +1,19 @@
-function add(a, b) {
-  return a + b;
-}
+const { test } = QUnit;
 
-QUnit.module('add', function() {
-  QUnit.test('two numbers', function(assert) {
-    assert.equal(add(1, 2), 3);
-  });
+QUnit.module('Group A');
+
+test('basic test example', assert => {
+  assert.true(true, 'this is fine');
+});
+test('basic test example 2', assert => {
+  assert.true(true, 'this is also fine');
 });
 
+QUnit.module('Group B');
+
+test('basic test example 3', assert => {
+  assert.true(true, 'this is fine');
+});
+test('basic test example 4', assert => {
+  assert.true(true, 'this is also fine');
+});
