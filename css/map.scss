@@ -13,6 +13,15 @@
 	box-sizing: border-box;
 }
 
+html {
+	overflow: hidden;
+}
+
+body {
+	overflow: hidden;
+}
+
+
 .hodos-canvas {
 	position: absolute;
 }

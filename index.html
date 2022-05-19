@@ -50,8 +50,18 @@
           </div>
           <div class="main-modal-content">
             <div class="modal-section">
+              <form action="" id="biomes-form">
+                <label for="biomes-toggle">Biomes :</label>
+                <input
+                  id="biomes-toggle"
+                  name="biomes-toggle"
+                  type="checkbox"
+                />
+              </form>
+            </div>
+            <div class="modal-section">
               <form action="" id="debug-form">
-                <label for="debug-toggle">Debug:</label>
+                <label for="debug-toggle">Debug :</label>
                 <input
                   id="debug-toggle"
                   name="debug-toggle"
@@ -61,7 +71,7 @@
             </div>
             <div class="modal-section">
               <form method="GET" action="" id="seed-form">
-                <label for="seed">Seed:</label>
+                <label for="seed">Seed :</label>
                 <input type="text" class="seed-placeholder" id="seed" name="seed" />
                 <input type="submit" value="Changer" />
               </form>
