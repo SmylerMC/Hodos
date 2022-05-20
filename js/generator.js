@@ -273,7 +273,7 @@ class MapGenerator {
     }
   }
 
-  
+
   generateCorruptedBurn() {
     let burn;
     burn = Array();
@@ -294,6 +294,7 @@ class MapGenerator {
       }
     }
   }
+
 
   /* truc moche*/
   colorizeBiome() {
