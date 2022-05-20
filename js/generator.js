@@ -273,6 +273,7 @@ class MapGenerator {
     }
   }
 
+  
   generateCorruptedBurn() {
     let burn;
     burn = Array();
@@ -310,10 +311,10 @@ class MapGenerator {
         cell.debugColor = new GlColor(0, 1, 0);
       }
       if (cell.biome == BIOMES["Swamp"]) {
-        cell.debugColor = new GlColor(0, 0, 1);
+        cell.debugColor = new GlColor(0, 1, 1);
       }
       if (cell.biome == BIOMES["Jungle"]) {
-        cell.debugColor = new GlColor(0, 0, 1);
+        cell.debugColor = new GlColor(0, 1, 1);
       }
       if (cell.biome == BIOMES["Desert"]) {
         cell.debugColor = new GlColor(1, 0, 0);
