@@ -240,8 +240,8 @@ class MapGenerator {
       let nextBiome = this.cells[nbCell].getBiomeType(this.#random);
       this.cells[nbCell].biome =
         BIOMES[BIOMESPOOL[nextBiome].at(getRandomInRange(0, 1, this.#random))];
-      if (this.cells[nbCell].z > 0.6) {
-        this.cells[nbCell].biome = BIOMES[Mountain];
+      if (this.cells[nbCell].z > 0.8) {
+        this.cells[nbCell].biome = BIOMES["Mountain"];
       }
       burn.push(nbCell);
     });
@@ -273,7 +273,6 @@ class MapGenerator {
     }
   }
 
-
   generateCorruptedBurn() {
     let burn;
     burn = Array();
@@ -294,7 +293,6 @@ class MapGenerator {
       }
     }
   }
-
 
   /* truc moche*/
   colorizeBiome() {
