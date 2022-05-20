@@ -63,7 +63,7 @@ class MapController {
   }
 
   zoom(deltaZoom) {
-    if (this.#map.camera.zoom + deltaZoom >= 0) {
+    if (this.#map.camera.zoom + deltaZoom >= 0 && this.#map.camera.zoom + deltaZoom <= 7) {
       this.#map.camera.zoom += deltaZoom;
       this.#map.camera.updateGl();
     }
