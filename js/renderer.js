@@ -130,18 +130,16 @@ class MapRenderer {
     this.#setBiomes();
   }
 
-  get debug() {
-    return this.#activeWorldShaderProgram !== this.#defaultWorldShaderProgram;
-  }
-
   setRenderingMode(mode) {
     let newProgram = null;
+    let debug = false;
     switch (mode) {
       case "default":
         newProgram = this.#defaultWorldShaderProgram;
         break;
       case "debug":
         newProgram = this.#debugWorldShaderProgram;
+        debug = true;
         break;
       case "biomes":
         newProgram = this.#biomeWorldShaderProgram;
@@ -150,18 +148,13 @@ class MapRenderer {
         console.log('Tying to use an unknown rendering mode, will fallback to default');
         newProgram = this.#defaultWorldShaderProgram;
     }
+    if (debug) {
+      this.#debugSpan.style.visibility = "visible";
+    } else {
+      this.#debugSpan.style.visibility = "hidden";
+    }
     if (newProgram !== this.#activeWorldShaderProgram) {
       this.#changeShaderProgram(newProgram);
-    }
-  }
-
-  set debug(value) {
-    if (value && !this.debug) {
-      this.#changeShaderProgram(this.#debugWorldShaderProgram);
-      this.#debugSpan.style.visibility = "visible";
-    } else if (!value && this.debug) {
-      this.#changeShaderProgram(this.#defaultWorldShaderProgram);
-      this.#debugSpan.style.visibility = "hidden";
     }
   }
 
