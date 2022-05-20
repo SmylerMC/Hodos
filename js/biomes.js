@@ -83,7 +83,7 @@ class TundraBiome extends Biome {
   longitudeSigma;
 
   constructor(random) {
-    super(random, new GlColor(0.83,0.93,0.98), new GlColor(0.49,0.73,0.75));
+    super(random, new GlColor(0.94,0.97,0.97), new GlColor(0.8,0.82,0.82));
     this.biomePool = "Cold";
     this.longitudeAverage = 80;
     this.longitudeSigma = 4;
@@ -143,7 +143,7 @@ class PlainBiome extends Biome {
   longitudeSigma;
 
   constructor(random) {
-    super(random, new GlColor(0.21,0.65,0.35), new GlColor(0.21,0.65,0.35));
+    super(random, new GlColor(0.74,0.91,0.55), new GlColor(0.57,0.67,0.46));
     this.biomePool = "Temperate";
     this.longitudeAverage = 55;
     this.longitudeSigma = 12;
@@ -164,7 +164,7 @@ class SwampBiome extends Biome {
   longitudeSigma;
 
   constructor(random) {
-    super(random);
+    super(random, new GlColor(0.45,0.5,0.3), new GlColor(0.33,0.35,0.25));
     this.biomePool = "Humid";
     this.longitudeAverage = 31;
     this.longitudeSigma = 4.5;
@@ -183,7 +183,7 @@ class JungleBiome extends Biome {
   longitudeSigma;
 
   constructor(random) {
-    super(random);
+    super(random, new GlColor(0.22,0.37,0.07), new GlColor(0.16,0.27,0.05));
     this.biomePool = "Humid";
     this.longitudeAverage = 31;
     this.longitudeSigma = 4.5;
@@ -204,7 +204,7 @@ class DesertBiome extends Biome {
   longitudeSigma;
 
   constructor(random) {
-    super(random, new GlColor(252 / 0xFF, 144 / 0xFF, 100 / 0xFF), new GlColor(252 / 0xFF, 209 / 0xFF, 100 / 0xFF));
+    super(random, new GlColor(0.94,0.82,0.58), new GlColor(0.74,0.65,0.49));
     this.biomePool = "Dry";
     this.longitudeAverage = 17.5;
     this.longitudeSigma = 3.5;
@@ -223,7 +223,7 @@ class SavanaBiome extends Biome {
   longitudeSigma;
 
   constructor(random) {
-    super(random);
+    super(random, new GlColor(0.97,0.89,0.29), new GlColor(0.67,0.63,0.36));
     this.biomePool = "Dry";
     this.longitudeAverage = 17.5;
     this.longitudeSigma = 3.5;
@@ -241,7 +241,7 @@ class SavanaBiome extends Biome {
 class MountainBiome extends Biome {
   biomePool;
   constructor(random) {
-    super(random);
+    super(random, new GlColor(0.27,0.25,0.21), new GlColor(0.72,0.71,0.67));
     this.biomePool = "Mountain";
   }
   stay() {
@@ -253,7 +253,7 @@ class MountainBiome extends Biome {
 class CorruptedBiome extends Biome {
   biomePool;
   constructor(random) {
-    super(random);
+    super(random, new GlColor(0.43,0.12,0.12), new GlColor(0.19,0.1,0.1));
     this.biomePool = "Special";
   }
   stay() {
@@ -265,7 +265,7 @@ class CorruptedBiome extends Biome {
 class FairyBiome extends Biome {
   biomePool;
   constructor(random) {
-    super(random);
+    super(random, new GlColor(0.9,0.79,0.87), new GlColor(0.64,0.48,0.59));
     this.biomePool = "Special";
   }
   stay() {
