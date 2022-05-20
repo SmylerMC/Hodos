@@ -24,14 +24,14 @@ class MapGenerator {
     let time = Date.now();
     this.seedCells = Array();
     let trianglesVertices = getRandomPointsIn2dRange(
-      1000,
+      10000,
       0,
       WORLD_SIZE,
       this.#random
     );
     this.delaunay = d3.Delaunay.from(trianglesVertices);
     trianglesVertices = getRandomPointsIn2dRange(
-      1000,
+      10000,
       0,
       WORLD_SIZE,
       this.#random
@@ -41,7 +41,7 @@ class MapGenerator {
     this.cells = this.createAllCells(
       this.delaunay.voronoi([0, 0, WORLD_SIZE, WORLD_SIZE])
     );
-    this.generateMultipleContinentBurn(15, 0.4);
+    this.generateMultipleContinentBurn(15, 0.1);
     this.generateIsland(0.01, 0.4);
     this.generateAltitude();
     this.generateBiome();
