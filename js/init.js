@@ -36,3 +36,5 @@ worldMap
       element.value = seed;
     }
   });
+
+  $("#default-toggle").prop("checked", true);
