@@ -28,6 +28,7 @@ worldMap
     resize();
     console.log("Map loaded");
     worldMap.startRender();
+    worldMap.controller.zoom(1);
   })
   .then(() => {
     let seed = worldMap.generator.seed;

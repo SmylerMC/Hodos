@@ -148,11 +148,14 @@ class ShaderProgram {
 class WorldShaderProgram extends ShaderProgram {
 
   #glCoordsAttrib;
+  #glBiomeIdAttrib;
 
   use() {
     super.use();
     this.#glCoordsAttrib = this.gl.getAttribLocation(this.glProgram, "coordinates");
+    this.#glBiomeIdAttrib = this.gl.getAttribLocation(this.glProgram, "biome_id");
     this.gl.enableVertexAttribArray(this.#glCoordsAttrib);
+    this.gl.enableVertexAttribArray(this.#glBiomeIdAttrib);
   }
 
   bindSurfaceVertexPositionBuffer(buffer) {
@@ -160,6 +163,14 @@ class WorldShaderProgram extends ShaderProgram {
     this.gl.vertexAttribPointer(
         this.#glCoordsAttrib,
         3, this.gl.FLOAT,
+        false, 0, 0);
+  }
+
+  bindBiomeIdBuffer(buffer) {
+    this.gl.bindBuffer(this.gl.ARRAY_BUFFER, buffer);
+    this.gl.vertexAttribPointer(
+        this.#glBiomeIdAttrib,
+        1, this.gl.FLOAT,
         false, 0, 0);
   }
 
@@ -174,6 +185,22 @@ class WorldShaderProgram extends ShaderProgram {
   setViewMatrix(matrix) {
     let pointer = this.gl.getUniformLocation(this.glProgram, "view");
     this.gl.uniformMatrix4fv(pointer, false, matrix);
+  }
+
+  /**
+   * Sets the biome color sampling texture.
+   *
+   * @param biomeTexture  the gl texture handle
+   * @param maxId         the maximum id stored in the texture
+   */
+  setBiomesColors(biomeTexture, maxId) {
+    let textureUnit = 0;  // from 0 to 15 is ok
+    let pointer = this.gl.getUniformLocation(this.glProgram, "biomes");
+    this.gl.activeTexture(this.gl.TEXTURE0);
+    this.gl.bindTexture(this.gl.TEXTURE_2D, biomeTexture);
+    this.gl.uniform1i(pointer, textureUnit);
+    pointer = this.gl.getUniformLocation(this.glProgram, "max_id");
+    this.gl.uniform1f(pointer, maxId);
   }
 
 }

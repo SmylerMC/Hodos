@@ -11,6 +11,9 @@ class MapRenderer {
   #lastFramesTimes = [];
   #camera;
 
+  #biomeTexture;
+  #maxBiomeId;
+
   #generator;
 
   constructor(div, generator) {
@@ -23,7 +26,7 @@ class MapRenderer {
     this.#debugSpan.classList.add("hodos-debug");
     this.#debugSpan.style.visibility = "hidden";
     div.appendChild(this.#debugSpan);
-    this.#gl = this.#canvas.getContext("experimental-webgl");
+    this.#gl = this.#canvas.getContext("experimental-webgl", {preserveDrawingBuffer: true});
     this.#generator = generator;
     this.#camera = new Camera(this);
   }
@@ -47,11 +50,11 @@ class MapRenderer {
   /**
    * Renders a frame, and schedules rendering for the next frame.
    *
-   * @param timestamp when was the method called
+   * @param timestamp when was the method calledColorize terrain according to first biome colors
    */
   render(timestamp) {
     let start = new Date().getTime();
-    this.#gl.clearColor(0, 0.5, 0.8, 1);
+    this.#gl.clearColor(0.278, 0.460, 0.525, 1);
     this.#gl.clear(this.#gl.COLOR_BUFFER_BIT | this.#gl.DEPTH_BUFFER_BIT);
     this.tileTest.render(this.#activeWorldShaderProgram);
     let end = new Date().getTime();
@@ -59,7 +62,7 @@ class MapRenderer {
     if (this.#lastFrameStartTime) {
       this.#lastFramesTimes.push(start - this.#lastFrameStartTime);
       if (this.#lastFramesTimes.length > 100) this.#lastFramesTimes.shift();
-      this.#debugSpan.innerText = 
+      this.#debugSpan.innerText =
         "FPS: " + this.fps +
         " | Frame time: " + frameTime + "ms" +
         " | Zoom: " + this.camera.zoom +
@@ -85,6 +88,34 @@ class MapRenderer {
   async #loadData() {
     this.tileTest = this.#generator.generateTile(0, 0, 0);
     this.tileTest.bake(this.#gl);
+
+    // Biome texture
+    let biomes = Object.values(BIOMES);
+    this.#maxBiomeId = Math.max(...biomes.map(b => b.id));
+    let colorArray = new Array(this.#maxBiomeId);
+    biomes.forEach(biome => {
+      colorArray[6 * biome.id] = biome.lowColor.red * 0xFF;
+      colorArray[6 * biome.id + 1] = biome.lowColor.green * 0xFF;
+      colorArray[6 * biome.id + 2] = biome.lowColor.blue * 0xFF;
+      colorArray[6 * biome.id + 3] = biome.highColor.red * 0xFF;
+      colorArray[6 * biome.id + 4] = biome.highColor.green * 0xFF;
+      colorArray[6 * biome.id + 5] = biome.highColor.blue * 0xFF;
+    });
+    this.#biomeTexture = this.#gl.createTexture();
+    this.#gl.bindTexture(this.#gl.TEXTURE_2D, this.#biomeTexture);
+    this.#gl.texImage2D(this.#gl.TEXTURE_2D, 0, this.#gl.RGB,
+        Math.ceil(colorArray.length / 3), 1, 0,
+        this.#gl.RGB, this.#gl.UNSIGNED_BYTE, new Uint8Array(colorArray));
+    this.#gl.texParameteri(this.#gl.TEXTURE_2D, this.#gl.TEXTURE_MAG_FILTER, this.#gl.NEAREST);
+    this.#gl.texParameteri(this.#gl.TEXTURE_2D, this.#gl.TEXTURE_MIN_FILTER, this.#gl.NEAREST);
+    this.#gl.texParameteri(this.#gl.TEXTURE_2D, this.#gl.TEXTURE_WRAP_S, this.#gl.CLAMP_TO_EDGE);
+    this.#gl.texParameteri(this.#gl.TEXTURE_2D, this.#gl.TEXTURE_WRAP_T, this.#gl.CLAMP_TO_EDGE);
+    this.#gl.bindTexture(this.#gl.TEXTURE_2D, null);
+    this.#setBiomes();
+  }
+
+  #setBiomes() {
+    this.#activeWorldShaderProgram.setBiomesColors(this.#biomeTexture, this.#maxBiomeId);
   }
 
   #changeShaderProgram(newShaders) {
@@ -92,6 +123,7 @@ class MapRenderer {
     newShaders.use();
     this.#activeWorldShaderProgram = newShaders;
     this.camera.updateGl();
+    this.#setBiomes();
   }
 
   get debug() {
@@ -118,6 +150,10 @@ class MapRenderer {
 
   get worldShaderProgram() {
     return this.#activeWorldShaderProgram;
+  }
+
+  get canvas(){
+    return this.#canvas;
   }
 
 }
