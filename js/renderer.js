@@ -76,7 +76,7 @@ class MapRenderer {
 
   async #loadShaders() {
     this.#defaultWorldShaderProgram = new WorldShaderProgram(this.#gl, "glsl/world_default.vert", "glsl/world_default.frag");
-    this.#biomeWorldShaderProgram = new WorldShaderProgram(this.#gl, "glsl/world_biomes.vert", "glsl/world_biomes.frag");
+    this.#biomeWorldShaderProgram = new BiomesWorldShaderProgram(this.#gl, "glsl/world_biomes.vert", "glsl/world_biomes.frag");
     this.#debugWorldShaderProgram = new DebugWorldShaderProgram(this.#gl, "glsl/world_debug.vert", "glsl/world_debug.frag");
     this.#activeWorldShaderProgram = this.#defaultWorldShaderProgram;
     await Promise.all(
