@@ -1,7 +1,8 @@
 class MapRenderer {
 
   #activeWorldShaderProgram;
-  #worldShaderProgram;
+  #defaultWorldShaderProgram;
+  #biomeWorldShaderProgram;
   #debugWorldShaderProgram;
   #div;
   #canvas;
@@ -74,12 +75,15 @@ class MapRenderer {
   }
 
   async #loadShaders() {
-    this.#worldShaderProgram = new WorldShaderProgram(this.#gl, "glsl/world.vert", "glsl/world.frag");
+    this.#defaultWorldShaderProgram = new WorldShaderProgram(this.#gl, "glsl/world_default.vert", "glsl/world_default.frag");
+    this.#biomeWorldShaderProgram = new WorldShaderProgram(this.#gl, "glsl/world_biomes.vert", "glsl/world_biomes.frag");
     this.#debugWorldShaderProgram = new DebugWorldShaderProgram(this.#gl, "glsl/world_debug.vert", "glsl/world_debug.frag");
-    this.#activeWorldShaderProgram = this.#worldShaderProgram;
+    this.#activeWorldShaderProgram = this.#defaultWorldShaderProgram;
     await Promise.all(
-        [this.#worldShaderProgram.load(),
-        this.#debugWorldShaderProgram.load()]).then(() => {
+        [
+            this.#defaultWorldShaderProgram.load(),
+            this.#biomeWorldShaderProgram.load(),
+            this.#debugWorldShaderProgram.load()]).then(() => {
       console.log("Loaded shader programs");
     }, () => console.log("Failed to load shaders"));
     this.#activeWorldShaderProgram.use();
@@ -127,7 +131,28 @@ class MapRenderer {
   }
 
   get debug() {
-    return this.#activeWorldShaderProgram !== this.#worldShaderProgram;
+    return this.#activeWorldShaderProgram !== this.#defaultWorldShaderProgram;
+  }
+
+  setRenderingMode(mode) {
+    let newProgram = null;
+    switch (mode) {
+      case "default":
+        newProgram = this.#defaultWorldShaderProgram;
+        break;
+      case "debug":
+        newProgram = this.#debugWorldShaderProgram;
+        break;
+      case "biomes":
+        newProgram = this.#biomeWorldShaderProgram;
+        break;
+      default:
+        console.log('Tying to use an unknown rendering mode, will fallback to default');
+        newProgram = this.#defaultWorldShaderProgram;
+    }
+    if (newProgram !== this.#activeWorldShaderProgram) {
+      this.#changeShaderProgram(newProgram);
+    }
   }
 
   set debug(value) {
@@ -135,7 +160,7 @@ class MapRenderer {
       this.#changeShaderProgram(this.#debugWorldShaderProgram);
       this.#debugSpan.style.visibility = "visible";
     } else if (!value && this.debug) {
-      this.#changeShaderProgram(this.#worldShaderProgram);
+      this.#changeShaderProgram(this.#defaultWorldShaderProgram);
       this.#debugSpan.style.visibility = "hidden";
     }
   }
