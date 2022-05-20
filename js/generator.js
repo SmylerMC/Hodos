@@ -280,25 +280,25 @@ class MapGenerator {
         cell.debugColor = new GlColor(1, 1, 1);
       }
       if (cell.biome === BIOMES["Tundra"]) {
-        cell.debugColor = new GlColor(1, 1, 1);
+        cell.debugColor = new GlColor(0.8, 0.8, 0.8);
       }
       if (cell.biome === BIOMES["Forest"]) {
         cell.debugColor = new GlColor(0, 1, 0);
       }
       if (cell.biome === BIOMES["Plain"]) {
-        cell.debugColor = new GlColor(0, 1, 0);
+        cell.debugColor = new GlColor(0, 0.8, 0);
       }
       if (cell.biome === BIOMES["Swamp"]) {
         cell.debugColor = new GlColor(0, 1, 1);
       }
       if (cell.biome === BIOMES["Jungle"]) {
-        cell.debugColor = new GlColor(0, 1, 1);
+        cell.debugColor = new GlColor(0, 0.8, 0.8);
       }
       if (cell.biome === BIOMES["Desert"]) {
         cell.debugColor = new GlColor(1, 0, 0);
       }
       if (cell.biome === BIOMES["Savana"]) {
-        cell.debugColor = new GlColor(1, 0, 0);
+        cell.debugColor = new GlColor(0.8, 0, 0);
       }
       if (cell.biome === BIOMES["Mountain"]) {
         cell.debugColor = new GlColor(0.5, 0.5, 0.5);

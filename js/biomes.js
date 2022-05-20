@@ -65,7 +65,7 @@ class Biome {
 
 class OceanBiome extends Biome {
   constructor() {
-    super(new GlColor(0.278, 0.470, 0.525), new GlColor(0.278, 0.470, 0.525));
+    super(new GlColor(0.28,0.47,0.53), new GlColor(0.28,0.47,0.53));
   }
   isContinent() {
     return false;
@@ -83,7 +83,7 @@ class TundraBiome extends Biome {
   longitudeSigma;
 
   constructor(random) {
-    super(random, new GlColor(0.922, 0.98, 0.059, 1), new GlColor(0.835, 0.882, 0.89, 1));
+    super(random, new GlColor(0.83,0.93,0.98), new GlColor(0.49,0.73,0.75));
     this.biomePool = "Cold";
     this.longitudeAverage = 80;
     this.longitudeSigma = 4;
@@ -102,7 +102,7 @@ class TaigaBiome extends Biome {
   longitudeSigma;
 
   constructor(random) {
-    super(random, new GlColor(0.922, 0.98, 0.059, 1), new GlColor(0.835, 0.882, 0.89, 1));
+    super(random, new GlColor(0.83,0.93,0.98), new GlColor(0.49,0.73,0.75));
     this.biomePool = "Cold";
     this.longitudeAverage = 80;
     this.longitudeSigma = 4;
@@ -123,7 +123,7 @@ class ForestBiome extends Biome {
   longitudeSigma;
 
   constructor(random) {
-    super(random, new GlColor(0 / 0xFF, 147 / 0xFF, 61 / 0xFF), new GlColor(0 / 0xFF, 86 / 0xFF, 40 / 0xFF));
+    super(random, new GlColor(0.21,0.65,0.35), new GlColor(0.15,0.47,0.25));
     this.biomePool = "Temperate";
     this.longitudeAverage = 55;
     this.longitudeSigma = 12;
@@ -143,7 +143,7 @@ class PlainBiome extends Biome {
   longitudeSigma;
 
   constructor(random) {
-    super(random, new GlColor(222 / 0xFF, 252 / 0xFF, 126 / 0xFF), new GlColor(141 / 0xFF, 252 / 0xFF, 100 / 0xFF));
+    super(random, new GlColor(0.21,0.65,0.35), new GlColor(0.21,0.65,0.35));
     this.biomePool = "Temperate";
     this.longitudeAverage = 55;
     this.longitudeSigma = 12;
