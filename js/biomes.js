@@ -65,7 +65,7 @@ class Biome {
 
 class OceanBiome extends Biome {
   constructor() {
-    super(new GlColor(0.28,0.47,0.53), new GlColor(0.28,0.47,0.53));
+    super(null, new GlColor(0.28,0.47,0.53), new GlColor(0.28,0.47,0.53));
   }
   isContinent() {
     return false;
