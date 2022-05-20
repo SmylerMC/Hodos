@@ -49,6 +49,11 @@ document.getElementById("map").addEventListener('wheel', e => {
   }
 })
 
+$('#mode-form input').change(function() {
+  let mode = $(this).val()
+  worldMap.renderer.setRenderingMode(mode);
+});
+
 /*Toggle biomes mode*/
 document.getElementById("biomes-toggle").addEventListener('change', e => {
   //worldMap.controller.biomesDebug();

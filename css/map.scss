@@ -295,6 +295,7 @@ body {
 
 				.modal-section {
 					margin: 0.5rem 0;
+					width: 80%;
 
 					p {
 						margin: 0;
@@ -324,6 +325,13 @@ body {
 					input[type="submit"]:hover {
 						background-color: rgba(0,0,0,0.2);
 						cursor: pointer;
+					}
+
+					form {
+						display: flex;
+						flex-direction: row;
+						justify-content: space-around;
+						align-items: flex-start;
 					}
 				}
 			}
@@ -355,6 +363,7 @@ body {
 	width: 3rem;
 	display: block;
 	transition: all 0.2s ease;
+	margin: auto;
 
 	&:hover {
 		filter: invert(0.4);

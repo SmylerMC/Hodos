@@ -65,7 +65,7 @@ class Biome {
 
 class OceanBiome extends Biome {
   constructor() {
-    super(new GlColor(0.28, 0.46, 0.53), new GlColor(0.28, 0.46, 0.53));
+    super(new GlColor(0.278, 0.470, 0.525), new GlColor(0.278, 0.470, 0.525));
   }
   isContinent() {
     return false;
@@ -83,7 +83,7 @@ class TundraBiome extends Biome {
   longitudeSigma;
 
   constructor(random) {
-    super(random, new GlColor(44 / 0xFF, 58 / 0xFF, 57 / 0xFF), new GlColor(80 / 0xFF, 112 / 0xFF, 117 / 0xFF));
+    super(random, new GlColor(0.922, 0.98, 0.059, 1), new GlColor(0.835, 0.882, 0.89, 1));
     this.biomePool = "Cold";
     this.longitudeAverage = 80;
     this.longitudeSigma = 4;
@@ -102,7 +102,7 @@ class TaigaBiome extends Biome {
   longitudeSigma;
 
   constructor(random) {
-    super(random);
+    super(random, new GlColor(0.922, 0.98, 0.059, 1), new GlColor(0.835, 0.882, 0.89, 1));
     this.biomePool = "Cold";
     this.longitudeAverage = 80;
     this.longitudeSigma = 4;

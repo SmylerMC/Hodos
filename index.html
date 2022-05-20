@@ -51,30 +51,44 @@
           </div>
           <div class="main-modal-content">
             <div class="modal-section">
-              <form action="" id="biomes-form">
-                <label for="biomes-toggle">Biomes :</label>
-                <input
-                  id="biomes-toggle"
-                  name="biomes-toggle"
-                  type="checkbox"
-                />
-              </form>
-            </div>
-            <div class="modal-section">
-              <form action="" id="debug-form">
-                <label for="debug-toggle">Debug :</label>
-                <input
-                  id="debug-toggle"
-                  name="debug-toggle"
-                  type="checkbox"
-                />
+              <form action="" id="mode-form">
+                <div>
+                  <label for="default-toggle">Parchemin :</label>
+                  <input
+                    id="default-toggle"
+                    name="mode-toggle"
+                    value="default"
+                    type="radio"
+                    checked
+                  />
+                </div>
+                <div>
+                  <label for="biomes-toggle">Biomes :</label>
+                  <input
+                    id="biomes-toggle"
+                    name="mode-toggle"
+                    value="biomes"
+                    type="radio"
+                  />
+                </div>
+                <div>
+                  <label for="debug-toggle">Debug :</label>
+                  <input
+                    id="debug-toggle"
+                    name="mode-toggle"
+                    value="debug"
+                    type="radio"
+                  />
+                </div>
               </form>
             </div>
             <div class="modal-section">
               <form method="GET" action="/index.html" id="seed-form">
-                <label for="seed">Seed :</label>
-                <input type="text" class="seed-placeholder" id="seed" name="seed" />
-                <input type="submit" value="Changer" />
+                <div>
+                  <label for="seed">Seed :</label>
+                  <input type="text" class="seed-placeholder" id="seed" name="seed" />
+                  <input type="submit" value="Changer" />
+                </div>
               </form>
             </div>
           </div>
