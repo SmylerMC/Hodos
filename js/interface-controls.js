@@ -95,3 +95,22 @@ for (const element of document.getElementsByClassName("project-modal-toggle")) {
     toggleModal("project-modal");
   });
 }
+
+/*Import image*/
+
+document.getElementById("screenshot").addEventListener('click', (e) => {
+  let canvas = worldMap.renderer.canvas;
+  let dataURL = canvas.toDataURL("image/png", 1.0);
+  downloadImage(dataURL,`world-map-${canvas.width}x${canvas.height}-seed ${worldMap.generator.seed}.png`);
+})
+
+// Save | Download image
+function downloadImage(data, filename) {
+  let a = document.createElement('a');
+  a.href = data;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  delete a;
+}  

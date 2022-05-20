@@ -84,21 +84,42 @@ body {
 	flex-direction: column;
 	justify-content: flex-start;
 	align-items: center;
-}
 
-.map-controls button {
-	width: 2em;
-	height: 2em;
-	margin: 3px;
-	background: #d0c9b7;
-	color: #040403;
-	border: 1px solid #040403;
-	cursor: pointer;
-	transition: background-color 0.2s ease;
-
-	&:hover {
-		background: #a5a091;
+	button {
+		width: 2em;
+		height: 2em;
+		margin: 3px;
+		background: #d0c9b7;
+		color: #040403;
+		border: 1px solid #040403;
+		cursor: pointer;
+		transition: background-color 0.2s ease;
+	
+		&:hover {
+			background: #a5a091;
+		}
 	}
+
+	button.download-button {
+		width: 2.5em;
+		height: 2.5em;
+		margin: 3px;
+		margin-top: 10px;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		background: #d0c9b7;
+		color: #040403;
+		border: 1px solid #040403;
+		cursor: pointer;
+		transition: background-color 0.2s ease;
+
+		img{
+			width: 80%;
+		}
+	}
+	
 }
 
 /*Header*/

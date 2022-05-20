@@ -249,10 +249,6 @@ class MapGenerator {
       let current = burn.pop();
 
       for (let next of this.delaunay.neighbors(current)) {
-        console.log(
-          this.cells[next].isContinent() &&
-            this.cells[next].getBiomePool() == "default"
-        );
         if (
           this.cells[next].isContinent() &&
           this.cells[next].getBiomePool() == "default"
