@@ -128,7 +128,7 @@ class MapGenerator {
       let cellIndex = burn.pop();
       //check if one cycle is do
       if (cellIndex === -1) {
-        proba -= taux;
+        proba -= rate;
         if (burn.length !== 0) {
           burn.unshift(-1);
         }
