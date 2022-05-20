@@ -56,9 +56,6 @@ class Cell {
 
   setEarth() {
     this.biome = BIOMES["continent"];
-    //Temporary
-    //TODO Actually generate an altitude value, in the MapGenerator class
-    this.center.z = 0.1;
   }
 
   isContinent() {

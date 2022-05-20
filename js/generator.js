@@ -50,8 +50,7 @@ class MapGenerator {
     this.colorizeBiome();
     time = Date.now() - time;
     console.log("Map generates in " + time + " ms");
-    //TODO create paths
-    return new Tile(z, x, y, this.cells, []);
+    return new Tile(z, x, y, this.cells);
   }
 
   // create cell from the voronoid diagram
@@ -89,7 +88,7 @@ class MapGenerator {
   /* 1 or 2 steps are doing the job quite right */
   lloydRelaxation(totalSteps) {
     for (let i = 0; i < totalSteps; i++) {
-      var polygons = Array.from(
+      let polygons = Array.from(
         this.delaunay.voronoi([0, 0, WORLD_SIZE, WORLD_SIZE]).cellPolygons()
       );
       this.trianglesVertices = polygons.map(d3.polygonCentroid);
@@ -101,27 +100,7 @@ class MapGenerator {
 
   /* GENERATION METHOD */
 
-  generateContinentBurn() {
-    let burn;
-    burn = Array();
-    this.seedCells.push(this.delaunay.find(WORLD_SIZE / 2, WORLD_SIZE / 2));
-    burn.push(this.seedCells[0]);
-    let proba = 1.0;
-    while (burn.length !== 0) {
-      let currentCell = burn.pop();
-      if (this.cells[currentCell].isMaritime()) {
-        this.cells[currentCell].setEarth();
-        this.cells[currentCell].debugColor = new GlColor(0, 1, 0);
-        for (let next of this.delaunay.neighbors(currentCell)) {
-          if (this.#random() < proba && !this.delaunay.hull.includes(next))
-            burn.unshift(next);
-        }
-      }
-      proba -= 0.01;
-    }
-  }
-
-  generateMultipleContinentBurn(numberOfContinent, taux) {
+  generateMultipleContinentBurn(numberOfContinent, rate) {
     let burn = Array();
     const MAP_SIZE_PERCENT_MARGIN = 0.1;
     // select i cell to be the seed of continent
@@ -149,7 +128,7 @@ class MapGenerator {
       let cellIndex = burn.pop();
       //check if one cycle is do
       if (cellIndex === -1) {
-        proba -= taux;
+        proba -= rate;
         if (burn.length !== 0) {
           burn.unshift(-1);
         }
@@ -177,9 +156,9 @@ class MapGenerator {
     }
   }
 
-  generateIsland(taux, fairyRate) {
+  generateIsland(rate, fairyRate) {
     this.cells.forEach((cell) => {
-      if (this.#random() < taux && cell.isMaritime()) {
+      if (this.#random() < rate && cell.isMaritime()) {
         let distanceFromCenter = taxiDistance(
           cell.center.x,
           cell.center.y,
@@ -241,7 +220,7 @@ class MapGenerator {
       this.cells[nbCell].biome =
         BIOMES[BIOMESPOOL[nextBiome].at(getRandomInRange(0, 1, this.#random))];
       if (this.cells[nbCell].z > 0.6) {
-        this.cells[nbCell].biome = BIOMES[Mountain];
+        this.cells[nbCell].biome = BIOMES["Mountain"];
       }
       burn.push(nbCell);
     });
@@ -251,14 +230,14 @@ class MapGenerator {
       for (let next of this.delaunay.neighbors(current)) {
         if (
           this.cells[next].isContinent() &&
-          this.cells[next].getBiomePool() == "default"
+          this.cells[next].getBiomePool() === "default"
         ) {
           if (this.cells[next].center.z > 0.8) {
             this.cells[next].biome = BIOMES["Mountain"];
           } else {
             //Magnifique repartiteur de biome
             let nextBiome = this.cells[next].getBiomeType(this.#random);
-            if (this.cells[current].getBiomePool == nextBiome) {
+            if (this.cells[current].getBiomePool === nextBiome) {
               this.cells[next].biome = BIOMES[this.cells[current].biome.stay()];
             } else {
               this.cells[next].biome =
@@ -299,31 +278,31 @@ class MapGenerator {
   /* truc moche*/
   colorizeBiome() {
     this.cells.forEach((cell) => {
-      if (cell.biome == BIOMES["Taiga"]) {
+      if (cell.biome === BIOMES["Taiga"]) {
         cell.debugColor = new GlColor(1, 1, 1);
       }
-      if (cell.biome == BIOMES["Tundra"]) {
+      if (cell.biome === BIOMES["Tundra"]) {
         cell.debugColor = new GlColor(1, 1, 1);
       }
-      if (cell.biome == BIOMES["Forest"]) {
+      if (cell.biome === BIOMES["Forest"]) {
         cell.debugColor = new GlColor(0, 1, 0);
       }
-      if (cell.biome == BIOMES["Plain"]) {
+      if (cell.biome === BIOMES["Plain"]) {
         cell.debugColor = new GlColor(0, 1, 0);
       }
-      if (cell.biome == BIOMES["Swamp"]) {
+      if (cell.biome === BIOMES["Swamp"]) {
         cell.debugColor = new GlColor(0, 1, 1);
       }
-      if (cell.biome == BIOMES["Jungle"]) {
+      if (cell.biome === BIOMES["Jungle"]) {
         cell.debugColor = new GlColor(0, 1, 1);
       }
-      if (cell.biome == BIOMES["Desert"]) {
+      if (cell.biome === BIOMES["Desert"]) {
         cell.debugColor = new GlColor(1, 0, 0);
       }
-      if (cell.biome == BIOMES["Savana"]) {
+      if (cell.biome === BIOMES["Savana"]) {
         cell.debugColor = new GlColor(1, 0, 0);
       }
-      if (cell.biome == BIOMES["Mountain"]) {
+      if (cell.biome === BIOMES["Mountain"]) {
         cell.debugColor = new GlColor(0.5, 0.5, 0.5);
       }
       if (cell.biome === BIOMES["Corrupted"]) {

@@ -38,7 +38,6 @@ class Tile extends Mesh {
   #x;
   #y;
   #cells;
-  #paths;
 
   #surfaceVertexCount;
   #surfaceVertexPositions;
@@ -52,15 +51,13 @@ class Tile extends Mesh {
    * @param x     {int}         tile X coordinate
    * @param y     {int}         tile Y coordinate
    * @param cells {Array[Cell]} list of voronoi cells that overlap with the tile
-   * @param paths {Array[Path]} list of path like objects (TODO)
    */
-  constructor(z, x, y, cells, paths) {
+  constructor(z, x, y, cells) {
     super();
     this.#z = z;
     this.#x = x;
     this.#y = y;
     this.#cells = cells;
-    this.#paths = paths;
   }
 
   bake(gl) {

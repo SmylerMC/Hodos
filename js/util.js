@@ -9,10 +9,11 @@ const getRandomInRange = (min, max, randomFunction) => {
 /**
  * Creates an array of two-dimensional arrays of numbers between lowerBound and upperBound.
  *
- * @param {Number} n            the number of points to create
- * @param {Number} lowerBound   the lower bound for the points coordinates (inclusive)
- * @param {Number} upperBound   the upper bound for the points coordinates (exclusive)
- * @returns {*[]}               the array of random 2d points, as an array of arrays
+ * @param {Number} n                the number of points to create
+ * @param {Number} lowerBound       the lower bound for the points coordinates (inclusive)
+ * @param {Number} upperBound       the upper bound for the points coordinates (exclusive)
+ * @param {function} randomFunction a function that generates a number between 0 and 1
+ * @returns {*[]}                   the array of random 2d points, as an array of arrays
  */
 const getRandomPointsIn2dRange = (
   n,
@@ -56,10 +57,9 @@ const getRandomSeed = () => {
  * @returns {Number}   a value between 0 (when the cell is on the edge) and 1 (when the cell is in the middle)
  */
 const sigma = (x, T) => {
-  //let λ = 100/T;
-  //TODO : Find a better function for lamda
-  let λ = 0.001;
-  let exp = Math.exp(-λ * (x - T / 2));
+  //let lambda = 100/T;
+  let lambda = 0.001;
+  let exp = Math.exp(-lambda * (x - T / 2));
   return Math.max(-2 / (1 + exp) + 1, 0);
 };
 
@@ -92,11 +92,11 @@ class Counter {
  * Normal function as seen here : https://zupimages.net/up/22/19/y80o.png
  *
  * @param {Number} x value between 0 and 100
- * @param {Number} μ average value of gaussian
- * @param {Number} σ sigma value of gaussian
+ * @param {Number} mu average value of gaussian
+ * @param {Number} sigma sigma value of gaussian
  * @returns {Number} value between 0 and 1
  */
-const normalFunction = (x, μ, σ) => {
-  let arg = -((x - μ) ** 2) / (2 * σ ** 2);
+const normalFunction = (x, mu, sigma) => {
+  let arg = -((x - mu) ** 2) / (2 * sigma ** 2);
   return Math.exp(arg);
 };
