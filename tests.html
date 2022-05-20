@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+
+<html lang="en-us">
+  <head>
+    <title>Hodos</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="https://code.jquery.com/qunit/qunit-2.19.1.css">
+    <link rel="stylesheet" href="css/map.css" />
+    <style>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="map">
+      <div class="map-controls">
+        <button onclick="worldMap.controller.zoom(1)">+</button>
+        <button onclick="worldMap.controller.zoom(-1)">-</button>
+      </div>
+    </div>
+    <footer class="map-settings">
+      <form action="" id="debug-form">
+        <label for="debug-toggle">Debug:</label>
+        <input
+          name="debug-toggle"
+          type="checkbox"
+          onclick="worldMap.controller.toggleDebug()"
+        />
+      </form>
+      <form method="GET" action="" id="seed-form">
+        <label for="seed">Seed:</label>
+        <input type="text" class="seed-placeholder" id="seed" name="seed" />
+        <input type="submit" value="Change" />
+      </form>
+    </footer>
+    <div id="qunit"></div>
+    <div id="qunit-fixture"></div>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="js/libs/aleaPRNG.min.js"></script>
+    <script src="js/libs/perlin.js"></script>
+    <script src="js/util.js"></script>
+    <script src="js/biomes.js"></script>
+    <script src="js/generator.js"></script>
+    <script src="js/geometry.js"></script>
+    <script src="js/mesh.js"></script>
+    <script src="js/map.js"></script>
+    <script src="js/renderer.js"></script>
+    <script src="js/shader.js"></script>
+    <script src="js/init.js"></script>
+    <script src="https://code.jquery.com/qunit/qunit-2.19.1.js"></script>
+    <script src="js/unit-tests.js"></script>
+  </body>
+</html>
