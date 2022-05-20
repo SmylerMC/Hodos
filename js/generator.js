@@ -237,7 +237,7 @@ class MapGenerator {
           } else {
             //Magnifique repartiteur de biome
             let nextBiome = this.cells[next].getBiomeType(this.#random);
-            if (this.cells[current].getBiomePool === nextBiome) {
+            if (this.cells[current].getBiomePool() === nextBiome) {
               this.cells[next].biome = BIOMES[this.cells[current].biome.stay()];
             } else {
               this.cells[next].biome =
