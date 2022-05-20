@@ -26,7 +26,7 @@ class MapRenderer {
     this.#debugSpan.classList.add("hodos-debug");
     this.#debugSpan.style.visibility = "hidden";
     div.appendChild(this.#debugSpan);
-    this.#gl = this.#canvas.getContext("experimental-webgl");
+    this.#gl = this.#canvas.getContext("experimental-webgl", {preserveDrawingBuffer: true});
     this.#generator = generator;
     this.#camera = new Camera(this);
   }
@@ -150,6 +150,10 @@ class MapRenderer {
 
   get worldShaderProgram() {
     return this.#activeWorldShaderProgram;
+  }
+
+  get canvas(){
+    return this.#canvas;
   }
 
 }
