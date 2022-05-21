@@ -74,7 +74,11 @@ class OceanBiome extends Biome {
 
 class ContinentBiome extends Biome {}
 
-class IslandBiome extends Biome {}
+class IslandBiome extends Biome {
+  constructor(random) {
+    super(random, new GlColor(1,0.69,0.11), new GlColor(0.77,0.64,0.21));
+  }
+}
 
 //Froid
 class TundraBiome extends Biome {
