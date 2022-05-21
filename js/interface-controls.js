@@ -11,32 +11,33 @@ document.getElementById("map-zoom-out-button").addEventListener('click', e => {
 
 /*Move on mouse drag and drop*/
 let isDragging = false;
-let x = 0;
-let y = 0;
-const rect = document.getElementById("map").getBoundingClientRect();
+let lastMouseX = 0;
+let lastMouseY = 0;
 
 document.getElementById("map").addEventListener('mousedown', e => {
   e.preventDefault();
-  x = e.clientX - rect.left;
-  y = e.clientY - rect.top;
+  lastMouseX = e.clientX;
+  lastMouseY = e.clientY;
   isDragging = true;
 })
 
 document.getElementById("map").addEventListener('mousemove', e => {
   if (isDragging === true) {
-    let amplitude = 20/(Math.abs(worldMap.camera.zoom) + 1)
-    worldMap.controller.move((x-(e.clientX - rect.left))*amplitude, (-y+(e.clientY - rect.top))*amplitude);
-    x = e.clientX - rect.left;
-    y = e.clientY - rect.top;
+    let sizeFactor = WORLD_SIZE / (TILE_PIXEL_SIZE * Math.pow(2, worldMap.camera.zoom));
+    let deltaX = lastMouseX - e.clientX;
+    let deltaY = e.clientY - lastMouseY;
+    worldMap.controller.move(deltaX * sizeFactor, deltaY * sizeFactor);
+    lastMouseX = e.clientX;
+    lastMouseY = e.clientY;
   }
 });
 
-document.getElementById("map").addEventListener('mouseup', e => {
-  if (isDragging === true) {
-    x = 0;
-    y = 0;
-    isDragging = false;
-  }
+document.addEventListener('mouseup', e => {
+  isDragging = false;
+});
+
+document.addEventListener('contextmenu', e => {
+  isDragging = false;
 });
 
 /*Zoom on mouse wheel*/
