@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="https://hodos.thesmyler.fr/assets/img/HodosLogoColorInvert.png" width=600>
+  <img src="./assets/img/HodosLogoColorInvert.png" width=600>
   <h1>Hodos</h1>
 </div>
 
@@ -10,10 +10,10 @@ Hodos is a simple client-side procedural world map generator running on JavaScri
 
 
 <div align="center">
-  <img src="https://hodos.thesmyler.fr/assets/img/example.png" width=600>
+  <img src="./assets/img/example.png" width=600>
 </div>
 
-A public instance is available at [hodos.thesmyler.fr](https://hodos.thesmyler.fr).
+A public instance is available at [hodos.soremo.eu.org](https://hodos.soremo.eu.org/).
 
 *Hodos, voyagez avec audace !*
 
