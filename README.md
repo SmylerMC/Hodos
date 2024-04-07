@@ -13,7 +13,7 @@ Hodos is a simple client-side procedural world map generator running on JavaScri
   <img src="./assets/img/example.png" width=600>
 </div>
 
-A public instance is available at [hodos.soremo.eu.org](https://hodos.soremo.eu.org/).
+A public instance is available at [hodos.soremo.me](https://hodos.soremo.me/).
 
 *Hodos, voyagez avec audace !*
 
